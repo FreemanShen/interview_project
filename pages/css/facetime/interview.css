@@ -1,0 +1,142 @@
+body{
+    padding: 0%;
+    margin:0%;
+    background-color: #f6f6f6c2;
+    /*background: url('');*/
+}
+#parent{
+    display:flex;
+    justify-content:center;
+    align-items:center;    
+}
+
+#logo{
+    display: block;
+    margin: 0 auto;
+    margin-top:60px;
+    margin-bottom:24px;
+    width: 128px;
+    height: 81px;
+}
+#logo:hover{
+    cursor: pointer;
+}
+.card{
+    margin:0 auto;
+    width: 400px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    padding-left:24px;
+}
+#head{
+    color:#121212;
+    font-size: 16px;
+    height: 60px;
+    line-height: 60px;
+    font-weight: 600;
+}
+#head:hover{
+    cursor: pointer;
+}
+#head::after{
+    content: '';
+    width: 60px;
+    height: 3px;
+    background: #0084FF;
+    border-radius: 1px;
+    display: block;
+    margin-top: -3px
+}
+#username,#password,#userID,#ensurePassword,#room_id,#user_id{
+    display: block;
+    width: 352px;
+    height: 56px;
+    line-height: 56px;
+    font-weight: 400 !important;
+    font-size: 16px;
+    overflow: hidden;
+    margin-top: 24px;
+    outline: none;
+    border:none;
+    box-shadow: none;
+    border-bottom: 1px solid #bbccee7c;
+    color:#121212 !important;
+}
+#username:focus,#password:focus,#userID,#ensurePassword{
+    box-shadow: none;
+    outline: none;
+    border:none;
+    box-shadow: none;
+    border-bottom: 1px solid #bbccee7c;
+}
+.loginButton{
+    margin-top: 24px;
+    display: block;
+    width:352px;
+    height: 40px;
+    color: white;
+    background-color: #0084FF;
+    outline: none;
+    border:none;
+    box-shadow: none;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+}
+.loginButton:hover{
+    background-color: #0062be;
+}
+.loginButton:focus{
+    outline: none;
+    border:none;
+    box-shadow: none;
+}
+#passwordBar{
+    width: 352px;
+    margin-top: 15px !important;
+}
+#findPassword{
+    float: right;
+    margin-right: 5px;
+}
+
+#loginHref{
+    margin-left: -24px;
+    margin-top: 15px;
+}
+
+.gitHubBtn{
+    background-color: #3B579d;
+}
+.gitHubBtn:hover{
+    background-color: #5379db;
+}
+#footer{
+   width: 400px;
+   margin-left: -24px;
+   padding-left: 24px;
+   margin-top: 10px;
+   background-color: rgb(246, 246, 246); 
+   padding:15px 0;
+}
+#footer a{
+    display: inline-block;
+    line-height: 32px;
+    height: 32px;
+    font-size: 15px;
+    font-weight: 400 !important;
+    color: #0084FF;
+    text-decoration: none;
+}
+#footer a:hover{
+    cursor: pointer;
+}
+#footerRight{
+    float: right;
+    margin-right: 24px;
+}
+#footerRight::after{
+    clear:both;
+}
+#footerLeft{
+    margin-left: 24px;
+}

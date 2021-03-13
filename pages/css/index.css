@@ -1,0 +1,115 @@
+body{
+    background-color: #ffffff;
+}
+#fundtal,#skills,#organization{
+    display: none;
+}
+
+#necessary,#fundtal,#skills,#organization{
+    color: #888888;
+    font-weight: 400;
+    line-height: 40px;
+    text-decoration: none;
+}
+#necessary a:hover,#fundtal a:hover,#skills a:hover,#organization a:hover{
+    color: #25bb9b;
+}
+#left-navigator{
+    float:left;
+    width: 11%;
+    margin-left: 7%;
+    margin-top:20px;
+    text-align: center;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 70%;
+}
+#left-navigator a{
+    cursor: pointer;
+    display: block;
+    margin-right: 10px;
+}
+.head-title{
+    color:#333333;
+    line-height: 50px;
+    font-size: 18px;
+    font-weight: 400;
+}
+.head-title:hover{
+    color:white;
+    background-color: #25bb9b;
+}
+#right-article{
+    float: left;
+    margin-left:25px;
+    margin-top:15px;
+    width:79%;
+}
+.index-title{
+    color: #25bb9b;
+    font-size: 18px;
+    line-height: 27px;
+    font-weight: 400;
+    margin-left: 10px;
+    margin-bottom: 12px;
+}
+.index-headline{
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color:#333333;
+    margin-bottom: 10px;
+}
+.index-skill-ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.index-skill-li{
+    float:left;
+    margin:10px 15px 5px 10px; 
+}
+.card{
+    text-align: center;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow:ellipsis;
+    background-color: #ffffff;
+    padding: 20px 50px 20px 50px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border:1px #333333;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    border: 1px rgba(58, 58, 58, 0.308) solid;
+}
+.card:hover{
+    color:#25bb9b;
+    box-shadow: 2px 2px 2px #6462627c;
+    cursor: pointer;
+}
+.card img{
+    display: inline-block;
+    width: 80px;
+    height: 80px; 
+    margin-top:10px; 
+    border-radius: 50%;
+}
+
+/* 响应式布局 - 屏幕尺寸小于 800px 时，两列布局改为上下布局 */
+@media screen and (max-width: 800px) {
+    #left-navigator, #right-article {   
+      width: 100%;
+      padding: 0;
+    }
+  }
+   
+/* 响应式布局 -屏幕尺寸小于 400px 时，导航等布局改为上下布局 */
+@media screen and (max-width: 400px) {
+#nav a {
+    float: none;
+    width: 100%;
+}
+}

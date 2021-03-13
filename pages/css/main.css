@@ -1,0 +1,193 @@
+*{
+    box-sizing: border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    -webkit-box-sizing:border-box; /* Safari */
+}
+body{
+    margin:0;
+    font-family: system;
+    padding: 10px;
+    background-color:#f1f1f1;
+}
+#nav{
+    width: 100%;
+    height: 8%;
+    background-color:#333333;
+}
+
+/* 导航条链接 */
+#nav a {
+    float: left;
+    display: block;
+    color: #cccccc;
+    height: 100%;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+   
+  /* 链接颜色修改 */
+#nav a:hover {
+    background-color: #ddd;
+    color: black;
+    cursor: pointer;
+  }
+
+#main{
+    width:100%;
+    height: 92%;
+}
+
+.loginButton{
+    display: inline-block;
+    height: 80%;
+    text-align: center;
+    margin:0.45%;
+    padding: 0.875rem 2.5rem;
+    background-color: #f3401c;
+    box-shadow:none;
+    font-size: 0.875rem;
+    line-height: 1;
+    font-family: Arial;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 50px;
+    color: #ffffff;
+    outline: none;
+    float:right;
+}
+.loginButton:hover{
+    background-color: #ff6648;
+}
+
+#banner{
+    width: 100%;
+    height: 50%;
+}
+#left_content{
+    float:left;
+    margin-left: 15px;
+    width:15%;
+}
+#article{
+    width:60%;
+    float: left;
+}
+#right_content{
+    width:23%;
+    padding-left:5px;    
+    float: left;
+}
+#right_content a {
+    color: #333333;
+}
+#right_content a:hover{
+    color:#25bb9b;
+}
+#right_content span{
+    color: #999999;
+}
+#right_content ul{
+    padding: 0;
+    margin: 0;
+}
+
+.forum{
+    background-color: white;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.forum:hover{
+    box-shadow: 8px 8px 4px #929292;
+    cursor: pointer;
+}
+ul{
+    list-style-type: none;
+}
+#article_list{
+    margin: 20px;
+    padding: 0;
+}
+
+ 
+/* 图像部分 */
+.fakeimg {
+    background-color: #aaa;
+    width: 100%;
+    padding: 20px;
+}
+
+#current_hot_news,#recent_hot_news,#great_news,#review{
+    width: 100%;
+}
+
+
+.reply{
+    float:right;
+}
+
+.headline{
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+.headline:before{
+    background: #ff6547;
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 5px;
+    margin-bottom: 2px;
+    vertical-align: middle;
+}
+.company_icon img{
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+#company li{
+    float:left;
+    margin:2px;
+}
+.company_icon p{
+    text-align: center;
+}
+#company_page{
+    overflow:hidden;
+}
+.intro{
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow:ellipsis;
+}
+.release p{
+    color:#666666;
+    padding: 10px;
+}
+.release p:hover{
+    color: #28cfae;
+    background-color:rgba(56, 255, 115, 0.1);
+    
+}
+
+.article{
+    display: inline-block;
+}
+
+.forum_main{
+    float:right;
+}
+.forum_main img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 8px;
+}
+.forum_main p{
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color:#666666;
+}

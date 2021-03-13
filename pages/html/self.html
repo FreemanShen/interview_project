@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/me.css"/>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/index.js"></script>
+    <script src="../js/recevie_invite.js"></script>
+
+    <script>
+        /*
+        根据sessionStorage的值写入
+        */
+        window.onload = function(){
+
+            //页面渲染之后，查看一下sessionStorage的登陆状态，如果是已登录，修改button里的内容，做一个跳转
+            if(sessionStorage.getItem('login') == 'true'){
+                document.getElementById('userInfoBtn').innerHTML="欢迎,"+sessionStorage.getItem('username');
+                document.getElementById('userInfoBtn').setAttribute("disabled", true);
+            }
+            
+            if( sessionStorage.getItem('username') !=null &&  sessionStorage.getItem('username')!='')
+                document.getElementById('userNickName').innerHTML = sessionStorage.getItem('username');
+                let userId = sessionStorage.getItem('userId');
+                let response;
+                let getMsgHttp = new XMLHttpRequest();
+                getMsgHttp.onreadystatechange = function(){
+                    if(getMsgHttp.readyState == 4 && getMsgHttp.status == 200){
+                        response = getMsgHttp.responseText;
+                        //test
+                        //console.log(getMsgHttp.responseText);
+                        if(response!="fail"){
+
+                            let obj = JSON.parse(response);
+                            document.getElementById('profileImg').src= "./headpic/"+obj.pic_path;
+                          
+                        }else if(response == "fail"){
+                            //console.log(response);
+                            window.alert('请检查输入的账号和密码是否正确');
+                            location.reload();
+                        }
+                    }
+                    }
+                    //@todo:post地址可以更改
+                    getMsgHttp.open('POST',"http://localhost/interview-project/server/get_user_info.php",true);
+                    getMsgHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+                    getMsgHttp.send('userId='+userId);
+        }
+    </script>
+    <title>程序员面试网站-个人中心</title>
+</head>
+<body>
+    <div id="nav">
+        <a>首页</a>
+        <a href="./question_bank.html">题库</a>
+        <a href="./facetime.html">面试</a>
+        <a>学习</a>
+        <a href="./chatting_room.html">聊天室</a>
+        <a href="./discuss.html">讨论区</a>
+        <a href="./self.html">个人</a>
+        <button type="button" class="loginButton" id="userInfoBtn" onclick="backTologin()">登录/注册</button>
+    </div>
+
+    <div style="clear: both;"></div>
+
+    <div id="profile">
+        <img id="profileImg" src="https://pic4.zhimg.com/3853e4cfc6ce319e9e8e3b5d87bb6311_xl.jpg" />
+        <span id="userNickName">郑秋冬</span>
+        <div class="editBox">
+            <button id="reply" class="editButton"><span style="display: inline-flex; align-items: center;">​<svg fill="#0084ff" viewBox="0 0 24 24" width="16" height="16"><path d="M4.076 16.966a4.19 4.19 0 0 1 1.05-1.76l8.568-8.569a.524.524 0 0 1 .741 0l2.928 2.927a.524.524 0 0 1 0 .74l-8.568 8.57c-.49.49-1.096.852-1.761 1.051l-3.528 1.058a.394.394 0 0 1-.49-.488l1.06-3.53zM20.558 4.83c.59.59.59 1.546 0 2.136l-1.693 1.692a.503.503 0 0 1-.712 0l-2.812-2.812a.504.504 0 0 1 0-.712l1.693-1.693a1.51 1.51 0 0 1 2.135 0l1.389 1.389z"></path></svg></span>&nbsp;编辑个人资料</button>
+        </div>
+    </div>
+
+
+    <div id="contentBox">
+        <div id="leftContent">
+            <nav class="checkOutContentNav">
+                <a class="selectedContentTab">我的关注</a>
+                <a>我的收藏</a>
+            </nav>
+            <nav class="checkOutContentNav">
+                <a class="selectedNavTab">我关注的人</a>
+                <a>我关注的话题</a>
+            </nav>
+            <!--@todo:
+                点击"我关注的话题" "我的收藏"时，切换为像index一样的contentBox列表
+                阅读代码时，注意区分class/id，可能有重名
+            -->
+            <div class="contentBox">
+                <div class="headPic">
+                    <img width="60" height="60" src="https://pic4.zhimg.com/v2-079f6283c2a67007e1e668b618d158d3_im.jpg">
+                </div>
+                <div class="corePersonBox">
+                    <button class="btn decorationBtn">已关注</button>
+                    <p class="author">诗与星空</p>
+                    <p class="sign">这个家伙很懒，什么也没有留下</p>
+                </div>
+                <div style="clear:both;margin:0;padding:0;width: 0;height: 0;"></div>
+            </div>
+            <div class="contentBox">
+                <div class="headPic">
+                    <img width="60" height="60" src="https://pic4.zhimg.com/v2-079f6283c2a67007e1e668b618d158d3_im.jpg">
+                </div>
+                <div class="corePersonBox">
+                    <button class="btn decorationBtn">已关注</button>
+                    <p class="author">诗与星空</p>
+                    <p class="sign">这个家伙很懒，什么也没有留下</p>
+                </div>
+                <div style="clear:both;margin:0;padding:0;width: 0;height: 0;"></div>
+            </div>
+            <div class="contentBox">
+                <div class="headPic">
+                    <img width="60" height="60" src="https://pic4.zhimg.com/v2-079f6283c2a67007e1e668b618d158d3_im.jpg">
+                </div>
+                <div class="corePersonBox">
+                    <button class="btn decorationBtn">已关注</button>
+                    <p class="author">诗与星空</p>
+                    <p class="sign">这个家伙很懒，什么也没有留下</p>
+                </div>
+                <div style="clear:both;margin:0;padding:0;width: 0;height: 0;"></div>
+            </div>
+            <div class="contentBox">
+                <div class="headPic">
+                    <img width="60" height="60" src="https://pic4.zhimg.com/v2-079f6283c2a67007e1e668b618d158d3_im.jpg">
+                </div>
+                <div class="corePersonBox">
+                    <button class="btn decorationBtn">已关注</button>
+                    <p class="author">诗与星空</p>
+                    <p class="sign">这个家伙很懒，什么也没有留下</p>
+                </div>
+                <div style="clear:both;margin:0;padding:0;width: 0;height: 0;"></div>
+            </div>
+        </div>
+        <div id="rightContent">
+            <!--@todo:当用户未登录，这部分功能应弹出alert导向用户登陆页面-->
+            <div id="myFunc">
+                <a><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我的收藏</a>
+                <a target="_blank"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.74 4h12.52c.961 0 1.74.775 1.74 1.73V16.27c0 .955-.779 1.73-1.74 1.73h-3.825l-1.658 2.044a1 1 0 0 1-1.554 0l-1.658-2.044H5.74C4.78 18 4 17.224 4 16.27V5.73C4 4.775 4.778 4 5.74 4zM12 16a.976.976 0 0 0 .705-.287.951.951 0 0 0 .295-.712.954.954 0 0 0-.295-.714A.976.976 0 0 0 12 14a.962.962 0 0 0-.705.295A.961.961 0 0 0 11 15c0 .284.098.522.295.713A.975.975 0 0 0 12 16zm1.278-4.924a36.81 36.81 0 0 0 1.023-.975c.19-.193.354-.422.492-.688.138-.266.207-.575.207-.928 0-.448-.12-.864-.363-1.246a2.517 2.517 0 0 0-1.029-.906C13.164 6.111 12.652 6 12.072 6c-.624 0-1.17.133-1.638.399-.468.265-.824.6-1.068 1.005-.244.405-.366.804-.366 1.2 0 .19.077.368.231.531a.747.747 0 0 0 .567.246c.38 0 .638-.234.774-.703.144-.449.32-.788.528-1.019.208-.23.532-.345.972-.345.376 0 .683.114.921.342.238.229.357.51.357.841 0 .17-.039.328-.117.473a1.782 1.782 0 0 1-.288.396c-.114.118-.3.294-.555.526a9.71 9.71 0 0 0-.696.688c-.172.194-.31.418-.414.673a2.391 2.391 0 0 0-.156.906c0 .278.071.488.213.63a.716.716 0 0 0 .525.211c.4 0 .638-.216.714-.648.044-.203.077-.345.099-.426.022-.081.053-.162.093-.243.04-.081.101-.17.183-.268.082-.098.191-.21.327-.34z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我关注的问题&nbsp;</a>
+                <a target="_blank"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M4 10V8a1 1 0 1 1 2 0v2h2a1 1 0 0 1 0 2H6v2a1 1 0 0 1-2 0v-2H2a1 1 0 0 1 0-2h2zm10.455 2c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-7 6c0-2.66 4.845-4 7.272-4C17.155 14 22 15.34 22 18v1.375c0 .345-.28.625-.625.625H8.08a.625.625 0 0 1-.625-.625V18z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我的邀请 &nbsp;</a>
+                <a target="_blank"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.74 4h12.52c.961 0 1.74.775 1.74 1.73V16.27c0 .955-.779 1.73-1.74 1.73h-3.825l-1.658 2.044a1 1 0 0 1-1.554 0l-1.658-2.044H5.74C4.78 18 4 17.224 4 16.27V5.73C4 4.775 4.778 4 5.74 4zM7 8.98c0 .554.449.996 1.003.996h4.994A.992.992 0 0 0 14 8.981a.997.997 0 0 0-1.003-.995H8.003A.992.992 0 0 0 7 8.98zm0 4c0 .554.446.996.995.996h8.01a.993.993 0 0 0 .995-.995.993.993 0 0 0-.995-.995h-8.01A.993.993 0 0 0 7 12.98z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;站务中心</a>
+                <a target="_blank"><svg width="18" height="18" viewBox="0 0 18 18" fill="#8590a6"><path d="M9 1.5c2.835 0 5.152 2.195 5.247 4.949l.003.176v.253A2.25 2.25 0 0 1 15.75 9v2.25a2.25 2.25 0 0 1-1.5 2.122v.257c0 .547-.2 1.073-.557 1.482l-.102.109-1.06 1.06a.75.75 0 0 1-1.124-.99l.063-.07 1.06-1.061a.75.75 0 0 0 .213-.432l.007-.098V13.5H12a.75.75 0 0 1-.75-.75V7.5a.75.75 0 0 1 .75-.75h.75v-.125C12.75 4.628 11.076 3 9 3 6.98 3 5.34 4.541 5.254 6.464l-.004.286H6a.75.75 0 0 1 .743.648l.007.102v5.25a.75.75 0 0 1-.648.743L6 13.5H4.5a2.25 2.25 0 0 1-2.245-2.096l-.005-.154V9c0-.98.626-1.814 1.5-2.122v-.253C3.75 3.79 6.105 1.5 9 1.5z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;帮助中心</a>
+                <a target="_blank"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M16.517 15.815a5.871 5.871 0 0 1-4.481 2.078 5.865 5.865 0 0 1-5.859-5.857 5.865 5.865 0 0 1 5.859-5.859c1.63 0 3.204.7 4.319 1.919.085.093.24.432.209.797a1.086 1.086 0 0 1-.436.779c-.248.193-.516.29-.797.29-.402 0-.7-.198-.814-.314A3.473 3.473 0 0 0 12 8.575a3.464 3.464 0 0 0-3.46 3.461 3.464 3.464 0 0 0 3.46 3.46 3.63 3.63 0 0 0 2.654-1.181c.136-.152.458-.306.806-.306.274 0 .542.095.773.274.35.269.45.588.473.809.032.308-.072.585-.188.723m4.686-7.699C20.67 6.883 19.96 5.82 19.07 4.929c-.891-.89-1.954-1.601-3.188-2.133A9.728 9.728 0 0 0 12 2a9.733 9.733 0 0 0-3.883.796c-1.234.532-2.297 1.243-3.186 2.133-.891.891-1.602 1.954-2.134 3.187A9.713 9.713 0 0 0 2 12a9.752 9.752 0 0 0 .797 3.883c.531 1.233 1.242 2.296 2.134 3.186.89.891 1.953 1.602 3.186 2.134A9.725 9.725 0 0 0 12 22a9.72 9.72 0 0 0 3.883-.797c1.233-.532 2.296-1.243 3.188-2.134.89-.89 1.601-1.953 2.132-3.186A9.73 9.73 0 0 0 22 12a9.69 9.69 0 0 0-.797-3.884" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;版权服务中心</a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>

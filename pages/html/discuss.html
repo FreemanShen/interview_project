@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>讨论区_技术交流/产品运营/留学指南</title>
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
+    
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="../js/discuss.js"></script>
+    <script src="../js/recevie_invite.js"></script>
+</head>
+<body>
+    <div id="nav">
+        <a>首页</a>
+        <a href="./question_bank.html">题库</a>
+        <a href="./facetime.html">面试</a>
+        <a>学习</a>
+        <a href="./chatting_room.html">聊天室</a>
+        <a href="./discuss.html">讨论区</a>
+        <a href="./self.html">个人</a>
+        <button type="button" class="loginButton" id="userInfoBtn" onclick="backTologin()">登录/注册</button>
+    </div>
+
+    <div style="clear: both;"></div>
+    <div id ="main">
+        <img id="banner" src='./images/banner.jfif' >
+        <div id="left_content">            
+            <div class="forum release">
+                <h1 class="headline">讨论区</h1>
+                <p>交流讨论</p>
+                <p>找面经</p>
+                <p>找内推</p>
+                <p>offer比较</p>
+                <p>全部标签</p>
+                <h1 class="headline">分享与求助</h1>
+                <!-- 搜索框？？发布按钮？-->
+                <p><a href="./post_discuss.html" style="text-decoration: none;color:inherit;">我要发布</a></p>
+            </div>
+        </div>
+        <div id="article">
+            <ul id="article_list">
+                <li>
+                    <div class="forum">
+                        <div class="forum_main">
+                            <p><img src='./logo/logo1.jpg'></p>
+                            <p>牛客校招助手</p>
+                        </div>
+                        <h2 class="title">百度贴吧欢迎你啊~</h2> 
+                        <h5 class="time">今天 15:38:48&nbsp;发表在 [招聘信息]  </h5>
+                        <h5 class="brief"><span>百度</span>&nbsp;&nbsp;&nbsp;<span>北京/深圳</span>&nbsp;&nbsp;&nbsp;<span>校招/秋招/社招</span></h5>                
+                        <p class="intro">百度在招移动端软件研发工程师啦~不管你是社招、校招还是实习，都欢迎哟~ 😃校招、实习生只要基础学科学的比较好就可以咯～ 😃</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="right_content">
+            <div id="current_hot_news" class="forum">
+                <h1 class="headline">实时热点</h1>
+                <ul>
+                    <li>
+                        <a># 简历 #</a>
+                        <p><span>6424次浏览</span> &nbsp;&nbsp;<span>324人参与</span></p>
+                    </li>
+                    <li>
+                        <a># 社招内推 #</a>
+                        <p><span>6424次浏览</span> &nbsp;&nbsp;<span>324人参与</span></p>
+                    </li>
+                    <li>
+                        <a># 许愿携程offer #</a>
+                        <p><span>6424次浏览</span> &nbsp;&nbsp;<span>324人参与</span></p>
+                    </li>
+                    <li>
+                        <a># 阿里许愿 #</a>
+                        <p><span>6424次浏览</span> &nbsp;&nbsp;<span>324人参与</span></p>
+                    </li>
+                    <li>
+                        <a># 深动科技北京有限公司实习 #</a>
+                        <p><span>6424次浏览</span> &nbsp;&nbsp;<span>324人参与</span></p>
+                    </li>          
+                </ul>
+            </div>
+            <div id="recent_hot_news" class="forum">
+                <h1 class="headline">全站近期热帖</h1>
+                <ul>
+                    <li>
+                        <a>字节跳动后台开发实习一二三+HR面 面经（已oc）</a>
+                        <p><span>发表于 2020-12-28 22:18:49</span> &nbsp;&nbsp;<span class="reply">回复(13)</span></p>
+                    </li>
+                    <li>
+                        <a>字节飞书Java实习一面凉经</a>
+                        <p><span>发表于 2020-12-28 21:15:44</span> &nbsp;&nbsp;<span class="reply">回复(3)</span></p>
+                    </li>
+                    <li>
+                        <a>字节教育Java实习一面凉经</a>
+                        <p><span>发表于 2020-12-28 21:04:04</span> &nbsp;&nbsp;<span class="reply">回复(3)</span></p>
+                    </li>
+                    <li>
+                        <a>凡科面经</a>
+                        <p><span>发表于 今天 11:45:54</span> &nbsp;&nbsp;<span class="reply">回复(2)</span></p>
+                    </li>
+                    <li>
+                        <a>将“尊重”写进价值观，三七互娱用空杯心态迎接挑战</a>
+                        <p><span>发表于 今天 14:09:58</span> &nbsp;&nbsp;<span class="reply">回复(0)</span></p>
+                    </li>          
+                </ul>
+            </div>
+            <div id="company_page" class="forum">
+                <h1 class="headline">公司主页</h1>
+                <ul id="company">
+                    <li class="company_icon">
+                        <p><img src='./images/1.jpg'></p>
+                        <p>字节跳动</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/2.jpg'></p>
+                        <p>腾讯</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/3.jpg'></p>
+                        <p>阿里巴巴</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/4.jpg'></p>
+                        <p>美团</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/5.jpg'></p>
+                        <p>百度</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/1.jpg'></p>
+                        <p>字节跳动</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/2.jpg'></p>
+                        <p>腾讯</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/3.jpg'></p>
+                        <p>阿里巴巴</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/4.jpg'></p>
+                        <p>美团</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/5.jpg'></p>
+                        <p>百度</p>
+                    </li>       
+                    <li class="company_icon">
+                        <p><img src='./images/1.jpg'></p>
+                        <p>字节跳动</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/2.jpg'></p>
+                        <p>腾讯</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/3.jpg'></p>
+                        <p>阿里巴巴</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/4.jpg'></p>
+                        <p>美团</p>
+                    </li>
+                    <li class="company_icon">
+                        <p><img src='./images/5.jpg'></p>
+                        <p>百度</p>
+                    </li>          
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

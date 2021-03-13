@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>讨论区_技术交流/产品运营/留学指南</title>
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="../css/question_card.css" />
+    
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    
+
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/bootstrap-3.3.4.css">
+    <link href="../css/question_bank.css" rel="stylesheet" type="text/css"/>
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="http://www.jq22.com/jquery/bootstrap-3.3.4.js"></script>
+    <script type="text/javascript" src="../js/Questions.js"></script>
+    <script src="../js/question_bank.js"></script>
+    <script src="../js/recevie_invite.js"></script>
+    
+</head>
+<body>
+    <div id="nav">
+        <a>首页</a>
+        <a href="./question_bank.html">题库</a>
+        <a href="./facetime.html">面试</a>
+        <a>学习</a>
+        <a href="./chatting_room.html">聊天室</a>
+        <a href="./discuss.html">讨论区</a>
+        <a href="./self.html">个人</a>
+        <button type="button" class="loginButton" id="userInfoBtn" onclick="backTologin()">登录/注册</button>
+    </div>
+    <div style="clear: both;"></div>
+    <div id ="main">
+        <div id="question_card">             
+            <div style="width: 100%;height:auto;display: inline-block;border: 1px solid white;position: relative;margin-top:10px;">
+                <div style="width: 100%;">
+                  <div style="width: 80%;margin: 0px auto">
+                    <div style="width: 100%;height:100px;border: 1px solid #CCC;border-bottom:none;background:#FFF;">
+                      <div class="middle-top" style="width: 100%;height: 50px;border-bottom: 1px solid #CCC;background:#2D3339; position:relative;">
+                        <div class="middle-top-left pull-left"
+                                             style="height: 100%;padding-left: 20px;;background:#232C31;color:#FFF;">
+                          <div class="text-center pull-left progress-left"
+                                                 style="border: 1px solid #A2C69A;background:#FFF;border-radius:10px;line-height:20px;height:20px;margin:15px 0px 15px 0px;font-size: 11px;position:relative;">
+                            <div class="progress pull-left"
+                                                     style="background: #609E53;width: 0px;height:18px;position:absolute;left: 0px;"></div>
+                            <div class="pro-text" style="left: 0px;color: #609E53;position:absolute;top:0px;width:100%;"> 已完成<span class="progres"></span></div>
+                          </div>
+                          <div class="pull-left" style=" width:135px;line-height:20px;height:20px;margin:15px;font-size:15px;"> 
+                            <!--已做答的数量和考题总数--> 
+                            当前第<span class="questioned"></span>题/共<span class="question_sum"></span>题 </div>
+                        </div>
+                        <div class="middle-top-right text-center pull-left"
+                                             style="width:160px; height: 100%;border-left: 1px solid red;position: absolute;right: 0px;">
+                          <div class="stop pull-left" style="width: 50px; height: 100%;padding: 10px;"> <a href="javascript:void(0);" class="text-center" style="color: #FE6547;">
+                            <div class="time-stop glyphicon glyphicon-pause" title="暂停"
+                                                         style="width:30px;height: 30px;line-height:30px; border-radius:15px;border: 1px solid #FE6547;"></div>
+                            <div class="time-start glyphicon glyphicon-play" title="开始"
+                                                         style="width:30px;height: 30px;line-height:30px;border-radius:15px;border: 1px solid #FE6547;display:none;"></div>
+                            </a> </div>
+                          <div class="pull-left"  style="width: 100px; height: 100%;padding: 10px 0px 10px 0px;">
+                            <div class="time" style="width:100px;height: 30px;line-height:30px; border-radius:15px;font-size:20px;color:#FFF;"> </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style="width: 100%;height: 50px;font-size:15px;color: #000;line-height: 50px;padding-left: 20px;">
+                        <div style="color:#FFF;background: red;width: 22px;height: 22px;border-radius:11px;line-height:22px;font-size:13px; text-align: center;" class="glyphicon glyphicon-map-marker">
+                        </div>
+                        [单选题] 
+                      </div>
+                    </div>
+                    <div style="width: 100%;height:auto;display: inline-block;border: 1px solid #CCC;border-bottom:1px dashed #CCC;background:#FFF;">
+                      <div style="width: 100%;height: 90%;padding:20px 20px 0px 20px;"> 
+                        <!--试题区域-->
+                        <ul class="list-unstyled question" id="" name="">
+                          <li class="question_title"></li>
+                        </ul>
+                        <!--考题的操作区域-->
+                        <div class="operation" style="margin-top: 20px;">
+                          <div class="text-left"
+                                                 style="margin-left:20px;font-size: 15px;float: left;line-height: 30px;">
+                            <div id="unHeart" style="color:#999999;"> <span class="glyphicon glyphicon-heart-empty"></span> <span>收藏本题</span> </div>
+                            <div id="heart" style="color:#C40000;display: none;"> <span class="glyphicon glyphicon-heart"></span> <span>已收藏</span> </div>
+                          </div>
+                          <div class="text-right" style="margin-right: 20px;">
+                            <div class="form-group" style="color: #FFF;">
+                              <button class="btn btn-success" id="submitQuestions">提交试卷</button>
+                              <button class="btn btn-info" type="button" id="preQuestion">上一题</button>
+                              <button class="btn btn-info" id="nextQuestion">下一题</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="width: 100%;height:auto;display: inline-block;border: 1px solid #CCC;border-top:none;background:#FFF;">
+                      <div style="width: 100%;padding:20px;">
+                        <div class="panel-default">
+                          <div class="panel-heading" class="panel-heading" id="closeCard" style="color: #DCE4EC;font-size: 15px;display: none;background: none;">
+                          <span>收起答题卡</span> <span class="glyphicon glyphicon-chevron-up"></span> </div>
+                        <div class="panel-heading" id="openCard" style="font-size: 15px;background: none;"> <span>展开答题卡</span> <span class="glyphicon glyphicon-chevron-down"></span> </div>
+                        <div id="answerCard" style="display: none;">
+                          <div class="panel-body form-horizontal" style="padding: 0px;">
+                            <ul class="list-unstyled">
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+    </div>
+
+
+</body>
+</html>
