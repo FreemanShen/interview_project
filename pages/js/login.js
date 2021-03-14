@@ -38,6 +38,7 @@ function login(){
           sessionStorage.setItem('username',obj.userName)
           sessionStorage.setItem('userId',userId)
           sessionStorage.setItem('isAdmin',obj.admin);
+          sessionStorage.setItem('pic_path',obj.pic_path);
           window.location.href="../html/index.html";
         }else if(response == "fail"){
           //console.log(response);

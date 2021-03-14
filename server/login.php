@@ -12,7 +12,7 @@ $result;
 $obj;
 
 
-$sql = 'select password,name,admin from user where id = '.$userId.'';
+$sql = 'select password,name,admin,pic_path from user where id = '.$userId.'';
 $result = mysqli_query($conn,$sql);
 if(!$result){
     echo 'fail';
@@ -38,7 +38,7 @@ if($row){
         $obj = new stdClass();
         $obj->userName = $userName;
         $obj->admin = $admin;
-  
+        $obj->pic_path = $dbrow['pic_path'];
 
         echo json_encode($obj);
         die();

@@ -12,8 +12,9 @@ function receive(){
             clearInterval(interval);
             let obj = JSON.parse(response);
             sessionStorage.setItem("interviewee",obj.interviewee);
-            window.alert(obj.interviewee+'邀请您进入面试房间'+obj.room_id);
-            window.location.href="../html/facetime.html";
+            if(window.confirm(obj.interviewee+'邀请您进入面试房间'+obj.room_id)){
+              window.location.href="../html/facetime.html";
+            }
           }else{
             console.log(new Date()+"未收到面试邀请");
           }

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<!--修改日志:
+  本程序还有如下几个待改进的地方：
+    功能模块可以加一些数据分析的内容
+  -->
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>面试网站后台人员管理系统</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="../html/admin/vendors/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="../html/admin/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="../html/admin/vendors/css/vendor.bundle.base.css">
+
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="../html/admin/vendors/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="../html/admin/vendors/chartist/chartist.min.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="../html/admin/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="../html/admin/images/favicon.png" />
+    <style>
+        .tab_info span,.input_text {
+            display: inline-block;
+            max-width: 100px;
+            overflow: hidden;    
+            text-overflow:ellipsis;    
+            white-space: nowrap; 
+        }
+    </style>
+    <script>        
+        $(function(){
+            if(sessionStorage.getItem("isAdmin")!="1"){
+                if(sessionStorage.getItem('illegal')=='1'){
+                    window.alert("没有权限访问该页面！");
+                    window.location.href="error-404.html"
+                }
+                else{
+                    window.alert("没有权限访问该页面！");
+                    window.history.back(-1);
+                    sessionStorage.setItem('illegal','1');
+                }
+            }
+        })　
+        window.onload = function(){
+            let userName = sessionStorage.getItem('username');
+            let pic_path = sessionStorage.getItem('pic_path');
+            let picNodes = document.getElementsByClassName('userpic');
+            let userNodes = document.getElementsByClassName('username');
+            for(let i=0;i<picNodes.length;i++){
+                //@to be continued
+                picNodes[i].src = "./headpic/"+pic_path;
+            }
+            for(let i=0;i<userNodes.length;i++){
+                userNodes[i].innerHTML = userName;
+            }
+        }
+    </script>
+  </head>
+<body>
+    <div class="container-scroller">
+      <!-- partial:partials/_navbar.html -->
+      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="navbar-brand-wrapper d-flex align-items-center">
+          <!--@Questions here 怎么改变名字？为什么在文件修改成功了，放到localhost上就不行-->
+          <a class="navbar-brand brand-logo" href="javscript:void(0);">
+            <img src="../html/admin/images/logo.svg" alt="logo" class="logo-dark" />
+          </a>
+        </div>
+        <!-- 顶部导航栏-->
+        <div class="navbar-menu-wrapper d-flex align-items-center flex-grow-1">
+          <!--欢迎信息-- @todo:可以添加用户名 -->          
+          <h5 class="mb-0 font-weight-medium d-none d-lg-flex">你好，欢迎使用本系统！</h5>
+          <ul class="navbar-nav navbar-nav-right ml-auto">
+            <!--客户信息-->
+            <li class="nav-item dropdown d-none d-xl-inline-flex user-dropdown">
+              <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                <img class="img-xs rounded-circle ml-2 userpic" src="../html/admin/images/faces/bossFace.jpg" alt="Profile image"> <span class="font-weight-normal username" > Freeman </span></a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+                <div class="dropdown-header text-center">
+                  <!--这里还可以再完善，图片搞得更好一点-->
+                  <img class="img-md rounded-circle userpic" src="../html/admin/images/faces/bossFace.jpg" alt="Profile image">
+                  <p class="mb-1 mt-3 username">郑景深</p>
+                  <p class="font-weight-light text-muted mb-0">865366186@qq.com</p>
+                </div>
+                <a class="dropdown-item" onclick='backToLogin()'><i class="dropdown-item-icon icon-power text-primary"></i>退出</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- partial -->
+      <!--左侧的导航栏-->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+          <ul class="nav" id='tableList'>
+          </ul>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <!--用来生成财务报表-->
+            <div class="row">
+              <div class="col-md-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="d-sm-flex align-items-baseline report-summary-header">
+                          <h5 class="font-weight-semibold"> 统计信息</h5> <span class="ml-auto">更新报告</span> <button class="btn btn-icons border-0 p-2" onclick="updateStatics()"><i class="icon-refresh"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row report-inner-cards-wrapper">
+                      <div class=" col-md -6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <span class="report-title"> 用户人数</span>
+                          <h4 id='userNum'></h4>
+                          <span class="report-count"></span>
+                        </div>
+                        <div class="inner-card-icon bg-success">
+                          <i class="icon-rocket"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <span class="report-title"> 贴子数量</span>
+                          <h4 id='articleNum'></h4>
+                          <span class="report-count"></span>
+                        </div>
+                        <div class="inner-card-icon bg-danger">
+                          <i class="icon-briefcase"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <span class="report-title"> 面试场次</span>
+                          <h4 id='interviewNum'></h4>
+                          <span class="report-count"></span>
+                        </div>
+                        <div class="inner-card-icon bg-warning">
+                          <i class="icon-globe-alt"></i>
+                        </div>
+                      </div>
+                      <!--
+                      <div class="col-md-6 col-xl report-inner-card">
+                        <div class="inner-card-text">
+                          <span class="report-title">供应商总数</span>
+                          <h4 id='sNum'></h4>
+                          <span class="report-count"></span>
+                        </div>
+                        <div class="inner-card-icon bg-primary">
+                          <i class="icon-diamond"></i>
+                        </div>
+                      </div>
+                        -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--可以看看怎么使用卡片-->
+            <div class="row" id='tableRow' style='display:none;'>
+              <div class="col-md-12 grid-margin">
+                  <div class="card">
+                      <div class="card-body" id='tableBody'>
+                        <!--这里用来接收show_table.php的信息-->
+                        <!--@这里还可以做的更加漂亮一点-->
+                        <!--@信息太少的时候要怎么做？-->
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021  All rights reserved.更多有关本项目的信息请访问<a href="https://blog.csdn.net/weixin_42896310" title="bootstrapmb">我的博客</a></span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="icon-heart text-danger"></i></span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../html/admin/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="../html/admin/vendors/chart.js/Chart.min.js"></script>
+    <script src="../html/admin/vendors/moment/moment.min.js"></script>
+    <script src="../html/admin/vendors/daterangepicker/daterangepicker.js"></script>
+    <script src="../html/admin/vendors/chartist/chartist.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../html/admin/js/off-canvas.js"></script>
+    <script src="../html/admin/js/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="../html/admin/js/dashboard.js"></script>
+    <!-- End custom js for this page -->
+    <script>
+      var backToLogin = function(){
+        window.location.href = "./login.html";
+        console.log('back to login');
+      }
+      
+      var updateStatics = function(){
+        let newhttp = new XMLHttpRequest();
+        let statisticsInfo;
+  
+        let userNum = document.getElementById('userNum');
+        let articleNum = document.getElementById('articleNum');
+        let interviewNum = document.getElementById('interviewNum');
+        
+        newhttp.onreadystatechange = function(){
+        if(newhttp.readyState == 4 && newhttp.status == 200){
+            //.innerHTML = myhttp.responseText;
+            statisticsInfo = JSON.parse(newhttp.responseText);
+            userNum.innerHTML = statisticsInfo[0];
+            articleNum.innerHTML = statisticsInfo[1];
+            interviewNum.innerHTML = statisticsInfo[2];
+          }
+        }
+        newhttp.open('POST',"http://localhost/interview-project/server/summary.php",true);
+        newhttp.send();
+      }
+      
+      var tableName,columnCount,jsonInfo,firstCol;
+      //简单的页面逻辑sciprt实现
+      var tableNameRequest = function(node){
+       let myhttp = new XMLHttpRequest();
+        myhttp.onreadystatechange = function(){
+        if(myhttp.readyState == 4 && myhttp.status == 200){
+            /*
+            @todo:更改为前后端分离，后端只传JSON
+            */
+            node.innerHTML = myhttp.responseText;
+          }
+        }
+        myhttp.open('POST',"http://localhost/interview-project/server/table_name.php",true);
+        myhttp.send();
+        
+        let newhttp = new XMLHttpRequest();
+        let statisticsInfo;
+        let userNum = document.getElementById('userNum');
+        let articleNum = document.getElementById('articleNum');
+        let interviewNum = document.getElementById('interviewNum');
+        
+        newhttp.onreadystatechange = function(){
+        if(newhttp.readyState == 4 && newhttp.status == 200){
+            //.innerHTML = myhttp.responseText;
+            statisticsInfo = JSON.parse(newhttp.responseText);
+            userNum.innerHTML = statisticsInfo[0];
+            articleNum.innerHTML = statisticsInfo[1];
+            interviewNum.innerHTML = statisticsInfo[2];
+          }
+        }
+        newhttp.open('POST',"http://localhost/retail_system_demo/myretail/summary.php",true);
+        newhttp.send();
+        
+      }
+      //发送获取列表名称的请求
+      var tableListNode = document.getElementById('tableList');
+      tableNameRequest(tableListNode);
+
+      
+      //实现将表格展示在卡片中的功能
+      var showTable = function(node){
+        //在showTable中负责发送两个ajax请求，将返回的信息插入到content中
+        /*
+        table_name = node.innerHTML;
+        'table_info.php?table_name=$table_name'
+        */
+        var tableRowNode = document.getElementById('tableRow');
+        tableRowNode.style.display = "inline";
+        var table_name = node.firstElementChild.innerText;
+        var showHttp = new XMLHttpRequest();
+        showHttp.onreadystatechange = function(){
+          if(showHttp.readyState==4 && showHttp.status==200){
+            //@todo:更改为前后端分离，后端只传JSON
+            document.getElementById('tableBody').innerHTML = showHttp.responseText;
+          }
+        }
+        //to be continue ....
+        showHttp.open('GET','http://localhost/interview-project/server/tab_info.php?table_name='+table_name,true);
+        showHttp.send();
+        //console.log('success!');
+
+        var getFuncHttp = new XMLHttpRequest();
+        var infoarr;
+        getFuncHttp.onreadystatechange = function(){
+          if(getFuncHttp.readyState == 4 && getFuncHttp.status == 200){
+            infoarr = JSON.parse(getFuncHttp.responseText);
+            tableName = infoarr[0];
+            columnCount = infoarr[1];
+            jsonInfo = infoarr[2];
+            firstCol = infoarr[3];
+          }
+        }
+        getFuncHttp.open('GET','http://localhost/interview-project/server/info.php?table_name='+table_name,true);
+        getFuncHttp.send();
+      }
+      //添加删除功能
+      var del = function(node){
+        var name = node.name;
+        var id = node.id;
+        request(name,id,node);
+      }
+      var request = function(name,id,node){
+        //console.log("delete from "+'<?php echo $table_name;?>'+" where "+name+" = "+ id);  
+        var myHttp = new XMLHttpRequest();
+        myHttp.onreadystatechange = function(){
+          if(myHttp.readyState == 4 && myHttp.status == 200){
+            console.log(myHttp.responseText);
+            if(myHttp.responseText=='success'){
+              var trNode = node.parentNode.parentNode;
+              trNode.parentNode.removeChild(trNode);
+            }else{
+              window.alert("无法正确删除,请检查外键约束");
+            }
+          }
+        }
+        myHttp.open('POST','http://localhost/interview-project/server/del_node.php',true);
+        myHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+        myHttp.send('name='+name+"&table_name="+tableName+"&id="+id);
+      }
+      //添加编辑功能
+      //添加插入功能
+      /*
+        算法描述：
+        一点击，就生成一行新的文本框，然后创建一个确定按钮
+        用户输入数据，输入数据完毕后点击确定按钮
+      */
+      var insert = function(tabName){
+        /*
+        获取table结点，然后调用table.insertRow()创建新的tr结点，
+        根据php中的$count获取文本个数，然后使用一个循环，向新建的tr结点插入文本个数的cell();
+        完毕后，再向tr结点插入一个cell,colspan占两个格，向cell中插入一个新的button，innerHtml为确定,并给Button添加点击事件，sureToInsert(this)
+        */
+        //获取文本的个数
+        var length = columnCount;
+        var tabNode = document.getElementById('tab');
+        var trNode = tabNode.insertRow();
+        trNode.style.color = "#212529";
+        trNode.style.backgroundColor = "#ecf0f4";
+        var flag = false;
+        if(tabName=='purchases') flag = true;         
+        for(let i=0;i<length;i++){
+          if(i >= length-2 && flag == true){
+            let tdNode = trNode.insertCell(i);
+            tdNode.innerHTML = '';
+          }else{
+            let tdNode = trNode.insertCell(i);
+            //@cursor
+            tdNode.innerHTML = '<input type="text" class="search-form d-none d-md-block form-control input_text" />';
+            //<input type="text" class="search-form d-none d-md-block form-control" />
+            //btn btn-rounded btn-success btn-fw
+          }
+        }
+        var tdbuttonNode = trNode.insertCell(length);    
+        tdbuttonNode.colSpan = "2";
+        tdbuttonNode.align = "center";
+        tdbuttonNode.innerHTML = "<button class='btn btn-rounded btn-success btn-fw' onclick = 'sureToInsert(this)'>确定</button>"; 
+      }
+      var sureToInsert = function(node){
+        /*
+        在新的确定按钮中，当用户点击，将获取文本框的信息，将文本框的信息发送给Php文件，由php文件执行sql操作插入数据
+        当成功插入后，创建span结点，用span结点替换原来的text结点，同时，创建两个新的button,插入到tr行中，需要注意赋值给这两个button的id和name
+        */
+        /*
+        获取button结点的parentNode.parentNode,即tr结点。
+        创建strArr。
+        根据php的column_array的长度，遍历tr结点中的子节点td结点，获取到td结点的firstChild.value，将其记录在strArr中
+        然后使用ajax发送http请求，send()table_name，strArr数组，column_array。需要将strArr和column_array转换为json格式
+        在确定发送成功了之后，就再次遍历tr结点中的td结点，找到firstChild结点，创建span结点,用strArr为其赋值，替代td结点的firstChild结点
+        然后在执行两次insertCell()，插入button，需要为其的id和name赋值 name赋字段名，id赋具体值
+        */
+        var trNode = node.parentNode.parentNode;
+        var str_Arr= new Array();
+        var length = columnCount;
+        var tdNode_Arr = trNode.children;
+
+        for(let i=0;i<length;i++){
+        if(tdNode_Arr[i].firstChild.value==""){
+            //信息合法性检测
+            window.alert("请输入完整信息");
+            return;
+        }
+        let textValue =tdNode_Arr[i].firstChild.value;
+        str_Arr[i] = textValue;
+        } 
+        /*发送请求*/
+        insertRequest(str_Arr,length,tdNode_Arr,trNode);
+
+      }
+
+      var insertRequest = function(str_Arr,length,tdNode_Arr,trNode){
+        var insertHttp = new XMLHttpRequest();
+        insertHttp.onreadystatechange = function(){
+          if(insertHttp.readyState == 4 && insertHttp.status == 200){
+            if(insertHttp.responseText=='success'){
+              //change here
+              for(let i=0;i<length;i++){
+                var spanNode = document.createElement('span');
+                spanNode.innerHTML = str_Arr[i];
+                tdNode_Arr[i].replaceChild(spanNode,tdNode_Arr[i].firstChild);
+              }
+              //删除原来的确定按钮
+              tdNode_Arr[length].parentNode.removeChild(tdNode_Arr[length]);
+              //添加新的button
+              var editTd = trNode.insertCell(length);
+              /*
+                "<td><button class='btn  btn-rounded btn-danger btn-sm' name='$first_column' id='$dbrow[0]' onclick='del(this)'>删除</button></td>";
+                "<td><button class='btn  btn-rounded btn-primary btn-sm' name='$first_column' id='$dbrow[0]' onclick='edit(this)'>编辑</button></td>";
+              */
+              //change here
+              editTd.innerHTML = "<button class='btn btn-rounded btn-danger btn-sm' name='"+firstCol+"' "+" id="+str_Arr[0]+" onclick='del(this)'>删除</button>";
+              var delTd  = trNode.insertCell(length+1);
+              delTd.innerHTML  = "<button class='btn btn-rounded btn-primary btn-sm' name='"+firstCol+"' "+" id="+str_Arr[0]+" onclick='edit(this)'>编辑</button>";      
+            }else{
+              window.alert("请检查输入值是否有效");
+            }
+          }
+        }
+
+        insertHttp.open("POST","http://localhost/interview-project/server/insert.php",true);
+        //转换为json格式
+        var column_name = 'column_name='+jsonInfo;
+        var column_value = '&column_value='+JSON.stringify(str_Arr);
+        var table_name = '&table_name='+tableName;
+        console.log(column_name+column_value+table_name);
+        insertHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        insertHttp.send(column_name+column_value+table_name);
+      }  
+      
+      //实现编辑功能
+      var edit = function(node){
+        if(node.innerHTML == '编辑'){
+          node.innerHTML = '确认';
+          var trNode = node.parentNode.parentNode;
+          var length = columnCount;
+          var tdNode_Arr = trNode.children;
+          //第一个元素不更改，从1开始，而且还要排除掉最后的两个Button edit和delete
+          for(let i=1;i<length;i++){
+            if(tdNode_Arr[i]!= trNode.lastChild && tdNode_Arr[i]!= trNode.lastChild.previousElementSibling){
+            /*
+              1.为每个存放字段数组的td添加span标签
+              2.通过dom操作，获取到button的父结点的父节点，即tr结点，
+              然后根据字段的长度，遍历tr结点中的每个td结点，将每个td结点的firstChild的innerHTML赋值给新创建的结点，然后用replace替换
+            */
+              var spanNode = tdNode_Arr[i].firstChild;
+              var newNode = document.createElement("INPUT");
+              newNode.setAttribute('type','text');
+              //392
+              newNode.setAttribute('class','search-form d-none d-md-block form-control');
+              //newNode.class = 'search-form d-none d-md-block form-control';
+              newNode.value = spanNode.innerHTML;
+              spanNode.parentNode.replaceChild(newNode,spanNode);
+            }
+          } 
+        }else if(node.innerHTML == '确认'){
+            /*
+            需要执行的事情：
+            1.通过dom操作，获取到button的父节点的父节点，即tr结点
+            根据字段的长度，遍历tr结点中的每个td结点，获取到td结点的子结点即input框的值，存放在一个字符串数组中
+            2.存放到字符串数组后，结合Php中的$column_array将数据通过ajax的post请求发送给edit_data.php中
+            3.更改完毕后，再次遍历tr结点中的每个td结点，创建span结点，用字符串数组中的值为其赋值，然后用replaceChild替换
+            */ 
+            var trNode = node.parentNode.parentNode;
+            var length = columnCount;
+            var tdNode_Arr = trNode.children;
+            var str_Arr = new Array();
+            //将数据存放到字符串数组
+            for(let i=0;i<length;i++){
+              if(tdNode_Arr[i]!=trNode.lastChild && tdNode_Arr[i]!=trNode.lastChild.previousElementSibling){
+                if(i!=0){
+                  str_Arr[i] = tdNode_Arr[i].firstChild.value;
+                }else{
+                  str_Arr[i] = tdNode_Arr[i].firstChild.innerText;
+                }
+              }
+            }
+            //发送请求
+            editRequest(str_Arr,node,trNode,tdNode_Arr,length);
+        }
+      }
+
+      var editRequest = function(str_Arr,node,trNode,tdNode_Arr,length){
+        var editHttp = new XMLHttpRequest();
+        editHttp.onreadystatechange = function(){
+          if(editHttp.readyState == 4 && editHttp.status == 200){
+            console.log(editHttp.responseText);
+            if(editHttp.responseText == 'success'){
+              for(let i=1;i<length;i++){
+                if(tdNode_Arr[i]!=trNode.lastChild && tdNode_Arr[i]!=trNode.lastChild.previousElementSibling){
+                  var newNode = document.createElement('span');
+                  var textNode = tdNode_Arr[i].firstChild;
+                  newNode.innerHTML = tdNode_Arr[i].firstChild.value;
+                  textNode.parentNode.replaceChild(newNode,textNode);
+                }
+              }
+              node.innerHTML = '编辑';  
+            }else{
+              window.alert("请检查输入值是否有误");
+            }
+          }
+        }
+        var column_name = "column_name="+jsonInfo;
+        var column_value = "&column_value="+JSON.stringify(str_Arr);
+        editHttp.open('POST','http://localhost/interview-project/server/edit.php',true);
+        editHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        editHttp.send(column_name+column_value+"&table_name="+tableName);
+      }
+      //实现生成月报表的功能
+      //@月报表的界面有点丑，看看能不能改改
+      /*
+        步骤描述:
+          获取信息，向monthly.php发送生成请求
+          将请求的结果返回到table里
+          @todo:生成面试场次
+      */
+      /*
+      var generateMonthlyReport = function(){
+        //tableRow style
+        var searchId = document.getElementById('pid').value;  
+        var tableRowNode = document.getElementById('tableRow');
+        //console.log(searchId);
+        let myhttp = new XMLHttpRequest();
+        myhttp.onreadystatechange = function(){
+          if(myhttp.readyState == 4 && myhttp.status == 200){
+            if(myhttp.responseText != 'fail') {
+              //显示表格，将返回结果显示到tableBody中
+              tableRowNode.style.display = 'inline';
+              document.getElementById('tableBody').innerHTML = myhttp.responseText;
+              //console.log(myhttp.responseText);
+            }else{
+              window.alert("请检查输入的产品id是否有误");
+            }   
+          }
+        }
+        myhttp.open('GET',"http://localhost/retail_system_demo/myretail/month_report.php?id="+searchId,true);
+        myhttp.send();
+      }
+      */
+    </script>
+  </body>
+</html>
