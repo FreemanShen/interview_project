@@ -102,6 +102,27 @@
         <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <ul class="nav" id='tableList'>
+             <!-- 显示用户 -->
+            <li class="nav-item nav-profile">
+              <a href="#" class="nav-link">
+                <!--图片-->
+                <div class="profile-image">
+                  <img class="img-xs rounded-circle userpic" src="../html/admin/images/faces/bossFace.jpg" alt="profile image">
+                </div>
+                <!--客户名字-->
+                <div class="text-wrapper">
+                  <p class="profile-name username">Freeman</p>
+                  <p class="designation">admin</p>
+                </div>
+                <div class="icon-container">
+                  <i class="icon-user"></i>
+                </div>
+              </a>
+            </li>
+            <!-- 导航页面dashboard,此处可以用来更新 -->
+            <li class="nav-item nav-category">
+              <span class="nav-link">TABLE INFORMATION</span>
+            </li>
           </ul>
         </nav>
         <!-- partial -->
@@ -171,7 +192,7 @@
             <div class="row" id='tableRow' style='display:none;'>
               <div class="col-md-12 grid-margin">
                   <div class="card">
-                      <div class="card-body" id='tableBody'>
+                      <div class="card-body" id='tableBody' style="overflow-x: scroll;">
                         <!--这里用来接收show_table.php的信息-->
                         <!--@这里还可以做的更加漂亮一点-->
                         <!--@信息太少的时候要怎么做？-->
@@ -247,7 +268,7 @@
             /*
             @todo:更改为前后端分离，后端只传JSON
             */
-            node.innerHTML = myhttp.responseText;
+            node.innerHTML += myhttp.responseText;
           }
         }
         myhttp.open('POST',"http://localhost/interview-project/server/table_name.php",true);

@@ -37,6 +37,13 @@ window.onload = function(){
   
     console.log("onload exectuing...");
 
+    if(sessionStorage.getItem("isAdmin")=="1"){
+        let aNode = document.createElement('a');
+        aNode.innerHTML= "管理"
+        aNode.setAttribute("href","./admin.html");
+        document.getElementById('nav').appendChild(aNode);
+    }
+
     //页面渲染之后，查看一下sessionStorage的登陆状态，如果是已登录，修改button里的内容，做一个跳转
     if(sessionStorage.getItem('login') == 'true'){
         document.getElementById('userInfoBtn').innerHTML="欢迎,"+sessionStorage.getItem('username');

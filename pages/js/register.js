@@ -2,7 +2,14 @@ function register() {
     var userId = document.getElementById("userid").value;
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
-   
+    var sePassword = document.getElementById('surepassword').value;
+
+   if(password!=sePassword){
+     window.alert('两次密码不一致');
+     document.getElementById("password").value = "";
+     document.getElementById('surepassword').value = "";
+     return;
+   }
     console.log(userid); console.log(username); console.log(password);
     
     var response;

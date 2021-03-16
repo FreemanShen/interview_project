@@ -206,7 +206,7 @@ $(function(){
     getQuestionHttp.open('POST',"http://localhost/interview-project/server/question.php",true);
     getQuestionHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
     //根据题目类型去确定(type - -)
-    getQuestionHttp.send('type=1');
+    getQuestionHttp.send('type='+parseInt(sessionStorage.getItem("exercise_type")));
     
 
     /*alert(QuestionJosn.length);*/

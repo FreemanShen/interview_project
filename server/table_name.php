@@ -8,6 +8,7 @@ $result = mysqli_query($conn,$sql);
 
 //设置格式
 if($result){
+  /*
   echo'
   <!-- 显示用户 -->
   <li class="nav-item nav-profile">
@@ -31,6 +32,7 @@ if($result){
     <span class="nav-link">TABLE INFORMATION</span>
   </li>
   ';
+  */
   //显示表名
   $row = mysqli_num_rows($result);
   if($row){
