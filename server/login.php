@@ -12,7 +12,7 @@ $result;
 $obj;
 
 
-$sql = 'select password,name,admin,pic_path from user where id = '.$userId.'';
+$sql = 'select * from user where id = '.$userId.'';
 $result = mysqli_query($conn,$sql);
 if(!$result){
     echo 'fail';
@@ -33,12 +33,24 @@ if($row){
         } 
         //@超级用户怎么说?
         //返回用户名
-        $userName = $dbrow['name'];
-        $admin = $dbrow['admin'];
+        $userName = $dbrow['name'];        
         $obj = new stdClass();
-        $obj->userName = $userName;
-        $obj->admin = $admin;
+        $obj->userName = $userName;        
         $obj->pic_path = $dbrow['pic_path'];
+        $obj->name = $dbrow['name'];
+        $obj->online = $dbrow['online'];
+        $obj->admin = $dbrow['admin'];
+        $obj->last_login = $dbrow['last_login'];
+        $obj->sex = $dbrow['sex'];
+        $obj->tel = $dbrow['tel'];
+        $obj->mail = $dbrow['mail'];
+        $obj->school = $dbrow['school'];
+        $obj->city = $dbrow['city'];
+        $obj->salary = $dbrow['salary'];
+        $obj->job = $dbrow['job'];
+        $obj->sign = $dbrow['sign'];
+        $obj->intro = $dbrow['intro'];
+
 
         echo json_encode($obj);
         die();

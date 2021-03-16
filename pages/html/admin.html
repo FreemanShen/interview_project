@@ -52,14 +52,19 @@
         window.onload = function(){
             let userName = sessionStorage.getItem('username');
             let pic_path = sessionStorage.getItem('pic_path');
+            let mailName = JSON.parse(sessionStorage.getItem('user_json')).mail;
             let picNodes = document.getElementsByClassName('userpic');
             let userNodes = document.getElementsByClassName('username');
+            let mailNodes = document.getElementById('mail');
             for(let i=0;i<picNodes.length;i++){
                 //@to be continued
                 picNodes[i].src = "./headpic/"+pic_path;
             }
             for(let i=0;i<userNodes.length;i++){
                 userNodes[i].innerHTML = userName;
+            }
+            for(let i=0;i<mailNodes.length;i++){
+              mailNodes[i].innerHTML = mailName;
             }
         }
     </script>
@@ -88,7 +93,7 @@
                   <!--这里还可以再完善，图片搞得更好一点-->
                   <img class="img-md rounded-circle userpic" src="../html/admin/images/faces/bossFace.jpg" alt="Profile image">
                   <p class="mb-1 mt-3 username">郑景深</p>
-                  <p class="font-weight-light text-muted mb-0">865366186@qq.com</p>
+                  <p class="font-weight-light text-muted mb-0 mail">somebody@email.com</p>
                 </div>
                 <a class="dropdown-item" onclick='backToLogin()'><i class="dropdown-item-icon icon-power text-primary"></i>退出</a>
               </div>
@@ -206,7 +211,6 @@
           <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
               <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021  All rights reserved.更多有关本项目的信息请访问<a href="https://blog.csdn.net/weixin_42896310" title="bootstrapmb">我的博客</a></span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="icon-heart text-danger"></i></span>
             </div>
           </footer>
           <!-- partial -->
@@ -235,6 +239,7 @@
     <script>
       var backToLogin = function(){
         window.location.href = "./login.html";
+        sessionStorage.clear();
         console.log('back to login');
       }
       
