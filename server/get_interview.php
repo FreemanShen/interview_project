@@ -9,7 +9,7 @@ $obj;
 如果发现有在10分钟内发起的会话，就反馈信息给客户，这时双方进入房间，并且计时器关闭。
 select * from sessionlogs where time()-create_time < 180 and interviewer =  
 */
-$sql = "select * from sessionlogs where ".$time."-create_time < 30 and interviewer = '".$interviewer."'";
+$sql = "select * from sessionlogs where ".$time."-create_time < 120 and interviewer = '".$interviewer."'";
 $result = mysqli_query($conn,$sql);
 if(!$result){
     echo 'fail';

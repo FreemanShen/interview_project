@@ -17,6 +17,21 @@
     </script>
 </head>
 <body>
+    <!--弹出罩。。。默认不可见-->
+    <div class="modal">
+        <div class="modal-header">
+            <p class="title">面试邀请</p>
+            <p class="close">×</p>
+        </div>
+        <div class="modal-content" id="interview_info">
+            
+        </div>
+        <div class="modal-footer">
+            <button class="btn" onclick="accept_interview()">接受邀请</button>
+        </div>
+    </div>
+    <div class="mask"></div>
+    <!--导航条 正文-->
     <div id="nav">
         <a href="./index.html">首页</a>
         <a href="./questions_index.html">题库</a>
@@ -180,21 +195,10 @@
             </ul>
         </div>
     </div>
+    <button id="toggleModal">
+        test
+    </button>
+   
 
-    <!--
-        <div class="modal">
-            <div class="modal-header">
-                <p class="title">这是弹出层的标题</p>
-                <p class="close">×</p>
-            </div>
-            <div class="modal-content">
-                
-            </div>
-            <div class="modal-footer">
-                <button class="close btn">关闭</button>
-            </div>
-        </div>
-        <div class="mask"></div>
-    -->
 </body>
 </html>

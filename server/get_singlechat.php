@@ -41,8 +41,8 @@ if($row){
 
 
         //获取sendername和receivername
-        $receiverSql = 'select name from user where id = '.$dbrow['receiver_id'].'';
-        $senderSql = 'select name from user where id ='.$dbrow['sender_id'].'';
+        $receiverSql = 'select name,pic_path from user where id = '.$dbrow['receiver_id'].'';
+        $senderSql = 'select name,pic_path from user where id ='.$dbrow['sender_id'].'';
         $reRes = mysqli_query($conn,$receiverSql);
         $sdRes = mysqli_query($conn,$senderSql);
 
@@ -54,6 +54,7 @@ if($row){
         if($rerow){
             $rerow=mysqli_fetch_array($reRes);
             $obj->receiver_name=$rerow['name']; 
+            $obj->recevier_pic_path = $rerow['pic_path'];
         }else{
             echo 'fail';
             die();
@@ -63,6 +64,8 @@ if($row){
         if($sdrow){
             $sdrow=mysqli_fetch_array($sdRes);
             $obj->sender_name=$sdrow['name']; 
+            $obj->sender_pic_path = $sdrow['pic_path'];
+
         }else{
             echo 'fail';
             die();

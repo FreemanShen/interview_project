@@ -1,5 +1,5 @@
 .mask{
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
@@ -10,7 +10,7 @@
     display: none;
 }
 .modal{
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     width: 400px;
@@ -43,6 +43,8 @@
 }
 .modal .modal-content{
     min-height: 100px;
+    padding-left: 15px;
+
 }
 .modal .modal-footer .btn{
     padding: 0 20px;

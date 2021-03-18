@@ -6,6 +6,8 @@
     <title>程序员面试网站-题库</title>
     <link rel="stylesheet" type="text/css" href="../css/main.css" />
     <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/modal.css"/>
+
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/index.js"></script>
@@ -13,6 +15,21 @@
     <script src="../js/logout.js"></script>
 </head>
 <body>
+    <!--弹出罩。。。默认不可见-->
+    <div class="modal">
+        <div class="modal-header">
+            <p class="title">面试邀请</p>
+            <p class="close">×</p>
+        </div>
+        <div class="modal-content" id="interview_info">
+            
+        </div>
+        <div class="modal-footer">
+            <button class="btn" onclick="accept_interview()">接受邀请</button>
+        </div>
+    </div>
+    <div class="mask"></div>
+
     <div id="nav">
         <a href="./index.html">首页</a>
         <a href="./questions_index.html">题库</a>

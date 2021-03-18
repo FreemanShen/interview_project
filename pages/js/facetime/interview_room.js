@@ -153,7 +153,8 @@ function get_msg(){
                         /*
                         @todo:
                         宁还没有登录，请先登录。。。。。
-                        */
+                        */ 
+                            //他方信息
                         if(objArr[i].sender_id != sender_id && objArr[i].sender_id != parseInt(sender_id)){
                             msgNode.innerHTML += '<div class="message-item">\
                                                         <div class="message-avatar">\
@@ -170,6 +171,7 @@ function get_msg(){
                                                     </div>';
 
                         }else{
+                            //己方信息
                             msgNode.innerHTML += '<div class="message-item outgoing-message">\
                                                     <div class="message-avatar">\
                                                         <figure class="avatar">\
@@ -198,4 +200,18 @@ function get_msg(){
  
 //@todo:添加时间戳，过了一天的内容就去除掉
 setInterval(get_msg,200);
-    
+
+
+/*
+<div class="chat-header-user">
+    <figure class="avatar">
+        <img src="./dist/media/img/man_avatar3.jpg" class="rounded-circle" alt="image">
+    </figure>
+    <div>
+        <h5>Byrom Guittet</h5>
+        <small class="text-success">
+            <i>writing...</i>
+        </small>
+    </div>
+</div>
+*/
