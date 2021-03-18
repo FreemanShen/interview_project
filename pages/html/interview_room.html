@@ -20,9 +20,19 @@
     <script src="../js/facetime/lib-generate-test-usersig.min.js"></script>
     <script src="../js/facetime/trtc.js"></script>
     <script src="../js/facetime/interview_room.js"></script>
-    <script src="../js/single_chatting.js"></script>
-
-
+    
+    <style>
+        .message-content{
+            width:fit-content;
+        }
+        .my_content{
+            float:right;
+        }
+        .my_avatar{
+            margin-right: 0 !important;
+            margin-left: 16px;
+        }
+    </style>
 </head>
 <body>
     <div class="room_left">
@@ -44,12 +54,12 @@
                 <div class="chat-header">
                     <div class="chat-header-user">
                         <figure class="avatar">
-                            <img src="./dist/media/img/man_avatar3.jpg" class="rounded-circle" alt="image">
+                            <img src="./logo/headpic_default.jpg" class="rounded-circle" alt="image" id="single_chat_img">
                         </figure>
                         <div>
-                            <h5>Byrom Guittet</h5>
-                            <small class="text-success">
-                                <i>writing...</i>
+                            <h5 id="single_chat_head_user">等待中...</h5>
+                            <small class="text-light" id="user_status">
+                                <i>offline...</i>
                             </small>
                         </div>
                     </div>

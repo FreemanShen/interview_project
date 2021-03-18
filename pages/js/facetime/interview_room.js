@@ -38,6 +38,8 @@ client.on('stream-subscribed', event => {
     console.log('远端流订阅成功：' + remoteStream.getId());
     // 播放远端流
     remoteStream.play('opposite_viewer');
+    get_receiver_info();
+
 });    
 
 client.on('peer-leave', event => {
@@ -130,8 +132,9 @@ function get_msg(){
     let getMsgHttp = new XMLHttpRequest();
     getMsgHttp.onreadystatechange = function(){
         if(getMsgHttp.readyState == 4 && getMsgHttp.status == 200){
+            //let set_head_flag = false;
             response = getMsgHttp.responseText;
-            if(response!="fail"){
+            if(response!="fail"){ 
                 let msgNode = document.getElementById('messages')
                 msgNode.innerHTML = "";
                 let objArr = JSON.parse(response);
@@ -154,12 +157,12 @@ function get_msg(){
                         @todo:
                         宁还没有登录，请先登录。。。。。
                         */ 
-                            //他方信息
+                        //他方信息
                         if(objArr[i].sender_id != sender_id && objArr[i].sender_id != parseInt(sender_id)){
                             msgNode.innerHTML += '<div class="message-item">\
                                                         <div class="message-avatar">\
                                                             <figure class="avatar">\
-                                                                <img src="./dist/media/img/man_avatar3.jpg" class="rounded-circle" alt="image">\
+                                                                <img src="./headpic/'+objArr[i].sender_pic_path+'" class="rounded-circle" alt="image">\
                                                             </figure>\
                                                             <div>\
                                                                 <h5>'+objArr[i].sender_name+'</h5>\
@@ -174,20 +177,23 @@ function get_msg(){
                             //己方信息
                             msgNode.innerHTML += '<div class="message-item outgoing-message">\
                                                     <div class="message-avatar">\
-                                                        <figure class="avatar">\
-                                                            <img src="./dist/media/img/women_avatar5.jpg" class="rounded-circle" alt="image">\
-                                                        </figure>\
                                                         <div>\
-                                                            <h5>'+objArr[i].sender_name+'</h5>\
-                                                            <div class="time">'+objArr[i].chattime+'<i class="ti-double-check text-info"></i></div>\
+                                                            <h5 align="right">'+objArr[i].sender_name+'</h5>\
+                                                            <div class="time">'+objArr[i].chattime+'</div>\
                                                         </div>\
+                                                        <figure class="avatar my_avatar">\
+                                                        <img src="./headpic/'+objArr[i].sender_pic_path+'" class="rounded-circle" alt="image">\
+                                                        </figure>\
                                                     </div>\
-                                                    <div class="message-content">'+objArr[i].msg+'\
+                                                    <div class="message-content my_content">'+objArr[i].msg+'\
                                                     </div>\
                                                     </div>';
                         }
                     }
+                    //clearInterval(get_msg)
                 }
+
+
             }else if(response == "fail"){
             }
         }
@@ -201,17 +207,36 @@ function get_msg(){
 //@todo:添加时间戳，过了一天的内容就去除掉
 setInterval(get_msg,200);
 
+function get_receiver_info(){
+    //receiver_id
+    let response;
+    let getRecevierHttp = new XMLHttpRequest();
+    getRecevierHttp.onreadystatechange = function(){
+        if(getRecevierHttp.readyState == 4 && getRecevierHttp.status == 200){
+    
+            response = getRecevierHttp.responseText;
+            if(response!="fail"){
+                let obj = JSON.parse(response)
+                let arr = [];
+                arr.push(obj.pic_path)
+                arr.push(obj.name)
+                document.getElementById('single_chat_img').setAttribute('src','./headpic/'+obj.pic_path);                             
+                document.getElementById('single_chat_head_user').innerHTML = obj.name;  
+                document.getElementById('user_status').innerHTML = "online";      
+                document.getElementById('user_status').classList.remove('text-light');      
+                document.getElementById('user_status').classList.add('text-success');                     
+                return arr;
+            }else if(response == "fail"){
+            }
+        }
+    }
+    //@todo:post地址可以更改
+    getRecevierHttp.open('POST',"http://localhost/interview-project/server/get_user_info.php",true);
+    getRecevierHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+    getRecevierHttp.send('userId='+receiver_id);
+    
+}
 
-/*
-<div class="chat-header-user">
-    <figure class="avatar">
-        <img src="./dist/media/img/man_avatar3.jpg" class="rounded-circle" alt="image">
-    </figure>
-    <div>
-        <h5>Byrom Guittet</h5>
-        <small class="text-success">
-            <i>writing...</i>
-        </small>
-    </div>
-</div>
-*/
+window.onload = function(){
+    get_msg();
+}
