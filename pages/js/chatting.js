@@ -68,7 +68,7 @@ function get_msg(){
                             msgNode.innerHTML += '<div class="message-item">\
                                                         <div class="message-avatar">\
                                                             <figure class="avatar">\
-                                                                <img src="./dist/media/img/man_avatar3.jpg" class="rounded-circle" alt="image">\
+                                                                <img src="./headpic/'+objArr[i].sender_pic_path+'" class="rounded-circle" alt="image">\
                                                             </figure>\
                                                             <div>\
                                                                 <h5>'+objArr[i].sender_name+'</h5>\
@@ -80,19 +80,19 @@ function get_msg(){
                                                  </div>';
 
                         }else{
-                            msgNode.innerHTML += '<div class="message-item outgoing-message">\
-                                                    <div class="message-avatar">\
-                                                        <figure class="avatar">\
-                                                            <img src="./dist/media/img/women_avatar5.jpg" class="rounded-circle" alt="image">\
-                                                        </figure>\
-                                                        <div>\
-                                                            <h5>'+objArr[i].sender_name+'</h5>\
-                                                            <div class="time">'+objArr[i].chattime+'<i class="ti-double-check text-info"></i></div>\
+                            msgNode.innerHTML +=    '<div class="message-item outgoing-message">\
+                                                        <div class="message-avatar">\
+                                                            <div>\
+                                                                <h5 align="right">'+objArr[i].sender_name+'</h5>\
+                                                                <div class="time">'+objArr[i].chattime+'</div>\
+                                                            </div>\
+                                                            <figure class="avatar my_avatar">\
+                                                            <img src="./headpic/'+objArr[i].sender_pic_path+'" class="rounded-circle" alt="image">\
+                                                            </figure>\
                                                         </div>\
-                                                    </div>\
-                                                    <div class="message-content">'+objArr[i].msg+'\
-                                                    </div>\
-                                                 </div>';
+                                                        <div class="message-content my_content">'+objArr[i].msg+'\
+                                                        </div>\
+                                                    </div>';
                         }
                     }
                 }

@@ -28,6 +28,12 @@ if($row){
       $obj->sender_id = $dbrow['sender_id'];
       $obj->sender_name = $dbrow['sender_name'];
       $obj->chattime = $dbrow['cdt'];
+
+      $get_pic_Sql = 'select pic_path from user where id = '.$obj->sender_id;
+      $get_pic_Res = mysqli_query($conn,$get_pic_Sql);
+      $pic_row = mysqli_fetch_array($get_pic_Res);
+      $obj->sender_pic_path = $pic_row['pic_path'];
+
       array_push($objArr,$obj);
     }
 }else{

@@ -19,6 +19,19 @@
     <!-- App styles -->
     <link rel="stylesheet" href="./dist/css/app.min.css">
     <script src="../js/chatting.js"></script>
+
+    <style>
+        .message-content{
+            width:fit-content;
+        }
+        .my_content{
+            float:right;
+        }
+        .my_avatar{
+            margin-right: 0 !important;
+            margin-left: 16px;
+        }
+    </style>
 </head>
 <body>
 
@@ -31,49 +44,13 @@
         <div class="chat">
             <div class="chat-header">
                 <div class="chat-header-user">
-                    <figure class="avatar">
-                        <img src="./dist/media/img/man_avatar3.jpg" class="rounded-circle" alt="image" id="single_chat_img">
-                    </figure>
+
                     <div>
-                        <h5 id="single_chat_head_user">Byrom Guittet</h5>
+                        <h5 id="single_chat_head_user">1号房</h5>
                         <small class="text-success">
-                            <i>online...</i>
+                            <i>创建者</i>
                         </small>
                     </div>
-                </div>
-                <div class="chat-header-action">
-                    <ul class="list-inline">
-                        <li class="list-inline-item d-xl-none d-inline">
-                            <a href="#" class="btn btn-outline-light mobile-navigation-button">
-                                <i data-feather="menu"></i>
-                            </a>
-                        </li>
-                        <li class="list-inline-item" data-toggle="tooltip" title="Voice call">
-                            <a href="#" class="btn btn-outline-light text-success" data-toggle="modal"
-                               data-target="#call">
-                                <i data-feather="phone"></i>
-                            </a>
-                        </li>
-                        <li class="list-inline-item" data-toggle="tooltip" title="Video call">
-                            <a href="#" class="btn btn-outline-light text-warning" data-toggle="modal"
-                               data-target="#videoCall">
-                                <i data-feather="video"></i>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#" class="btn btn-outline-light" data-toggle="dropdown">
-                                <i data-feather="more-horizontal"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" data-navigation-target="contact-information"
-                                   class="dropdown-item">Profile</a>
-                                <a href="#" class="dropdown-item">Add to archive</a>
-                                <a href="#" class="dropdown-item">Delete</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" class="dropdown-item text-danger">Block</a>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
             </div>
             <div class="chat-body"> <!-- .no-message -->
@@ -88,35 +65,6 @@
                 </div>
                 -->
                 <div class="messages" id="messages">
-                    <div class="message-item outgoing-message">
-                        <div class="message-avatar">
-                            <figure class="avatar">
-                                <img src="./dist/media/img/women_avatar5.jpg" class="rounded-circle" alt="image">
-                            </figure>
-                            <div>
-                                <h5>Mirabelle Tow</h5>
-                                <div class="time">01:20 PM <i class="ti-double-check text-info"></i></div>
-                            </div>
-                        </div>
-                        <div class="message-content">
-                            Hello how are you?
-                        </div>
-                    </div>
-                    <div class="message-item">
-                        <div class="message-avatar">
-                            <figure class="avatar">
-                                <img src="./dist/media/img/man_avatar3.jpg" class="rounded-circle" alt="image">
-                            </figure>
-                            <div>
-                                <h5>Byrom Guittet</h5>
-                                <div class="time">01:35 PM</div>
-                            </div>
-                        </div>
-                        <div class="message-content">
-                            I'm fine, how are you 😃
-                        </div>
-                    </div>
-
                 </div>
             </div>
             <div class="chat-footer">
