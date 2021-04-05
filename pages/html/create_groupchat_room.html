@@ -9,17 +9,22 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
     <script src="../js/init.js"></script>
     <script src="../js/facetime/inteverview.js"></script>
-
+    <script>
+        function createGroupChatRoom(){
+            console.log(new Date()+'func createGroupchat detected');
+        }
+    </script>
 </head>
 <body>
     
     <div id="parent">
         <div id="intverview_card" class="card">
-            <p id="head">进入房间</p>
+            <p id="head">创建群聊房间</p>
             <!--@record:这里还可以给各个Input框添加icon-->
             <input type="text" class="form-control" id="room_id" placeholder="请输入房间号">
-            <input type="text" class="form-control" id="user_id" placeholder="请输入邀请方/被邀请方id">
-            <button class="btn btn-primary  loginButton"  style="margin-bottom: 24px;" onclick='enterRoom()'>进入房间</button>
+            <input type="text" class="form-control" id="description_id" placeholder="请输入房间简介">
+            <input type="text" class="form-control" id="password" placeholder="请输入房间密码，不填默认为空">
+            <button class="btn btn-primary  loginButton" style="margin-bottom: 24px;" onclick='createGroupChatRoom()'>创建房间</button>
         </div>
     </div>
 </body>

@@ -47,7 +47,7 @@ body{
     display: block;
     margin-top: -3px
 }
-#username,#password,#userID,#ensurePassword,#room_id,#user_id{
+#username,#password,#userID,#ensurePassword,#room_id,#user_id,#description_id{
     display: block;
     width: 352px;
     height: 56px;

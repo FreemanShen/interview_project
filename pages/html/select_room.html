@@ -5,631 +5,111 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>选择聊天室房间</title>
-    
-
-    <link rel="stylesheet" href="../css/tip_cards.css">
+  
     <!--
       <script src="../js/chatting.js"></script>
     -->
     <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
-    <script src="../js/jquery.tip_cards.js"></script>
-    <script src="http://www.jq22.com/js/jq.js"></script>
 
-    
-    <style>
-    html {
-        height: 100%;
-    }
-
-    body {
-        background: #E5E8ED;
-        padding: 0;
-        text-align: center;
-        font-family: 'Open Sans';
-        position: relative;
-        margin: 0;
-        height: 100%;
-        -webkit-font-smoothing: antialiased;
-        text-rendering: optimizelegibility;
-    }
-        
-    a {
-        color: black;
-      }
-  
-      
-  
-      .header {
-        padding: 30px 0 0;
-        float: left; 
-        width: 100%;  
-        background: white;  
-      }
-  
-      
-  
-      .wrapper {
-          height: auto !important;
-          height: 100%;
-          margin: 0 auto; 
-          overflow: hidden;
-      }
-  
-      
-  
-      a {
-        text-decoration: none;  
-      }
-  
-      h1, h2 {
-        width: 100%;  
-        float: left;
-      }
-  
-      h1 {
-  
-        margin-top: 100px;
-  
-        color: #999;
-  
-        margin-bottom: 5px;
-  
-        font-size: 70px;
-  
-        font-weight: 100;
-  
-      }
-  
-      h2 {
-  
-        padding: 00px 20px 30px 20px;
-  
-        box-sizing: border-box;
-  
-        -webkit-box-sizing: border-box;
-  
-        -moz-box-sizing: border-box;
-  
-        letter-spacing: 0px;
-  
-        color: #888;
-  
-        font-size: 20px;
-  
-        line-height: 160%;
-  
-        font-weight: 100;
-  
-        margin-top: 10px;
-  
-        margin-bottom: 0;
-  
-      }
-  
-      
-  
-      
-  
-      .pointer {
-  
-        color: #00B0FF;
-  
-        font-family: 'Pacifico';
-  
-        font-size: 24px;
-  
-        margin-top: 15px;
-  
-        position: absolute;
-  
-        top: 130px;
-  
-        right: -40px;
-  
-      }
-  
-      .pointer2 {
-  
-        color: #00B0FF;
-  
-        font-family: 'Pacifico';
-  
-        font-size: 24px;
-  
-        margin-top: 15px;
-  
-        position: absolute;
-  
-        top: 130px;
-  
-        left: -40px;
-  
-      }
-  
-      pre {
-  
-        margin: 80px auto;
-  
-      }
-  
-      pre code {
-  
-        padding: 35px;
-  
-        border-radius: 5px;
-  
-        font-size: 15px;
-  
-        background: rgba(0,0,0,0.1);
-  
-        border: rgba(0,0,0,0.05) 5px solid;
-  
-        max-width: 500px;
-  
-      }
-  
-  
-  
-  
-  
-      .main {
-  
-        float: left;
-  
-        width: 100%;
-  
-        margin: 0 auto;
-  
-      }
-  
-      
-  
-      
-  
-      .main h1 {
-  
-        padding:20px 50px 10px;
-  
-        float: left;
-  
-        width: 100%;
-  
-        font-size: 60px;
-  
-        box-sizing: border-box;
-  
-        -webkit-box-sizing: border-box;
-  
-        -moz-box-sizing: border-box;
-  
-        font-weight: 100;
-  
-        margin: 0;
-  
-        padding-top: 25px;
-  
-        font-family: 'Open Sans';
-  
-        letter-spacing: -1px;
-  
-        text-transform: capitalize;
-  
-      }
-  
-     
-  
-      .main h1.demo1 {
-  
-        background: #1ABC9C;
-  
-      }
-  
-      
-  
-      .reload.bell {
-  
-        font-size: 12px;
-  
-        padding: 20px;
-  
-        width: 45px;
-  
-        text-align: center;
-  
-        height: 47px;
-  
-        border-radius: 50px;
-  
-        -webkit-border-radius: 50px;
-  
-        -moz-border-radius: 50px;
-  
-      }
-  
-      
-  
-      .reload.bell #notification {
-  
-        font-size: 25px;
-  
-        line-height: 140%;
-  
-      }
-  
-      
-  
-      .reload, .btn{
-  
-        display: inline-block;
-  
-        border-radius: 3px;
-  
-        -moz-border-radius: 3px;
-  
-        -webkit-border-radius: 3px;
-  
-        display: inline-block;
-  
-        line-height: 100%;
-  
-        padding: 0.7em;
-  
-        text-decoration: none;
-  
-        width: 100px;
-  
-        line-height: 140%;
-  
-        font-size: 17px;
-  
-        font-family: Open Sans;
-  
-        font-weight: bold;
-  
-        -webkit-box-shadow: none;
-  
-        box-shadow: none;
-  
-        background-color: #4D90FE;
-  
-        background-image: -webkit-linear-gradient(top,#4D90FE,#4787ED);
-  
-        background-image: linear-gradient(top,#4d90fe,#4787ed);
-  
-        border: 1px solid #3079ED;
-  
-        color: #FFF;
-  
-      }
-  
-      .reload:hover{
-  
-        background: #317af2;
-  
-      }
-  
-      .btn {
-  
-        width: 200px;
-  
-        -webkit-box-shadow: none;
-  
-        box-shadow: none;
-  
-        background-color: #4D90FE;
-  
-        background-image: -webkit-linear-gradient(top,#4D90FE,#4787ED);
-  
-        background-image: linear-gradient(top,#4d90fe,#4787ed);
-  
-        border: 1px solid #3079ED;
-  
-        color: #FFF;
-  
-      }
-  
-      .clear {
-  
-        width: auto;
-  
-      }
-  
-      .btn:hover, .btn:hover {
-  
-        background: #317af2;
-  
-      }
-  
-      .btns {
-  
-        width: 410px;
-  
-        margin: 50px auto;
-  
-      }
-  
-      .credit {
-  
-        text-align: center;
-  
-        color: #888;
-  
-        padding: 10px 10px;
-  
-        margin: 0 0 0 0;
-  
-        background: #f5f5f5;
-  
-        float: left;
-  
-        width: 100%;
-  
-      }
-  
-      .credit a {
-  
-        text-decoration: none;
-  
-        font-weight: bold;
-  
-        color: black;
-  
-      }
-  
-      
-  
-      .back {
-  
-        position: absolute;
-  
-        top: 0;
-  
-        left: 0;
-  
-        text-align: center;
-  
-        display: block;
-  
-        padding: 7px;
-  
-        width: 100%;
-  
-        box-sizing: border-box;
-  
-        -moz-box-sizing: border-box;
-  
-        -webkit-box-sizing: border-box;
-  
-        background:#f5f5f5;
-  
-        font-weight: bold;
-  
-        font-size: 13px;
-  
-        color: #888;
-  
-        -webkit-transition: all 200ms ease-out;
-  
-        -moz-transition: all 200ms ease-out;
-  
-        -o-transition: all 200ms ease-out;
-  
-        transition: all 200ms ease-out;
-  
-      }
-  
-      .back:hover {
-  
-        background: #eee;
-  
-      }
-  
-    
-  
-      
-  
-      .page-container {
-  
-        max-width: 1010px;
-  
-        margin: auto;
-  
-        position: relative;
-  
-      }
-  
-      
-  
-      .page-container p{
-  
-        font-size: 21px;
-  
-        font-weight: 100;
-  
-        line-height: 180%;
-  
-      }
-  
-      
-  
-      .page-container h3 {
-  
-        font-family: "noto serif";
-  
-        font-size: 23px;
-  
-      }
-  
-  
-  
-      .tip {
-  
-        display: none;
-  
-      }
-  
-  
-  
-      .tc_modal {
-  
-        width: 890px;
-  
-      }
-  
-      
-  
-      .tc_body .tc_card .tc_inner_card .tc_click_target {
-  
-        font-size: 1.25em;
-  
-        color: #888;
-  
-        line-height: 25px;
-  
-        font-weight: 300;
-  
-        text-align: left;
-  
-        padding: 30px 30px 30px 30px;
-  
-      }
-  
-      
-  
-      .tc_card:nth-child(1n+1) .tc_inner_card  {
-  
-        border-bottom: 3px solid #1345ED;
-  
-      }
-  
-      
-  
-      .tc_card:nth-child(2n+2) .tc_inner_card  {
-  
-        border-bottom: 3px solid #03A010;
-  
-      }
-  
-      
-  
-      .tc_card:nth-child(3n+3) .tc_inner_card  {
-  
-        border-bottom: 3px solid #F8B00F;
-  
-      }
-  
-      
-  
-      .tc_card:nth-child(4n+4) .tc_inner_card {
-  
-        border-bottom: 3px solid #DD4330;
-  
-      }
-  
-      
-  
-      
-  
-      .tc_back p {
-  
-        font-family: Open Sans, sans-serif;
-  
-        font-weight: 300;
-  
-        padding: 50px 20px 20px;
-  
-        margin: 0 0 10px 0;
-  
-        color: #8A8C93;
-  
-        color: #777;
-  
-        letter-spacing: -1.2px;
-  
-        font-size: 3.5625em;
-  
-        line-height: 72px;
-  
-        text-align: left;
-  
-      }
-  
-      .tc_inner_modal .tc_front {
-  
-        min-height: 300px;
-  
-      }
-  
-      
-  
-      .tc_inner_modal .tc_front h1 {
-  
-        margin-top: 20px;
-  
-        font-size: 32px;
-  
-        text-align: left;
-  
-        margin-bottom: 35px;
-  
-      }
-  
-      
-  
-      .tc_inner_modal .tc_front p {
-  
-        text-align: left;
-  
-        min-height: 70px;
-  
-        font-size: 24px;
-  
-        line-height: 180%;
-  
-      }
-  
-      .tc_next, .tc_prev {
-  
-        line-height: 90%;
-  
-      }
-  
-      .tc_inner_modal {
-  
-        margin: 40px;
-  
-      }
-  
-      
-  
-    </style>
-  
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../css/main.css" />
     <link rel="stylesheet" type="text/css" href="../css/index.css"/>
     <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700,900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="../css/select_room.css">
-      <script>
-  
-        $(document).ready( function() {
-  
-          $(document).ready( function() {
-  
-            $(".tips").tip_cards();
-  
-          });
-  
-        });
-  
-          
-  
-      </script>
+    <link rel="stylesheet" type="text/css" href="../css/select_room.css">  
+    <link rel="stylesheet" type="text/css" href="../css/modal.css"/>
 
-<script src="../js/main.js"></script>
-<script src="../js/index.js"></script>
-<script src="../js/recevie_invite.js"></script>
-<script src="../js/logout.js"></script>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/index.js"></script>
+    <script src="../js/recevie_invite.js"></script>
+    <script src="../js/logout.js"></script>
+    <script>
+      function loadToCreateGroupChatRoom(){
+        window.location.href="./create_groupchat_room.html";
+      }
+      function loadGroupChatRoom(){
+        
+        /*
+            ajax获取内容
+        */
+        var getGroupChatRoomHttp = new XMLHttpRequest();
+        getGroupChatRoomHttp.onreadystatechange = function(){
+            if(getGroupChatRoomHttp.readyState == 4 && getGroupChatRoomHttp.status == 200){
+              response = getGroupChatRoomHttp.responseText;
+              //test
+              //console.log(getGroupChatRoomHttp.responseText);
+              if(response!="fail"){
+                var obj = JSON.parse(this.response);
+                for(let i = 0; i<obj.length;i++){
+                    /*
+                    解析获取到的JSON数据，转换为房间
+                    var ulNode = document.getElementById('article_list');
+                    var newNode = document.createElement('li');              
+                    newNode.innerHTML = "<div class='forum'><div class='forum_main'><p><img src='./headpic/"+obj[i].pic_path+"'>"+"</p><p>"+obj[i].poster_name+"</p></div> <h2 class='title'>"+obj[i].topic+"</h2>"+"<h5 class='time'>"+obj[i].time.toString()+"</h5><h5 class='brief'><span>"+obj[i].company+"</span>&nbsp;&nbsp;&nbsp;<span>"+obj[i].loc+"</span>&nbsp;&nbsp;&nbsp;<span>校招/秋招/社招</span></h5>"+"<p class='intro'>"+obj[i].content+"</p>"+"</div>"
+                    ulNode.appendChild(newNode);
+
+                    $obj->room_id = $dbrow['room_id'];
+                    $obj->user_id = $dbrow['user_id'];
+                    $obj->description = $dbrow['description'];
+                    */
+                  let ulNode = document.getElementById('room_list');
+                  var newNode = document.createElement('div');
+                  newNode.classList.add('single-member');             
+                  newNode.classList.add('effect-2');             
+
+                  newNode.innerHTML = "<div class='member-image'>\
+                                        <img src='./images/chatting1.jpg' alt='Member'>\
+                                      </div>\
+                                      <div class='member-info'>\
+                                        <h3>房间号"+obj[i].room_id+"</h3>\
+                                        <h5>房主"+obj[i].user_id+"</h5>\
+                                        <p>"+obj[i].description+"<br>健康交流，和谐交谈<br>探讨技术，共同进步<br>迎接美好未来</p>\
+                                        <a class='social-touch' style='cursor: pointer;text-decoration: none;color:#333333;font-size: 16px;'>进入房间</a>\
+                                      </div>"
+                  ulNode.appendChild(newNode);
+                }
+        
+            }else if(response == "fail"){
+                
+              }
+            }
+          }
+          //@todo:post地址可以更改
+          getGroupChatRoomHttp.open('POST',"http://localhost/interview-project/server/get_group_chat_room.php",true);
+          getGroupChatRoomHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+          getGroupChatRoomHttp.send('getArticle=article');
+          }
+      window.onload = function(){
+        //页面渲染之后，查看一下sessionStorage的登陆状态，如果是已登录，修改button里的内容，做一个跳转
+        if(sessionStorage.getItem('login') == 'true'){
+            document.getElementById('userInfoBtn').innerHTML="欢迎,"+sessionStorage.getItem('username');
+            document.getElementById('userInfoBtn').setAttribute("disabled", true);
+        }
+        if(sessionStorage.getItem("isAdmin")=="1"){
+            let aNode = document.createElement('a');
+            aNode.innerHTML= "管理"
+            aNode.setAttribute("href","./admin.html");
+            document.getElementById('nav').appendChild(aNode);
+        } 
+        loadGroupChatRoom();   
+      }
+    </script>
 </head>
 <body>
+      <!--弹出罩。。。默认不可见-->
+    <div class="modal">
+        <div class="modal-header">
+            <p class="title">面试邀请</p>
+            <p class="close">×</p>
+        </div>
+        <div class="modal-content" id="interview_info">
+            
+        </div>
+        <div class="modal-footer">
+            <button class="btn" onclick="accept_interview()">接受邀请</button>
+        </div>
+    </div>
+    <div class="mask"></div>
     <!--导航条 正文-->
     <div id="nav">
       <a href="./index.html">首页</a>
@@ -642,74 +122,29 @@
       <a href="javascript:void(0);" onclick="logout()">注销</a>
       <button type="button" class="loginButton" id="userInfoBtn" onclick="backTologin()">登录/注册</button>        
     </div>
-    <!--
-    <div class="wrapper">
-      <div class="main">
-
-        <div class="page-container">
-  
-          <ul class="tips">
-  
-            <li>
-  
-              <div class="tc_front">
-  
-                  <a href="#tip1">Tip 1: See What videos your friends are posting and adjust friendships accordingly.</a>
-  
-              </div>
-  
-              <div class="tc_back">
-                <a href="#tip1">U know,I really want to fuck u</a>
-              </div>
-  
-  
-  
-              <div id="tip1" class="tip">
-  
-                <div class="tc_front">
-  
-                  <h1>1. See What videos your friends are posting</h1>
-  
-                  <p>www you're browsing youtube.com or its mobile app, when you're signed in with your Google Account, you can see videos recommended for you.</p>
-  
-                </div>
-  
-                <div class="tc_back">
-  
-                  <p>Tip 1: See What videos your friends are posting and adjust friendships accordingly.</p>
-                    <p>?????????????</p>
-                </div>
-  
-              </div>
-  
-            </li>
-  
-          </ul>
-  
-        </div>
-  
-      </div>
+    <div style="margin-top: 12px;">
+        <button class="btn-primary btn-lg" onclick="loadToCreateGroupChatRoom()">创建聊天室</button>
     </div>
-    -->
-
-
     <!-- Team members structure start -->
-    <div class="team-members row">
+    <div class="team-members row" id="room_list">
         
         <!-- effect-2 html -->
         <div class="single-member effect-2">
           <div class="member-image">
-              <img src="./images/member_270x210.jpg" alt="Member">
+              <img src="./images/chatting1.jpg" alt="Member">
             </div>
             <div class="member-info">
               <h3>房间6666</h3>
                 <h5>房主1234</h5>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <div class="social-touch">
-                  <a class="fb-touch" href="#"></a>
+                <a class="social-touch" style="cursor: pointer;text-decoration: none;color:#333333;font-size: 16px;">进入房间</a>
+                <!--
+                  <div class="social-touch">
+                    <a class="fb-touch" href="#"></a>
                     <a class="tweet-touch" href="#"></a>
                     <a class="linkedin-touch" href="#"></a>
-                </div>
+                  </div>
+                -->
             </div>
         </div>
         <!-- effect-2 html end -->
