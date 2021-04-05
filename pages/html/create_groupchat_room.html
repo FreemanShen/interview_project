@@ -11,8 +11,55 @@
     <script src="../js/facetime/inteverview.js"></script>
     <script>
         function createGroupChatRoom(){
-            console.log(new Date()+'func createGroupchat detected');
+            //console.log(new Date()+'func createGroupchat detected');            
+            /*
+                ajax获取内容
+            */
+            let room_id = document.getElementById('room_id').value;
+            let description_id = document.getElementById('description_id').value;
+            let password = document.getElementById('password').value;
+            let user_id = sessionStorage.getItem('userId');
+            if(user_id==""||user_id==null){
+                window.alert('您还未登录，请先登录！');
+                window.location.href="../html/login.html"
+                return;
+            }
+            
+            if(room_id=="" || room_id==null){
+                window.alert('房间号不能为空');
+                return;
+            }
+            if(description_id=="" || description_id==null){
+                window.alert('房间简介不能为空');
+                return;
+            }
+            if(description_id.length>15){
+                window.alert('房间简介过长')
+                return;
+            }
+
+
+            var createGroupChatHttp = new XMLHttpRequest();
+            createGroupChatHttp.onreadystatechange = function(){
+                if(createGroupChatHttp.readyState == 4 && createGroupChatHttp.status == 200){
+                    response = createGroupChatHttp.responseText;
+                    //test
+                    //console.log(createGroupChatHttp.responseText);
+                    if(response=="success"){
+                        window.location.href='./groupchat_room.html?room_id='+room_id;
+                    }else if(response == "fail"){
+                        window.alert("房间创建失败，请稍后重试"); 
+                           
+                    }
+                }
+            }
+            //@todo:post地址可以更改
+            createGroupChatHttp.open('POST',"http://localhost/interview-project/server/add_group_chat_room.php",true);
+            createGroupChatHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+            createGroupChatHttp.send('room_id='+room_id+"&description="+description_id+"&user_id="+user_id);      
         }
+
+  
     </script>
 </head>
 <body>

@@ -18,6 +18,15 @@
     <link rel="stylesheet" type="text/css" href="../css/select_room.css">  
     <link rel="stylesheet" type="text/css" href="../css/modal.css"/>
 
+    <style>
+      .enter-btn:focus{
+        /*
+        border: none;
+        outline: none;
+        */
+      }
+
+    </style>
 
     <script src="../js/main.js"></script>
     <script src="../js/index.js"></script>
@@ -62,9 +71,9 @@
                                       </div>\
                                       <div class='member-info'>\
                                         <h3>房间号"+obj[i].room_id+"</h3>\
-                                        <h5>房主"+obj[i].user_id+"</h5>\
+                                        <h5>房主"+obj[i].user_name+"</h5>\
                                         <p>"+obj[i].description+"<br>健康交流，和谐交谈<br>探讨技术，共同进步<br>迎接美好未来</p>\
-                                        <a class='social-touch' style='cursor: pointer;text-decoration: none;color:#333333;font-size: 16px;'>进入房间</a>\
+                                        <button class='social-touch btn-success enter-btn' style='cursor: pointer;text-decoration: none;color:#333333;font-size: 16px;' onclick='enterRoom("+obj[i].room_id+")'>进入房间</button>\
                                       </div>"
                   ulNode.appendChild(newNode);
                 }
@@ -78,7 +87,7 @@
           getGroupChatRoomHttp.open('POST',"http://localhost/interview-project/server/get_group_chat_room.php",true);
           getGroupChatRoomHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
           getGroupChatRoomHttp.send('getArticle=article');
-          }
+      }
       window.onload = function(){
         //页面渲染之后，查看一下sessionStorage的登陆状态，如果是已登录，修改button里的内容，做一个跳转
         if(sessionStorage.getItem('login') == 'true'){
@@ -93,7 +102,11 @@
         } 
         loadGroupChatRoom();   
       }
-    </script>
+     
+      function enterRoom(room_id){
+        window.location.href="./groupchat_room.html?room_id="+room_id;
+      }
+  </script>
 </head>
 <body>
       <!--弹出罩。。。默认不可见-->
@@ -129,6 +142,7 @@
     <div class="team-members row" id="room_list">
         
         <!-- effect-2 html -->
+        <!--
         <div class="single-member effect-2">
           <div class="member-image">
               <img src="./images/chatting1.jpg" alt="Member">
@@ -138,15 +152,16 @@
                 <h5>房主1234</h5>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 <a class="social-touch" style="cursor: pointer;text-decoration: none;color:#333333;font-size: 16px;">进入房间</a>
-                <!--
-                  <div class="social-touch">
-                    <a class="fb-touch" href="#"></a>
-                    <a class="tweet-touch" href="#"></a>
-                    <a class="linkedin-touch" href="#"></a>
-                  </div>
-                -->
             </div>
         </div>
+        -->
+        <!--
+          <div class="social-touch">
+            <a class="fb-touch" href="#"></a>
+            <a class="tweet-touch" href="#"></a>
+            <a class="linkedin-touch" href="#"></a>
+          </div>
+        -->
         <!-- effect-2 html end -->
 
         

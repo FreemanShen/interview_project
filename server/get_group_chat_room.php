@@ -23,6 +23,13 @@ if($row){
       $obj->user_id = $dbrow['user_id'];
       $obj->description = $dbrow['description'];
 
+
+      $get_name_Sql = 'select name from user where id = '.$obj->user_id;
+      $get_name_Res = mysqli_query($conn,$get_name_Sql);
+      $name_row = mysqli_fetch_array($get_name_Res);
+      $obj->user_name = $name_row['name'];
+
+
       array_push($objArr,$obj);
     }
 }else{
