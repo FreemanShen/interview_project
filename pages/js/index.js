@@ -20,12 +20,27 @@ function loadToQuestion(node){
     console.log(node.id);
     let type = 1;
     switch(node.id){
-        case "java": type = 1; break;
-        case "c++": type = 2;  break;
-        case "algorithm": type = 3; break;
+        case "java_server": type = 1; break;
+        case "c++_server": type = 2;  break;
+        case "go_server": type = 3; break;
         case "html": type = 4; break;
-        default:break;
+
+        case "java_android": type = 5; break;
+        case "kotlin_android": type = 6;  break;
+        case "ios": type = 7; break;
+        case "test": type = 8; break;
+
+        case "protect": type = 9; break;
+        case "hardware": type = 10;  break;
+        case "ee": type = 11; break;
+        case "inside": type = 12; break;
+
+        case "algorithm": type = 13;  break;
+        case "ai": type = 14; break;
+        case "data_sci": type = 15; break;
+
+        default: type=-1; break;
     }
     sessionStorage.setItem('exercise_type',type);
-    window.location.href="./question_bank.html";
+    window.location.href="./question_bank.html?type="+type;
 }

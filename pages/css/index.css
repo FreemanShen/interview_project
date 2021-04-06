@@ -6,13 +6,17 @@ body{
 }
 
 #necessary,#fundtal,#skills,#organization{
-    color: #888888;
+    color: #888888 !important;
     font-weight: 400;
     line-height: 40px;
     text-decoration: none;
 }
 #necessary a:hover,#fundtal a:hover,#skills a:hover,#organization a:hover{
-    color: #25bb9b;
+    color: #25bb9b !important;
+}
+#necessary a{
+    text-decoration: none !important;
+    color: #888888;
 }
 #left-navigator{
     float:left;
@@ -92,12 +96,17 @@ body{
 }
 .card img{
     display: inline-block;
-    width: 80px;
-    height: 80px; 
+    width: 80px !important;
+    height: 80px !important; 
     margin-top:10px; 
     border-radius: 50%;
 }
-
+.card p{
+    width: 150px;
+    overflow: hidden;/*（文字长度超出限定宽度，则隐藏超出的内容）*/
+    white-space: nowrap;/*（设置文字在一行显示，不能换行）*/
+    text-overflow: ellipsis;/*（规定当文本溢出时，显示省略符号来代表被修剪的文本）*/
+}
 /* 响应式布局 - 屏幕尺寸小于 800px 时，两列布局改为上下布局 */
 @media screen and (max-width: 800px) {
     #left-navigator, #right-article {   

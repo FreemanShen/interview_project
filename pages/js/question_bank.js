@@ -23,6 +23,22 @@ function backTologin(){
     window.location.href ="../html/login.html";
 }
 
+function GetRequest()
+{
+    var url = location.search;
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1)
+    {
+    var str = url.substr(1);
+    strs = str.split("&");
+    for(var i = 0; i < strs.length; i ++)
+    {
+    theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+    }
+    }
+    return theRequest;
+}
+
 
 var response;var QuestionJson;
 
@@ -202,12 +218,27 @@ $(function(){
         }
     }
     
-    //@todo:post地址可以更改
-    getQuestionHttp.open('POST',"http://localhost/interview-project/server/question.php",true);
-    getQuestionHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
-    //根据题目类型去确定(type - -)
-    getQuestionHttp.send('type='+parseInt(sessionStorage.getItem("exercise_type")));
-    
+    if(sessionStorage.getItem('login') == "true"){
+        if(GetRequest().type==null || GetRequest().type==-1 || GetRequest().type==""){
+            window.alert('你没有权限访问该页面！');
+            window.location.href='../html/login.html'
+            return;
+        }   
+        else{
+            //@todo:post地址可以更改
+            getQuestionHttp.open('POST',"http://localhost/interview-project/server/question.php",true);
+            getQuestionHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+            //根据题目类型去确定(type - -)
+            //getQuestionHttp.send('type='+parseInt(sessionStorage.getItem("exercise_type")));
+            //@todo:做用户校验
+            getQuestionHttp.send('type='+GetRequest().type);
+        }
+    }else{
+        window.alert('您还未登录，请先登录！');
+        window.location.href='../html/login.html'
+        return;
+    }
+
 
     /*alert(QuestionJosn.length);*/
     /*实现进度条信息加载的动画*/

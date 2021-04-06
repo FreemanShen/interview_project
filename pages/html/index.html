@@ -47,10 +47,10 @@
     <div id ="main">
         <img id="banner" src='./images/banner.jfif' >
         <div id="left-navigator">
-            <a class="head-title" style="background-color: #25bb9b;color:white;">求职必备</a>
+            <a class="head-title" style="background-color: #25bb9b;color:white;">笔试备战</a>
             <div id="necessary">
-                <a>笔试备战</a>
-                <a>课程推荐</a>
+                <a href="#lang_skill">编程语言测验</a>
+                <a href="#cs408">计算机基础测验</a>
                 <a>编程集合</a>
                 <a>项目推荐</a>
                 <a>网申内推</a>
@@ -73,7 +73,7 @@
                 <a>课程推荐</a>
                 <a>编程集合</a>
                 <a>项目推荐</a>
-                <a>网申内推</a>
+                <a>网申内推<skills/a>
                 <a>书籍推荐</a>
                 <a>常用工具</a>
             </div>
@@ -82,7 +82,7 @@
                 <a>笔试备战</a>
                 <a>课程推荐</a>
                 <a>编程集合</a>
-                <a>项目推荐</a>
+                <a>项目推荐</a> 
                 <a>网申内推</a>
                 <a>书籍推荐</a>
                 <a>常用工具</a>
@@ -91,114 +91,148 @@
 
         <div id='right-article'>
             <p class="index-title">笔试备战</p>
-            <p class='index-headline'>职业能力评测</p>
+            <p class='index-headline' id="lang_skill">编程语言测验</p>
+            <a name="lang_skill"></a>
             <ul class="index-skill-ul">
                 <li class="index-skill-li">
-                    <div class="card" id="java" onclick="loadToQuestion(this)">
-                        <p>Java工程师能力评估</p>
-                        <img src="./icon/ic1.png">
+                    <div class="card" id="java_server" onclick="loadToQuestion(this)">
+                        <p>后端能力评估(java)</p>
+                        <img src="./icon/java_server.png">
                     </div>
                 </li>
                 <li class="index-skill-li">
-                    <div class="card" id="c++" onclick="loadToQuestion(this)">
-                        <p>C++工程师能力评估</p>
-                        <img src="./icon/ic2.png">
+                    <div class="card" id="c++_server" onclick="loadToQuestion(this)">
+                        <p>后端能力评估(php)</p>
+                        <img src="./icon/php.png">
+                    </div>
+                </li>
+                <li class="index-skill-li">
+                    <div class="card" id="go_server" onclick="loadToQuestion(this)">
+                        <p>后端能力评估(go)</p>
+                        <img src="./icon/go.png">
                     </div>
                 </li>
                 <li class="index-skill-li">
                     <div class="card" id="html" onclick="loadToQuestion(this)">
-                        <p>前端工程师能力评估</p>
-                        <img src="./icon/ic4.png">
+                        <p>前端开发能力评估</p>
+                        <img src="./icon/html.png">
                     </div>
                 </li>
+
+                <li class="index-skill-li">
+                    <div class="card" id="java_android" onclick="loadToQuestion(this)">
+                        <p>安卓能力评估(java)</p>
+                        <img src="./icon/android_java.png">
+                    </div>
+                </li>
+                <li class="index-skill-li">
+                    <div class="card" id="kotlin_android" onclick="loadToQuestion(this)">
+                        <p>安卓能力评估(kotlin)</p>
+                        <img src="./icon/android_kotlin.png">
+                    </div>
+                </li>
+                <li class="index-skill-li">
+                    <div class="card" id="ios" onclick="loadToQuestion(this)">
+                        <p>ios开发能力评估</p>
+                        <img src="./icon/ios.png">
+                    </div>
+                </li>
+                <li class="index-skill-li">
+                    <div class="card" id="test" onclick="loadToQuestion(this)">
+                        <p>测试工程师能力评估</p>
+                        <img src="./icon/test.png">
+                    </div>
+                </li>
+
+                <li class="index-skill-li">
+                    <div class="card" id="protect" onclick="loadToQuestion(this)">
+                        <p>运维工程师能力评估</p>
+                        <img src="./icon/protect.png">
+                    </div>
+                </li>
+
+                <li class="index-skill-li">
+                    <div class="card" id="hardware" onclick="loadToQuestion(this)">
+                        <p>硬件开发工程师能力评估</p>
+                        <img src="./icon/hardware.png">
+                    </div>
+                </li>
+
+                
+                <li class="index-skill-li">
+                    <div class="card" id="ee" onclick="loadToQuestion(this)">
+                        <p>电气工程师能力评估</p>
+                        <img src="./icon/ee.png">
+                    </div>
+                </li>
+
+                
+                <li class="index-skill-li">
+                    <div class="card" id="inside" onclick="loadToQuestion(this)">
+                        <p>嵌入式工程师能力评估</p>
+                        <img src="./icon/inside.png">
+                    </div>
+                </li>
+
                 <li class="index-skill-li">
                     <div class="card" id="algorithm" onclick="loadToQuestion(this)">
                         <p>算法工程师能力评估</p>
-                        <img src="./icon/ic3.png">
+                        <img src="./icon/algorithm.png">
                     </div>
                 </li>
 
                 <li class="index-skill-li">
-                    <div class="card">
-                        <p>Java工程师能力评估</p>
-                        <img src="./icon/ic1.png">
-                    </div>
-                </li>
-                <li class="index-skill-li">
-                    <div class="card">
-                        <p>C++工程师能力评估</p>
-                        <img src="./icon/ic2.png">
-                    </div>
-                </li>
-                <li class="index-skill-li">
-                    <div class="card">
-                        <p>前端工程师能力评估</p>
-                        <img src="./icon/ic4.png">
-                    </div>
-                </li>
-                <li class="index-skill-li">
-                    <div class="card">
-                        <p>算法工程师能力评估</p>
-                        <img src="./icon/ic3.png">
+                    <div class="card" id="ai" onclick="loadToQuestion(this)">
+                        <p>人工智能工程师能力评估</p>
+                        <img src="./icon/ai.png">
                     </div>
                 </li>
 
                 <li class="index-skill-li">
-                    <div class="card">
-                        <p>Java工程师能力评估</p>
-                        <img src="./icon/ic1.png">
+                    <div class="card" id="data_sci" onclick="loadToQuestion(this)">
+                        <p>数据分析工程师能力评估</p>
+                        <img src="./icon/data.png">
+                    </div>
+                </li>
+            </ul>
+            <div style="clear: both;"></div>
+            <p class='index-headline' id="cs408">计算机基础测验</p>
+            <a name="cs408"></a>
+            <ul class="index-skill-ul">
+                <li class="index-skill-li">
+                    <div class="card" id="opsys" onclick="loadToQuestion(this)">
+                        <p>操作系统知识测验</p>
+                        <img src="./icon/op.png">
                     </div>
                 </li>
                 <li class="index-skill-li">
-                    <div class="card">
-                        <p>C++工程师能力评估</p>
-                        <img src="./icon/ic2.png">
+                    <div class="card" id="csnet" onclick="loadToQuestion(this)">
+                        <p>计算机网络知识测验</p>
+                        <img src="./icon/network.png">
                     </div>
                 </li>
                 <li class="index-skill-li">
-                    <div class="card">
-                        <p>前端工程师能力评估</p>
-                        <img src="./icon/ic4.png">
+                    <div class="card" id="ccp" onclick="loadToQuestion(this)">
+                        <p>计算机组成原理知识测验</p>
+                        <img src="./icon/cpu.png">
                     </div>
                 </li>
                 <li class="index-skill-li">
-                    <div class="card">
-                        <p>算法工程师能力评估</p>
-                        <img src="./icon/ic3.png">
-                    </div>
-                </li>
-
-                <li class="index-skill-li">
-                    <div class="card">
-                        <p>Java工程师能力评估</p>
-                        <img src="./icon/ic1.png">
+                    <div class="card" id="data_structure" onclick="loadToQuestion(this)">
+                        <p>数据结构知识测验</p>
+                        <img src="./icon/ds.png">
                     </div>
                 </li>
                 <li class="index-skill-li">
-                    <div class="card">
-                        <p>C++工程师能力评估</p>
-                        <img src="./icon/ic2.png">
-                    </div>
-                </li>
-                <li class="index-skill-li">
-                    <div class="card">
-                        <p>前端工程师能力评估</p>
-                        <img src="./icon/ic4.png">
-                    </div>
-                </li>
-                <li class="index-skill-li">
-                    <div class="card">
-                        <p>算法工程师能力评估</p>
-                        <img src="./icon/ic3.png">
+                    <div class="card" id="database" onclick="loadToQuestion(this)">
+                        <p>数据库知识测验</p>
+                        <img src="./icon/database.png">
                     </div>
                 </li>
             </ul>
         </div>
     </div>
-    <button id="toggleModal">
-        test
-    </button>
-   
+
 
 </body>
 </html>
