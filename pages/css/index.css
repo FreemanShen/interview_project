@@ -1,5 +1,6 @@
 body{
     background-color: #ffffff;
+    font-size: 16px;
 }
 #fundtal,#skills,#organization{
     display: none;

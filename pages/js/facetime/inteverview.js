@@ -11,26 +11,33 @@ function enterRoom(){
         
     }
 
-    sessionStorage.setItem('room_id',room_id);
-    sessionStorage.setItem('user_id',user_id);
     //console.log("room_id's value : "+room_id+"; user_id's value : "+user_id);
     
 
     //@todo: 添加一个逻辑判断，如果是suroot,才有权限sendInvite()
-    if(sessionStorage.getItem('isAdmin')=='1'){
+    if(sessionStorage.getItem('isAdmin')=='1' ||sessionStorage.getItem('isAdmin')=='2'){
+        sessionStorage.setItem('room_id',room_id);
+        sessionStorage.setItem('user_id',user_id);    
         sendInvite();
         //@todo:添加一个计时器，当过了多久还没响应。。就。。。
     }else{
-        //window.alert('你不是管理员，无法发送邀请！');
+        //window.alert('用户权限不够，无法发送邀请,请联系开发人员！');
         //window.location.href='../../html/index.html';
         //@todo:添加一个查房功能？
-        if(sessionStorage.getItem('interviewee')!=user_id){
+        if(sessionStorage.getItem('interviewee')==null){
+            window.alert('您的权限不够，无法创建面试房间');
+        }
+        else if(sessionStorage.getItem('interviewee')!=user_id){
             window.alert('邀请方id输入错误，请重新输入！');
-        }else{
+        }else if(sessionStorage.getItem('interview_room_id')!=room_id){
+            window.alert('房间号错误');
+        }
+        else{
+            sessionStorage.setItem('room_id',room_id);
+            sessionStorage.setItem('user_id',user_id);
             window.location.href="http://localhost/interview-project/pages/html/interview_room.html"
         }
     }
-
 }
 
 

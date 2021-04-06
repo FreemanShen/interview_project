@@ -39,6 +39,13 @@ function loadToQuestion(node){
         case "ai": type = 14; break;
         case "data_sci": type = 15; break;
 
+        case "opsys": type = 16;  break;
+        case "csnet": type = 17; break;
+        case "ccp": type = 18; break;
+        case "data_structure": type = 19;  break;
+        case "database": type = 20; break;
+
+        
         default: type=-1; break;
     }
     sessionStorage.setItem('exercise_type',type);

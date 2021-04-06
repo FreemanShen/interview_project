@@ -14,7 +14,10 @@ var receiver_id = sessionStorage.getItem('user_id');
 //console.log("room_id's value : "+roomId+"typeof roomid="+typeof(roomId)+"; user_id's value : "+userId+"typeof userid="+typeof(userId));
 //@todo:client的userid应取决于超级用户是谁，以及输入的用户名。
 //@todo:房间id同样需要从建房处获取
-
+if(roomId==null||userId==null||roomId==""||sender_id==null||sender_name==null){
+    window.alert('没有权限访问该页面！')
+    window.location.href = "../../html/login.html";
+}
 
 const client = TRTC.createClient({
     mode: 'rtc',

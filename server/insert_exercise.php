@@ -25,7 +25,7 @@ for($type = 1;$type<21;$type++){
         $ansc = "type ".$type." question ".$counter." ansc ";
         $ansd = "type ".$type." question ".$counter." ansd ";
         $reason = "type ".$type." question ".$counter." reason ";
-        $number = floor(mt_rand(1,4.9));
+        $number = floor(mt_rand(0,4));
         $sql = "insert into exercise(type,question,ansa,ansb,ansc,ansd,correct,reason) values(".$type.",'".$question."','".$ansa."','".$ansb."','".$ansc."','".$ansd."',".$number.",'".$reason."')";
         $result = mysqli_query($conn,$sql);
         //echo $sql;
@@ -34,7 +34,7 @@ for($type = 1;$type<21;$type++){
             //echo $sql;
             die();
         }else{
-            echo 'success number: '.$number.'<br>';
+            echo 'success number: '+$number+'\n';
             //die();
         }  
     }

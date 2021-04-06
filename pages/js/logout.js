@@ -4,6 +4,6 @@
 function logout(){
     if(sessionStorage.length != 0){
         sessionStorage.clear()
-        window.location.href = "./login.html"    
+        window.location.href = "../html/login.html"    
     }
 }

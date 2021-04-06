@@ -43,6 +43,7 @@ function receive(){
             //@todo:结点的获取应该放在window.onload中执行
             let obj = JSON.parse(response);
             sessionStorage.setItem("interviewee",obj.interviewee);
+            sessionStorage.setItem("interview_room_id",obj.room_id);
             document.getElementById('interview_info').innerHTML = "面试官"+obj.interviewee+'邀请您进入'+obj.room_id+'号面试房间';
             show();
             console.log(new Date()+"detect :"+obj.interviewee+'邀请您进入面试房间'+obj.room_id);
