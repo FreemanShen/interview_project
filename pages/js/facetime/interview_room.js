@@ -10,6 +10,24 @@ var  sender_name = sessionStorage.getItem('username');
 var receiver_id = sessionStorage.getItem('user_id');
 
 
+// 使用一个独立的用户 ID 进行推送屏幕分享
+const shareId = 'share-'+userId;
+const shareClient = TRTC.createClient({
+    mode: 'rtc',
+    sdkAppId:1400494399,
+    userId:shareId,
+    userSig:genTestUserSig(shareId).userSig
+});
+
+
+//创建专属的共享流，用于推送屏幕
+// 指明该 shareClient 不接收任何远端流 （它只负责发送屏幕分享流）
+shareClient.on('stream-added', event => {
+    const remoteStream = event.stream;
+    shareClient.unsubscribe(remoteStream);
+});
+
+
 //let userId = sessionStorage.getItem('user_id');
 //console.log("room_id's value : "+roomId+"typeof roomid="+typeof(roomId)+"; user_id's value : "+userId+"typeof userid="+typeof(userId));
 //@todo:client的userid应取决于超级用户是谁，以及输入的用户名。
@@ -30,9 +48,14 @@ const client = TRTC.createClient({
 //注册客户端相关事件
 client.on('stream-added', event => {
     const remoteStream = event.stream;
-    console.log('远端流增加: ' + remoteStream.getId());
-    //订阅远端流
-    client.subscribe(remoteStream);
+    const remoteUserId = remoteStream.getUserId();
+    if (remoteUserId === shareId) {
+      // 取消订阅自己的屏幕分享流
+      client.unsubscribe(remoteStream);
+    } else {
+      // 订阅其他一般远端流
+      client.subscribe(remoteStream);
+    }
 });
 
 //订阅远端流成功时播放远端流
@@ -40,14 +63,23 @@ client.on('stream-subscribed', event => {
     const remoteStream = event.stream;
     console.log('远端流订阅成功：' + remoteStream.getId());
     // 播放远端流
-    remoteStream.play('opposite_viewer');
-    get_receiver_info();
+    if(remoteStream.getUserId().indexOf('share')==-1){
+        remoteStream.play('opposite_viewer');
+        get_receiver_info();    
+    }else{
+        show();
+        remoteStream.play('share_screen')
+    }
 
 });    
 
 client.on('peer-leave', event => {
-    const userId = event.userId;
-    document.getElementById('opposite_viewer').innerHTML= "";
+    if(event.userId.indexOf('share')==-1){
+        document.getElementById('opposite_viewer').innerHTML= "";
+    }else{
+        document.getElementById('share_screen').innerHTML="";
+        close();
+    }
 });
 
 //连接房间
@@ -84,6 +116,7 @@ client.join({ roomId:roomId }).catch(error => {
     });
 
 
+
 window.onunload = function(){
 client
 .leave()
@@ -95,6 +128,7 @@ console.error('退房失败 ' + error);
 // 错误不可恢复，需要刷新页面。
 });
 }
+
 
 
 /**
@@ -240,6 +274,45 @@ function get_receiver_info(){
     
 }
 
+function share_screen(){
+    shareClient.join({ roomId:roomId }).then(() => {
+        console.log('shareClient join success');
+        // 创建屏幕分享流
+        const localStream = TRTC.createStream({ audio: false, screen: true });
+        localStream.initialize().then(() => {
+        // screencast stream init success
+            shareClient.publish(localStream).then(() => {
+                console.log('screen casting');
+            });
+        });
+    });
+}
+
 window.onload = function(){
     get_msg();
+}
+
+var mask = document.getElementsByClassName("mask")[0];
+var modal = document.getElementsByClassName("modal")[0];
+var closes = document.getElementsByClassName("close");
+function show(){
+    // 获取需要使用到的元素
+    mask = document.getElementsByClassName("mask")[0];
+    modal = document.getElementsByClassName("modal")[0];
+    closes = document.getElementsByClassName("close");
+    if(closes[0]!=null)
+        closes[0].onclick = close;
+    //if(closes[1]!=null)
+      //closes[1].onclick = close;
+
+    if(mask!=null && modal!=null){
+        mask.style.display = "block";
+        modal.style.display = "block";    
+    }
+}
+function close(){   
+    if(mask!=null && modal!=null){
+        mask.style.display = "none";
+        modal.style.display = "none";
+    }
 }

@@ -1,11 +1,12 @@
 var interval;
 
 
+var mask = document.getElementsByClassName("mask")[0];
+var modal = document.getElementsByClassName("modal")[0];
+var closes = document.getElementsByClassName("close");
 function show(){
     // 获取需要使用到的元素
-    let mask = document.getElementsByClassName("mask")[0];
-    let modal = document.getElementsByClassName("modal")[0];
-    let closes = document.getElementsByClassName("close");
+    
     if(closes[0]!=null)
         closes[0].onclick = close;
     //if(closes[1]!=null)
@@ -14,6 +15,8 @@ function show(){
     if(mask!=null && modal!=null){
         mask.style.display = "block";
         modal.style.display = "block";    
+    }else{
+      console.log(new Date()+'show fail');
     }
 }
 function close(){   
@@ -21,6 +24,7 @@ function close(){
         mask.style.display = "none";
         modal.style.display = "none";
     }
+
 }
 
 function receive(){
@@ -44,6 +48,11 @@ function receive(){
             let obj = JSON.parse(response);
             sessionStorage.setItem("interviewee",obj.interviewee);
             sessionStorage.setItem("interview_room_id",obj.room_id);
+            
+            mask = document.getElementsByClassName("mask")[0];
+            modal = document.getElementsByClassName("modal")[0];
+            closes = document.getElementsByClassName("close");
+            
             document.getElementById('interview_info').innerHTML = "面试官"+obj.interviewee+'邀请您进入'+obj.room_id+'号面试房间';
             show();
             console.log(new Date()+"detect :"+obj.interviewee+'邀请您进入面试房间'+obj.room_id);

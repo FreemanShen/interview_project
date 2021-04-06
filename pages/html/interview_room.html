@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="./vendor/enjoyhint/enjoyhint.css">
     <!-- App styles -->
     <link rel="stylesheet" href="./dist/css/app.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/modal.css"/>
 
     <title>面试房间</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
@@ -32,9 +33,28 @@
             margin-right: 0 !important;
             margin-left: 16px;
         }
+        .modal{
+            width: 480px;
+            height: fit-content;
+        }
+        .modal-content{
+            height:  270px !important;
+        }
     </style>
 </head>
 <body>
+    <!--显示共享内容-->
+    <!--弹出罩。。。默认不可见-->
+    <div class="modal">
+        <div class="modal-header">
+            <p class="title">屏幕共享</p>
+            <p class="close">×</p>
+        </div>
+        <div class="modal-content" id="share_screen">
+            
+        </div>
+    </div>
+    <div class="mask"></div>
     <div class="room_left">
         <div class="opposite_viewer" id="opposite_viewer">
 
@@ -121,7 +141,7 @@
                         </div>
                         <input type="text" class="form-control" id="msg_to_send" placeholder="Write a message.">
                         <div class="form-buttons">
-                            <button class="btn btn-light" data-toggle="tooltip" title="Add files" type="button">
+                            <button class="btn btn-light" data-toggle="tooltip" title="共享屏幕" type="button" onclick="share_screen()">
                                 <i data-feather="paperclip"></i>
                             </button>
                             <button class="btn btn-light d-sm-none d-block" data-toggle="tooltip"
@@ -141,7 +161,6 @@
     </div>
     <!-- ./ layout -->
 
-    
 <!-- Bundle -->
 <script src="https://www.jq22.com/jquery/jquery-3.3.1.js"></script>
 <script src="./vendor/bundle.js"></script>
