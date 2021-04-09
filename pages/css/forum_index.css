@@ -1,0 +1,291 @@
+
+*{
+    margin:0;
+    padding: 0;
+}
+body{
+    /*设定首页的默认字体，大小，颜色*/
+    font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
+    font-size: 15px;
+    color: #121212;
+    background-color: rgb(246, 246, 246);
+}
+#indexNav{
+    width:100%;
+    height: 52px;
+    /*position: fixed;*/
+    color: #8590a6;
+    background-color: #ffffff;
+}
+#indexNav a{
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    color: #8590a6;
+    height: 52px;
+    line-height: 52px;
+    padding:0 15px;
+}
+#indexNav a:hover{
+    color: #121212;
+}
+/*顶部导航栏的图标，栏目均设定为向左浮动*/
+#navLogoLink,#navUList,#searchBox{
+    float:left;
+}
+
+#navLogoLink{
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+/*设定选定时的样式，下划线等*/
+.selectedTab{
+    font-weight: 600 !important;
+    color: #121212 !important;
+}
+.selectedTab::after{
+    content: '';
+    width: 100%;
+    height: 3px;
+    background: #0084FF;
+    border-radius: 1px;
+    display: block;
+    margin-top: -3px
+}
+
+/*搜索框部分*/
+#searchBox{
+    display: inline-block;
+    height: 52px;
+    padding-top: 9px;
+    margin-left:45px;
+}
+#searchIcon{
+    padding-top: 9px;
+}
+#searchIcon:hover{
+    cursor: pointer;
+}
+#searchInput{
+    width:360px;
+    border-radius: 20px;
+}
+/*提问设定按钮样式*/
+#askButton{
+    color: #ffffff;
+    background-color: #0084FF;
+    padding:4px 25px;
+    font-size: 14px;
+    line-height: 30px;
+    font-weight: 400;
+    border-style: none;
+    margin-top: 7.2px;
+    margin-left: 15px;
+    border:none;
+    box-shadow: none;
+    outline: none;
+    border-radius: 20px;
+}
+#askButton:focus{
+    outline: none;
+}
+#askButton:hover{
+    background-color: #0077e7;
+}
+
+/*将后三个元素设定为右浮动*/
+#msgLogoLink,#infoLogoLink{
+    float:right;
+    display: inline-block;
+}
+/*设置用户头像*/
+#userPhoto{
+    margin-top: 11px;
+    margin-right: 45px;
+}
+#userPhoto:hover{
+    cursor: pointer;
+}
+
+.dropdownImg{
+    float: right;
+    display: inline-block;
+    position: relative;
+}
+.dropdownImg:hover .dropdown-content{
+    display: block !important;
+    position: absolute;
+    width:130px;
+    right:5px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 5px 20px rgba(18,18,18,.1);
+    border:1px solid #ebebeb;
+    z-index: 1;
+    
+} 
+
+.dropdown-content{
+    list-style-type: none;
+    text-decoration: none;
+    text-align: center;
+    display: none;
+}
+.dropdown-content li{
+    line-height: 40px;
+    height: 40px;
+}
+.dropdown-content li:hover{
+    background-color: #76839b10;
+}
+#indexMain{
+    width:80%;
+    margin: 0 auto;
+    color: #121212;
+}
+/*内容占比*/
+#indexLeftContent{
+    margin-top: 15px;
+    width: 68%;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(18,18,18,.1);
+    border-radius: 2px;
+    float: left;
+}
+#indexRightContent{
+    margin-top: 15px;
+    width: 25%;
+    margin-left: 12px;
+    float: left;
+}
+
+/*左侧列表导航栏*/
+#checkOutContentNav{
+    border-bottom-color: rgb(240,242,247);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+#checkOutContentNav a{
+    text-decoration: none;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    margin:0 22px;
+    height: 58px;
+    line-height: 58px;
+    color: #121212;
+}
+
+#checkOutContentNav a:hover{
+    color: #329cffb9;
+    cursor: pointer;
+}
+
+.selectedContentTab{
+    color: #0084FF !important;
+}
+
+.contentBox{
+    border-bottom-color: rgb(240,242,247);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    padding: 22px;
+    padding-bottom: 10px;
+}
+
+.title{
+    text-decoration: none !important;
+    color: #121212 !important;
+    font-weight: 600;
+    display: block;
+    font-size: 18px;
+    line-height: 28.8px;
+    height: 28.8px;
+}
+
+.title:hover{
+    color: #0055a5 !important;
+}
+
+.coreContentBox{
+    margin-top: 9px;
+    margin-bottom: -4px;
+    line-height: 25.05px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.buttonGroup{
+    padding-top:10px;
+}
+.agreeButton,.disagreeButton{
+    color: #0084FF;
+    background-color: rgba(0, 132, 255, 0.1);
+    outline: none;
+    border-style: none;
+    border: none;
+    height: 30px;
+    line-height: 30px;
+    padding:0 12px;
+    border-radius: 4px;
+}
+.agreeButton:focus,.disagreeButton:focus{
+    display: inline-block;
+    outline: none;
+    border-style: none;
+    border: none;
+}
+.commentButton,.shareButton,.likeButton,.collectButton,.readMoreButton{
+    color: #8590a6;
+    outline: none;
+    background-color: #ffffff;
+    border: none;
+    display: inline-block;
+    font-weight: 400;
+    margin-left: 20px;
+}
+
+.commentButton:hover,.shareButton:hover,.likeButton:hover,.collectButton:hover,.readMoreButton:hover{
+    color:#65676d;
+}
+
+.commentButton:focus,.shareButton:focus,.likeButton:focus,.collectButton:focus,.readMoreButton:focus{
+    background-color: #ffffff;
+    outline:none;
+    border: none;
+}
+#topFunctionLogo,#centerFuncLogo,#advertisement1,#advertisement2,#myFunc{
+    display: block;
+    width: 100%;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(18,18,18,.1);
+    border-radius: 2px;
+}
+#myFunc a{
+    display: block;
+    color: #8590a6 !important;
+    text-decoration: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+#myFunc a:hover{
+    background-color: #f6f6f6;
+}
+#myFunc a:hover{
+    cursor: pointer;
+}
+
+.advertisement1,.advertisement2{
+    display: inline-block;  
+    width: 100%;
+}
+
+/*2021-4-9新添加的部分*/
+.agreed{
+    background-color: #0066ff;
+    color: #ffffff;
+}

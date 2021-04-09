@@ -8,6 +8,11 @@ body{
     font-family: system;
     padding: 10px;
     background-color:#f1f1f1;
+    /*设定首页的默认字体，大小，颜色*/
+    font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
+    font-size: 15px;
+    color: #121212;
+    background-color: rgb(246, 246, 246);
 }
 #nav{
     width: 100%;
