@@ -27,8 +27,8 @@
     background-color: rgba(0, 132, 255,0.2);
 }
 
-
-#concernQuestion,#reply,#invite,#readMoreButton{
+/*顶部按钮组样式设计*/
+#concernQuestion,#reply,#invite,#readMoreButton,#goodQuestion,#write,#focus{
     display: inline-block;
 }
 
@@ -36,7 +36,7 @@
     width: 50%;
 }
 /*关注问题按钮*/
-#concernQuestion{
+#concernQuestion,#goodQuestion{
     background-color: #0084ff;
     border-radius: 3px;
     color: #ffffff;
@@ -90,9 +90,20 @@
 }
 
 #answerMainBox{
-    margin-top: 5px;
+    margin-top: 15px;
     margin-left: 15%;
+    
 }
+
+#answerMainBox::after{
+    clear: both;
+    content: "";
+    width: 0;
+    height: 0;
+    display: block;
+    visibility: hidden;
+}
+
 #leftAnswerContentBox{
     background-color: #ffffff;
     width: 55%;

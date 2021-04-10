@@ -16,16 +16,14 @@ if(!$result){
     echo 'fail';
     die();
 }else{
-    $updateSql = "update article set agreeNum = agreeNum +1 where art_id = ".$art_id;
-    $updateRes = mysqli_query($conn,$updateSql);
-    if($updateRes){
-        $getSql = "select agreeNum from article where art_id = ".$art_id;
-        $getRes = mysqli_query($conn,$getSql);
-        $dbrow = mysqli_fetch_array($getRes);
-        echo $dbrow["agreeNum"];
-    }
-
-
+    //$updateSql = "update article set agreeNum = agreeNum +1 where art_id = ".$art_id;
+    //$updateRes = mysqli_query($conn,$updateSql);
+    //if($updateRes){
+    $getSql = "select agreeNum from article where art_id = ".$art_id;
+    $getRes = mysqli_query($conn,$getSql);
+    $dbrow = mysqli_fetch_array($getRes);
+    echo $dbrow["agreeNum"];
+    //}
     //echo 'success';
     die();
 }  

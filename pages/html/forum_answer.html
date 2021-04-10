@@ -13,12 +13,219 @@
     <link rel="stylesheet" type="text/css" href="../css/modal.css"/>
     <link rel="stylesheet" href="../css/forum_answer.css" />
     <link rel="stylesheet" href="../css/forum_index.css" />
+    <style>
+        #descriptionButtonGroup button:hover{
+            cursor: pointer !important;
+        }
+    </style>
+
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
     <script src="../js/index.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/recevie_invite.js"></script>
     <script src="../js/logout.js"></script>
+    <script src="../js/GetRequest.js"></script>
+    <script>
+        /*
+        解析URL,发ajax，将获取的内容填充到页面中
+        */
+        window.onload = function(){
+            //页面渲染之后，查看一下sessionStorage的登陆状态，如果是已登录，修改button里的内容，做一个跳转
+            if(sessionStorage.getItem('login') == 'true'){
+                document.getElementById('userInfoBtn').innerHTML="欢迎,"+sessionStorage.getItem('username');
+                document.getElementById('userInfoBtn').setAttribute("disabled", true);
+            }
+            if(sessionStorage.getItem("isAdmin")=="1"){
+                let aNode = document.createElement('a');
+                aNode.innerHTML= "管理"
+                aNode.setAttribute("href","./admin.html");
+                document.getElementById('nav').appendChild(aNode);
+            }    
 
+            if(GetRequest().art_id==null || isNaN(GetRequest().art_id)){
+            //window.alert("禁止访问");
+            //window.location.href = "./error-403.html";
+            }
+            else{
+                let art_id = GetRequest().art_id;
+                //@todo: 如果已经登录，怎么处理？
+                $.ajax({
+                        url: "http://localhost/interview-project/server/get_specific_article.php",
+                        data: {art_id: art_id},
+                        type: "POST",
+                        success: function(data) {
+                            /*
+                            返回的内容:
+                                descriptionTitle:
+                                descriptionContent:
+                                concernQuestion
+                            */
+                            if(data!='fail'){
+                                let obj = JSON.parse(data);
+                                $('#descriptionTitle').html(obj.topic);
+                                $('#descriptionContent').html(obj.content);
+                                $('#concernQuestion').html(" 点赞 "+ obj.agreeNum);
+                            }
+                        }
+                    });  
+
+                let type = parseInt(document.getElementById('sortSelect').value);
+                //type = 1;
+                console.log('type : '+type);
+                //获取art_id对应的review;//根据时间或者点赞量排序
+                $.ajax({
+                        url: "http://localhost/interview-project/server/get_review.php",
+                        data: {art_id: art_id,type:type},
+                        type: "GET",
+                        success: function(data) {
+                            /*
+                            返回的内容:                  
+                            pic_path:  
+                            user_name:
+                            likeNum:
+                            content:
+                            time
+                            */
+                            if(data!='fail'){
+                                let obj = JSON.parse(data);
+                                let node = document.getElementById('leftAnswerContentBox');
+                                for(let i=0;i<obj.length;i++){
+                                    let newAns = document.createElement('div');
+                                    newAns.classList.add('answerBox');
+                                    newAns.innerHTML = '<div class="authorBox">\
+                                                            <img class="authorPhoto"  width="38" height="38" src="./headpic/'+obj[i].pic_path+'">\
+                                                            <span class="authorName">'+obj[i].user_name+'</span>\
+                                                        </div>\
+                                                        <div class="agreeNum">\
+                                                            <p>'+obj[i].likeNum+' 人赞同了该回答</p>\
+                                                        </div>\
+                                                        <div class="answer">\
+                                                            <p>'+obj[i].content+'</p>\
+                                                        </div>\
+                                                        <div class="time">\
+                                                            编辑于 '+obj[i].time+'\
+                                                        </div>\
+                                                        <div class="buttonGroup">\
+                                                            <button class="agreeButton" onclick="agree()"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 '+obj[i].likeNum+'</button>\
+                                                            <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>\
+                                                            <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> 暂无评论 </button>\
+                                                            <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>\
+                                                            <button class="likeButton" onclick="like()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 喜欢</button>\
+                                                            <button class="collectButton" onclick="collect()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>\
+                                                        </div>';
+                                    node.appendChild(newAns);
+                                }
+                            }else{
+                            }
+                        }
+                    });  
+            
+                //获取art_id对应的回答总数
+                $.ajax({
+                        url: "http://localhost/interview-project/server/get_review_num.php",
+                        data: {art_id: art_id},
+                        type: "GET",
+                        success: function(data) {
+                            $('#answerNum').html(data+'个回答');
+                        }
+                    });  
+
+            }
+        
+        }
+
+        function likeThis(){
+            let art_id = GetRequest().art_id;
+            if(sessionStorage.getItem("login") == "true"){
+                $.ajax({
+                    url: "http://localhost/interview-project/server/update_answer_goodBtn.php",
+                    data: {art_id: art_id,user_id:sessionStorage.getItem("userId")},
+                    type: "POST",
+                    success: function(data) {
+                        /*
+                        返回的内容:
+                            1.查询到，不加1
+                            2.没查询到，加1
+                        */
+                        if(data == 'success'){
+                            let newNum = parseInt(document.getElementById('concernQuestion').innerText.match(/\d+/g).join('')) + 1;
+                            $('#concernQuestion').html(" 点赞 "+ newNum);
+                        }else if(data == 'fail'){
+                            window.alert('你已经点过赞啦~')
+                        }
+                    }
+                });
+            }else{
+                window.alert('还没登陆，不能点赞噢~');
+                //$('#concernQuestion').attr('disabled',true);
+            }
+        }
+        
+        function updateAnswer(node){
+            let type = parseInt(node.value);   
+            console.log('type changed : '+type);
+            let art_id = GetRequest().art_id;
+            if(GetRequest().art_id==null || isNaN(GetRequest().art_id)){
+                return;
+            }else{
+                $.ajax({
+                    url: "http://localhost/interview-project/server/get_review.php",
+                    data: {art_id:art_id,type:type},
+                    type: "GET",
+                    success: function(data) {
+                        /*
+                        返回的内容:                  
+                        pic_path:  
+                        user_name:
+                        likeNum:
+                        content:
+                        time
+                        */
+                        if(data!='fail'){
+                            let obj = JSON.parse(data);
+                            let node = document.getElementById('leftAnswerContentBox');
+                            //先删掉原来所有class名为answerBox的盒子，然后再添加
+                            let boxLists = document.getElementsByClassName('answerBox');
+                            let length = boxLists.length;
+                            for(let i=0;i<length;i++){
+                                node.removeChild(boxLists[0]);
+                            }
+                            for(let i=0;i<obj.length;i++){
+                                let newAns = document.createElement('div');
+                                newAns.classList.add('answerBox');
+                                newAns.innerHTML = '<div class="authorBox">\
+                                                        <img class="authorPhoto"  width="38" height="38" src="./headpic/'+obj[i].pic_path+'">\
+                                                        <span class="authorName">'+obj[i].user_name+'</span>\
+                                                    </div>\
+                                                    <div class="agreeNum">\
+                                                        <p>'+obj[i].likeNum+' 人赞同了该回答</p>\
+                                                    </div>\
+                                                    <div class="answer">\
+                                                        <p>'+obj[i].content+'</p>\
+                                                    </div>\
+                                                    <div class="time">\
+                                                        编辑于 '+obj[i].time+'\
+                                                    </div>\
+                                                    <div class="buttonGroup">\
+                                                        <button class="agreeButton" onclick="agree()"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 '+obj[i].likeNum+'</button>\
+                                                        <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>\
+                                                        <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> 暂无评论 </button>\
+                                                        <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>\
+                                                        <button class="likeButton" onclick="like()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 喜欢</button>\
+                                                        <button class="collectButton" onclick="collect()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>\
+                                                    </div>';
+                                node.appendChild(newAns);
+                            }
+                        }else{
+                        }
+                    }
+                });  
+
+            }
+
+            
+        }
+    </script>
 </head>
 <body>
     <!-- 导航栏部分 -->
@@ -54,17 +261,18 @@
     <div id="description">
        <!--顶部的这些icon可以考虑换成时间，点赞数量等有用的内容-->
         <div id="tagGroup">
-            <a>时尚</a>
-            <a>内衣</a>
-            <a>女性</a>
-            <a>性感</a>
+            <a>深大</a>
+            <a>计软</a>
+            <a>景深</a>
+            <a>毕设</a>
         </div>       
         <h1 id="descriptionTitle">女朋友穿内衣一样的上衣出去，内裤露出来一半，不然就是什么短到露屁股的裙子，你们能接受么？</h1>
+        <h5 id="descriptionContent">我是你爹</h5>
         <div id="descriptionButtonGroup">
-            <!--@todo: 有时间可以加一下图标-->
-            <button id="concernQuestion">关注问题</button>
+            <!--@2021-4-10todo: 有时间改一下图标样式-->
+            <button id="concernQuestion" onclick="likeThis()">点赞 1</button>
             <button id="reply"><span style="display: inline-flex; align-items: center;">​<svg fill="#0084ff" viewBox="0 0 24 24" width="16" height="16"><path d="M4.076 16.966a4.19 4.19 0 0 1 1.05-1.76l8.568-8.569a.524.524 0 0 1 .741 0l2.928 2.927a.524.524 0 0 1 0 .74l-8.568 8.57c-.49.49-1.096.852-1.761 1.051l-3.528 1.058a.394.394 0 0 1-.49-.488l1.06-3.53zM20.558 4.83c.59.59.59 1.546 0 2.136l-1.693 1.692a.503.503 0 0 1-.712 0l-2.812-2.812a.504.504 0 0 1 0-.712l1.693-1.693a1.51 1.51 0 0 1 2.135 0l1.389 1.389z"></path></svg></span>&nbsp;写回答</button>
-            <button id="invite"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M4 10V8a1 1 0 1 1 2 0v2h2a1 1 0 0 1 0 2H6v2a1 1 0 0 1-2 0v-2H2a1 1 0 0 1 0-2h2zm10.455 2c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-7 6c0-2.66 4.845-4 7.272-4C17.155 14 22 15.34 22 18v1.375c0 .345-.28.625-.625.625H8.08a.625.625 0 0 1-.625-.625V18z" fill-rule="evenodd"></path></svg></span>&nbsp;邀请回答</button>
+            <button id="invite"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M4 10V8a1 1 0 1 1 2 0v2h2a1 1 0 0 1 0 2H6v2a1 1 0 0 1-2 0v-2H2a1 1 0 0 1 0-2h2zm10.455 2c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-7 6c0-2.66 4.845-4 7.272-4C17.155 14 22 15.34 22 18v1.375c0 .345-.28.625-.625.625H8.08a.625.625 0 0 1-.625-.625V18z" fill-rule="evenodd"></path></svg></span>&nbsp;关注问题</button>
             <button id="readMoreButton" class="readMoreButton" onclick="readMore()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span></button>
         </div>
     </div>
@@ -73,131 +281,11 @@
         <article id="leftAnswerContentBox">
             <nav id="topSortNav">
                 <span id="answerNum">38个回答</span>
-                <select id='sortSelect' class="form-control">
-                    <option>时间排序</option>
-                    <option>点赞量排序</option>
+                <select id='sortSelect' class="form-control" onchange='updateAnswer(this)'>
+                    <option value='1'>时间排序</option>
+                    <option value='2'>点赞量排序</option>
                 </select>
             </nav>
-            <div class="answerBox">
-                <div class="authorBox">
-                    <img class="authorPhoto"  width="38" height="38" src="https://pic4.zhimg.com/v2-07e7ef782039745eebce6adfb5e9f59d_xs.jpg?source=1940ef5c">
-                    <span class="authorName">小狗Sean</span>
-                </div> 
-                <div class="agreeNum">
-                    <p>19 人赞同了该回答</p>
-                </div>
-                <div class="answer">
-                    <p>和答主一样，6月毕业孤注一掷选调，面试没有逆袭上岸，0.2分实在可惜。调整了一下，又开始备考了。</p>
-                    <p>我觉得可以考虑高校辅导员，此外讲师岗现在部分二本还有招紧急硕士，双一流还有考试机会，公办高职讲师不知为何也双一流硕士起步了，所以我一个211开始懵逼了，答主作为985完全可以去考条件要求双一流硕士的二本，公办高职的讲师，或者条件更加宽松的辅导员。或者明年的省考，事业单位都可以去考一考，明年也有人才引进，也是引进到事业编，专业对口的话去国企也可以。我觉得唯一重要的就是应届身份，所以不建议随便找一个工作，档案动了或者有了社保，就不是应届了，国家的政策你也看到了，应届倾向很大，不然没有应届省份，大半的岗位都报不了。</p>
-                </div>
-                <div class="time">
-                    编辑于 2020-12-23
-                </div>
-                <div class="buttonGroup">
-                    <button class="agreeButton" onclick="agree()"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 164</button>
-                    <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>
-                    <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> 1 条评论</button>
-                    <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>
-                    <button class="likeButton" onclick="like()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 喜欢</button>
-                    <button class="collectButton" onclick="collect()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>
-                </div>
-            </div>
-            <div class="answerBox">
-                <div class="authorBox">
-                    <img class="authorPhoto"  width="38" height="38" src="https://pic4.zhimg.com/v2-07e7ef782039745eebce6adfb5e9f59d_xs.jpg?source=1940ef5c">
-                    <span class="authorName">小狗Sean</span>
-                </div> 
-                <div class="agreeNum">
-                    <p>19 人赞同了该回答</p>
-                </div>
-                <div class="answer">
-                    <p>和答主一样，6月毕业孤注一掷选调，面试没有逆袭上岸，0.2分实在可惜。调整了一下，又开始备考了。</p>
-                    <p>我觉得可以考虑高校辅导员，此外讲师岗现在部分二本还有招紧急硕士，双一流还有考试机会，公办高职讲师不知为何也双一流硕士起步了，所以我一个211开始懵逼了，答主作为985完全可以去考条件要求双一流硕士的二本，公办高职的讲师，或者条件更加宽松的辅导员。或者明年的省考，事业单位都可以去考一考，明年也有人才引进，也是引进到事业编，专业对口的话去国企也可以。我觉得唯一重要的就是应届身份，所以不建议随便找一个工作，档案动了或者有了社保，就不是应届了，国家的政策你也看到了，应届倾向很大，不然没有应届省份，大半的岗位都报不了。</p>
-                </div>
-                <div class="time">
-                    编辑于 2020-12-23
-                </div>
-                <div class="buttonGroup">
-                    <button class="agreeButton" onclick="agree()"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 164</button>
-                    <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>
-                    <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> 1 条评论</button>
-                    <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>
-                    <button class="likeButton" onclick="like()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 喜欢</button>
-                    <button class="collectButton" onclick="collect()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>
-                </div>
-            </div>
-            <div class="answerBox">
-                <div class="authorBox">
-                    <img class="authorPhoto"  width="38" height="38" src="https://pic4.zhimg.com/v2-07e7ef782039745eebce6adfb5e9f59d_xs.jpg?source=1940ef5c">
-                    <span class="authorName">小狗Sean</span>
-                </div> 
-                <div class="agreeNum">
-                    <p>19 人赞同了该回答</p>
-                </div>
-                <div class="answer">
-                    <p>和答主一样，6月毕业孤注一掷选调，面试没有逆袭上岸，0.2分实在可惜。调整了一下，又开始备考了。</p>
-                    <p>我觉得可以考虑高校辅导员，此外讲师岗现在部分二本还有招紧急硕士，双一流还有考试机会，公办高职讲师不知为何也双一流硕士起步了，所以我一个211开始懵逼了，答主作为985完全可以去考条件要求双一流硕士的二本，公办高职的讲师，或者条件更加宽松的辅导员。或者明年的省考，事业单位都可以去考一考，明年也有人才引进，也是引进到事业编，专业对口的话去国企也可以。我觉得唯一重要的就是应届身份，所以不建议随便找一个工作，档案动了或者有了社保，就不是应届了，国家的政策你也看到了，应届倾向很大，不然没有应届省份，大半的岗位都报不了。</p>
-                </div>
-                <div class="time">
-                    编辑于 2020-12-23
-                </div>
-                <div class="buttonGroup">
-                    <button class="agreeButton" onclick="agree()"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 164</button>
-                    <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>
-                    <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> 1 条评论</button>
-                    <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>
-                    <button class="likeButton" onclick="like()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 喜欢</button>
-                    <button class="collectButton" onclick="collect()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>
-                </div>
-            </div>
-            <div class="answerBox">
-                <div class="authorBox">
-                    <img class="authorPhoto"  width="38" height="38" src="https://pic4.zhimg.com/v2-07e7ef782039745eebce6adfb5e9f59d_xs.jpg?source=1940ef5c">
-                    <span class="authorName">小狗Sean</span>
-                </div> 
-                <div class="agreeNum">
-                    <p>19 人赞同了该回答</p>
-                </div>
-                <div class="answer">
-                    <p>和答主一样，6月毕业孤注一掷选调，面试没有逆袭上岸，0.2分实在可惜。调整了一下，又开始备考了。</p>
-                    <p>我觉得可以考虑高校辅导员，此外讲师岗现在部分二本还有招紧急硕士，双一流还有考试机会，公办高职讲师不知为何也双一流硕士起步了，所以我一个211开始懵逼了，答主作为985完全可以去考条件要求双一流硕士的二本，公办高职的讲师，或者条件更加宽松的辅导员。或者明年的省考，事业单位都可以去考一考，明年也有人才引进，也是引进到事业编，专业对口的话去国企也可以。我觉得唯一重要的就是应届身份，所以不建议随便找一个工作，档案动了或者有了社保，就不是应届了，国家的政策你也看到了，应届倾向很大，不然没有应届省份，大半的岗位都报不了。</p>
-                </div>
-                <div class="time">
-                    编辑于 2020-12-23
-                </div>
-                <div class="buttonGroup">
-                    <button class="agreeButton" onclick="agree()"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 164</button>
-                    <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>
-                    <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> 1 条评论</button>
-                    <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>
-                    <button class="likeButton" onclick="like()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 喜欢</button>
-                    <button class="collectButton" onclick="collect()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>
-                </div>
-            </div>
-            <div class="answerBox">
-                <div class="authorBox">
-                    <img class="authorPhoto"  width="38" height="38" src="https://pic4.zhimg.com/v2-07e7ef782039745eebce6adfb5e9f59d_xs.jpg?source=1940ef5c">
-                    <span class="authorName">小狗Sean</span>
-                </div> 
-                <div class="agreeNum">
-                    <p>19 人赞同了该回答</p>
-                </div>
-                <div class="answer">
-                    <p>和答主一样，6月毕业孤注一掷选调，面试没有逆袭上岸，0.2分实在可惜。调整了一下，又开始备考了。</p>
-                    <p>我觉得可以考虑高校辅导员，此外讲师岗现在部分二本还有招紧急硕士，双一流还有考试机会，公办高职讲师不知为何也双一流硕士起步了，所以我一个211开始懵逼了，答主作为985完全可以去考条件要求双一流硕士的二本，公办高职的讲师，或者条件更加宽松的辅导员。或者明年的省考，事业单位都可以去考一考，明年也有人才引进，也是引进到事业编，专业对口的话去国企也可以。我觉得唯一重要的就是应届身份，所以不建议随便找一个工作，档案动了或者有了社保，就不是应届了，国家的政策你也看到了，应届倾向很大，不然没有应届省份，大半的岗位都报不了。</p>
-                </div>
-                <div class="time">
-                    编辑于 2020-12-23
-                </div>
-                <div class="buttonGroup">
-                    <button class="agreeButton" onclick="agree()"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 164</button>
-                    <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>
-                    <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> 1 条评论</button>
-                    <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>
-                    <button class="likeButton" onclick="like()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 喜欢</button>
-                    <button class="collectButton" onclick="collect()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>
-                </div>
-            </div>
         </article>
         <!--@时间关系，右边的内容和Index页面右边的是一样的-->
         <div id="rightAnswerContentBox">
