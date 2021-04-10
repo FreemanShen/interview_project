@@ -20,9 +20,9 @@ $result;
 $obj;
 $objArray = array();
 if($type == 1){
-    $sql = "select content,likeNum,time,viewer_id as id from review where art_id = ".$art_id." order by time desc limit 20";    
+    $sql = "select review_id,content,likeNum,time,viewer_id as id from review where art_id = ".$art_id." order by time desc limit 20";    
 }else{
-    $sql = "select content,likeNum,time,viewer_id as id from review where art_id = ".$art_id." order by likeNum desc,time desc limit 20";    
+    $sql = "select review_id,content,likeNum,time,viewer_id as id from review where art_id = ".$art_id." order by likeNum desc,time desc limit 20";    
 }
 $result = mysqli_query($conn,$sql);
 $row = 0;
@@ -34,6 +34,7 @@ if($row!=0){
         $obj->likeNum = $dbrow['likeNum'];
         $obj->content = $dbrow['content'];
         $obj->time = $dbrow['time'];
+        $obj->review_id = $dbrow['review_id'];
 
         $userSql = "select pic_path,name from user where id = ".$dbrow['id'];
         $userRes = mysqli_query($conn,$userSql);
@@ -50,6 +51,7 @@ if($row!=0){
     $obj->time = 'not found';
     $obj->pic_path = 'not found';
     $obj->user_name = 'not found';
+    $obj->review_id = '0';
     array_push($objArray,$obj);
     echo json_encode($objArray);
 }
