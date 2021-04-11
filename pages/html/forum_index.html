@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>程序员面试系统-讨论区</title>
+    <title>程序员面试系统-讨论</title>
     <!--
     <link rel="shortcut icon" type="image/x-icon" href="https://static.zhihu.com/static/favicon.ico">
     -->
@@ -11,9 +11,73 @@
     <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../css/main.css" />
     <link rel="stylesheet" type="text/css" href="../css/index.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/modal.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="../css/modal.css"/>-->
     <link rel="stylesheet" href="../css/forum_index.css" />
+    <style>
+        .ask_my_question{
+			min-height: 200px;
+		}
+		.my_question{
+			color:#121212;
+			font-size: 24px;
+			font-style: normal;
+			outline: none;
+			border:none;
+			box-shadow: none;
+			overflow-y: scroll;
+			overflow-x: hidden;
+			resize: none;
+			height: 50px !important;
+		}
+		.my_question:focus{
+			outline: none;
+			border:none;
+			box-shadow: none;
+		}
+
+		.my_description{
+			border: 1px solid #b1b1b1;
+   			border-radius: 3px;
+			resize: none;
+			margin-top: 12px;
+			font-size: 16px;
+		}
+
+
+		.my_description:focus{
+			border: 1px solid #5f5f5f;
+   			border-radius: 3px;
+			resize: none;
+			box-shadow: none;
+		}
+		.askBtn{
+			background-color: #0066ff;
+			border-radius: 3px;
+			color: #ffffff;
+			font-size: 14px !important;
+			font-weight: 400 !important;
+			line-height: 32px;
+			padding: 0 16px;
+			outline: none;
+			border: 1px solid #0066ff;
+		}
+		.askBtn:hover{
+			background-color: #0084ff;
+		}
+		
+        #my_answer_hint{
+            width: 100%;
+            display: none;
+        }
+        #my_answer_hint>span{
+            display: inline-block;
+            float:right;
+            color: #f1403c;
+            font-size: 15px;
+        }
+    </style>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="../js/bootstrap.js"></script>
     <script src="../js/index.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/recevie_invite.js"></script>
@@ -111,6 +175,22 @@
             getContentHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
             getContentHttp.send('getArticle=article');
 
+
+            $('#myQuestionTopic').bind('input propertychange','textarea',function(){
+                if(($('#myQuestionTopic').val().indexOf('?') != $('#myQuestionTopic').val().length-1) && ($('#myQuestionTopic').val().indexOf('?') != $('#myQuestionTopic').val().length-1)){
+                    $('#my_answer_hint').css('display','block');
+                }else{
+                    $('#my_answer_hint').css('display','none');
+                }
+            });
+            if(sessionStorage.getItem('login')=='true'){
+                $('#myPostBtn').attr({"data-toggle":"modal","data-target":"#myModal"})
+            }else{
+                $('#myPostBtn').attr({"href":"javascript:void(0);"})
+                $('#myPostBtn').click(function(){
+                    window.alert('登录之后才能提问~')
+                })
+            }
         }
         
         function agree(art_id,node){
@@ -141,10 +221,35 @@
                 return;
             }
         }
+    
+        function submitMyQuestion(){
+            let topic = $('#myQuestionTopic').val();
+            let content = $('#myQuestionContent').val();
+            if(topic==''||content==''||topic==null||content==null||topic.length<6||content.length<15){
+                window.alert('问题应至少为6个字符，描述应至少为15个字符~');
+                return;
+            }
+            let poster_id = sessionStorage.getItem('userId');
+            
+            $.ajax({
+                    url: "http://localhost/interview-project/server/submit_question.php",
+                    data: {poster_id: poster_id,topic:topic,content:content},
+                    type: "POST",
+                    //dataType: "json",
+                    //add_article(865366186,'求考研二战研友','我想去清华大学交叉信息学院或浙江大学计算机学院读研究生');
+                    success: function(data) {
+                        if(data=='success'){  
+                            $('#myQuestionTopic').val('');
+                            $('#myQuestionContent').val('');
+                            $('#myModal').modal('hide');                     
+                        }
+                    }
+                });
+        }
     </script>
 </head>
 <body>
-        <!--
+    <!--
         bootstrap各个类的使用说明：
         .navbar——设置nav元素为导航条组件；
         .navbar-default——指定导航条组件为默认主题；
@@ -160,6 +265,7 @@
         -->
     <!-- 导航栏部分 -->
     <!--弹出罩。。。默认不可见-->
+    <!--
     <div class="modal">
         <div class="modal-header">
             <p class="title">面试邀请</p>
@@ -173,6 +279,64 @@
         </div>
     </div>
     <div class="mask"></div>
+    -->
+
+    <!--@新的面试模态框:-->
+    <div class="modal fade" id="interviewModal" tabindex="-1" role="dialog" aria-labelledby="interviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        面试邀请
+                    </h4>
+                </div>
+                <div class="modal-body" id="interview_info">
+                    在这里添加一些文本
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="accept_interview()">
+                        接受邀请
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->       
+    </div>
+
+    <!-- 发布问题模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        发布问题
+                    </h4>
+                </div>
+                <div class="modal-body ask_my_question">
+                    <textarea class="form-control my_question" id="myQuestionTopic" placeholder="写下你的问题，准确地描述更容易得到解答"></textarea>
+                    <div id="my_answer_hint" style="width: 100%;display: none;"><span style="display: inline-block;float:right;color: #f1403c;font-size: 15px;">问题描述应在最后输入符号?</span></div>
+				    <div style="clear: both;"></div>
+                    
+                    <textarea class="form-control my_description" id="myQuestionContent" placeholder="输入问题背景、条件等详细信息" rows="6"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">关闭-->
+                    </button>
+                    <button type="button" class="askBtn" onclick="submitMyQuestion()">
+                        发布问题
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
     <!--导航条 正文-->
     <div id="nav">
         <a href="./index.html">首页</a>
@@ -186,6 +350,8 @@
         <button type="button" class="loginButton" id="userInfoBtn" onclick="backTologin()">登录/注册</button>        
     </div>
     
+
+
     <div id="indexMain">
         <div id="indexLeftContent">
             <nav id="checkOutContentNav">
@@ -202,7 +368,7 @@
             <div id="myFunc">
                 <a><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我的收藏</a>
                 <a target="_blank" href="#"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.74 4h12.52c.961 0 1.74.775 1.74 1.73V16.27c0 .955-.779 1.73-1.74 1.73h-3.825l-1.658 2.044a1 1 0 0 1-1.554 0l-1.658-2.044H5.74C4.78 18 4 17.224 4 16.27V5.73C4 4.775 4.778 4 5.74 4zM12 16a.976.976 0 0 0 .705-.287.951.951 0 0 0 .295-.712.954.954 0 0 0-.295-.714A.976.976 0 0 0 12 14a.962.962 0 0 0-.705.295A.961.961 0 0 0 11 15c0 .284.098.522.295.713A.975.975 0 0 0 12 16zm1.278-4.924a36.81 36.81 0 0 0 1.023-.975c.19-.193.354-.422.492-.688.138-.266.207-.575.207-.928 0-.448-.12-.864-.363-1.246a2.517 2.517 0 0 0-1.029-.906C13.164 6.111 12.652 6 12.072 6c-.624 0-1.17.133-1.638.399-.468.265-.824.6-1.068 1.005-.244.405-.366.804-.366 1.2 0 .19.077.368.231.531a.747.747 0 0 0 .567.246c.38 0 .638-.234.774-.703.144-.449.32-.788.528-1.019.208-.23.532-.345.972-.345.376 0 .683.114.921.342.238.229.357.51.357.841 0 .17-.039.328-.117.473a1.782 1.782 0 0 1-.288.396c-.114.118-.3.294-.555.526a9.71 9.71 0 0 0-.696.688c-.172.194-.31.418-.414.673a2.391 2.391 0 0 0-.156.906c0 .278.071.488.213.63a.716.716 0 0 0 .525.211c.4 0 .638-.216.714-.648.044-.203.077-.345.099-.426.022-.081.053-.162.093-.243.04-.081.101-.17.183-.268.082-.098.191-.21.327-.34z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我的关注&nbsp;</a>
-                <a target="_blank" href="#"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M4 10V8a1 1 0 1 1 2 0v2h2a1 1 0 0 1 0 2H6v2a1 1 0 0 1-2 0v-2H2a1 1 0 0 1 0-2h2zm10.455 2c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-7 6c0-2.66 4.845-4 7.272-4C17.155 14 22 15.34 22 18v1.375c0 .345-.28.625-.625.625H8.08a.625.625 0 0 1-.625-.625V18z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我的邀请 &nbsp;</a>
+                <a id="myPostBtn" data-toggle="modal" data-target="#myModal"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M4 10V8a1 1 0 1 1 2 0v2h2a1 1 0 0 1 0 2H6v2a1 1 0 0 1-2 0v-2H2a1 1 0 0 1 0-2h2zm10.455 2c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-7 6c0-2.66 4.845-4 7.272-4C17.155 14 22 15.34 22 18v1.375c0 .345-.28.625-.625.625H8.08a.625.625 0 0 1-.625-.625V18z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我要提问 &nbsp;</a>
                 <a target="_blank" href="#"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.74 4h12.52c.961 0 1.74.775 1.74 1.73V16.27c0 .955-.779 1.73-1.74 1.73h-3.825l-1.658 2.044a1 1 0 0 1-1.554 0l-1.658-2.044H5.74C4.78 18 4 17.224 4 16.27V5.73C4 4.775 4.778 4 5.74 4zM7 8.98c0 .554.449.996 1.003.996h4.994A.992.992 0 0 0 14 8.981a.997.997 0 0 0-1.003-.995H8.003A.992.992 0 0 0 7 8.98zm0 4c0 .554.446.996.995.996h8.01a.993.993 0 0 0 .995-.995.993.993 0 0 0-.995-.995h-8.01A.993.993 0 0 0 7 12.98z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;站务中心</a>
                 <a target="_blank" href="#"><svg width="18" height="18" viewBox="0 0 18 18" fill="#8590a6"><path d="M9 1.5c2.835 0 5.152 2.195 5.247 4.949l.003.176v.253A2.25 2.25 0 0 1 15.75 9v2.25a2.25 2.25 0 0 1-1.5 2.122v.257c0 .547-.2 1.073-.557 1.482l-.102.109-1.06 1.06a.75.75 0 0 1-1.124-.99l.063-.07 1.06-1.061a.75.75 0 0 0 .213-.432l.007-.098V13.5H12a.75.75 0 0 1-.75-.75V7.5a.75.75 0 0 1 .75-.75h.75v-.125C12.75 4.628 11.076 3 9 3 6.98 3 5.34 4.541 5.254 6.464l-.004.286H6a.75.75 0 0 1 .743.648l.007.102v5.25a.75.75 0 0 1-.648.743L6 13.5H4.5a2.25 2.25 0 0 1-2.245-2.096l-.005-.154V9c0-.98.626-1.814 1.5-2.122v-.253C3.75 3.79 6.105 1.5 9 1.5z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;帮助中心</a>
                 <a target="_blank" href="#"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M16.517 15.815a5.871 5.871 0 0 1-4.481 2.078 5.865 5.865 0 0 1-5.859-5.857 5.865 5.865 0 0 1 5.859-5.859c1.63 0 3.204.7 4.319 1.919.085.093.24.432.209.797a1.086 1.086 0 0 1-.436.779c-.248.193-.516.29-.797.29-.402 0-.7-.198-.814-.314A3.473 3.473 0 0 0 12 8.575a3.464 3.464 0 0 0-3.46 3.461 3.464 3.464 0 0 0 3.46 3.46 3.63 3.63 0 0 0 2.654-1.181c.136-.152.458-.306.806-.306.274 0 .542.095.773.274.35.269.45.588.473.809.032.308-.072.585-.188.723m4.686-7.699C20.67 6.883 19.96 5.82 19.07 4.929c-.891-.89-1.954-1.601-3.188-2.133A9.728 9.728 0 0 0 12 2a9.733 9.733 0 0 0-3.883.796c-1.234.532-2.297 1.243-3.186 2.133-.891.891-1.602 1.954-2.134 3.187A9.713 9.713 0 0 0 2 12a9.752 9.752 0 0 0 .797 3.883c.531 1.233 1.242 2.296 2.134 3.186.89.891 1.953 1.602 3.186 2.134A9.725 9.725 0 0 0 12 22a9.72 9.72 0 0 0 3.883-.797c1.233-.532 2.296-1.243 3.188-2.134.89-.89 1.601-1.953 2.132-3.186A9.73 9.73 0 0 0 22 12a9.69 9.69 0 0 0-.797-3.884" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;版权服务中心</a>
@@ -222,63 +388,11 @@
 
 
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-    <scrip src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></scrip>
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <!--<script src="../js/bootstrap.js"></script>-->
+
 </body>
-
-<!--
-<div class="contentBox">
-    <a class="title" href="#">如何评价SN打野SOFM在《英雄联盟》2020年lpl全明星周末获得年度mvp奖？</a>
-    <span class="coreContentBox">
-        <span class="author">小妖：</span>
-        你问我离谱吗。我会说，离谱。这是最离谱的？我回答：不是。我见过的s7才是最离谱的。说实话，仿照nba，足球完善荣誉体系是好事。但藤井这么多年造的荣誉为什么立不住？为什么观众还是只认冠军？原因就在于此了。其实没必要看的太重。记住，观众眼里，赞助商眼里，冠军才是唯一，外战漂亮=吸粉。藤井的荣誉=cjb。至于cjb是什么。问问s8之前的uzi，肉鸡粉丝，问问s10之前的k9粉丝，他们对这个词熟。至于sn。看看就得了。这企业在哪都让人呕吐。只会营销的货色。张康阳当初世界赛一顿营销，精英，年少有为人设玩的贼响，各种角度踩着wsc上位。结果国米欧联被干碎，苏宁小店赔的比wsc还多。差不多得了。张康阳那句在意大利提到苏宁，老百姓眼里满满的敬畏。都被人嘲出花了。现在又在lpl搅风搅雨的。
-    </span>
-    <div class="buttonGroup">
-        <button class="agreeButton" onclick="agree()"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 164</button>
-        <button class="agreeButton agreed" onclick="agree()"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#ffffff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 已赞同 161 </button>
-
-        <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>
-        <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> 1 条评论</button>
-        <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>
-        <button class="likeButton" onclick="like()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 关注</button>
-        <button class="collectButton" onclick="collect()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>
-        <button class="readMoreButton" onclick="readMore()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span> 阅读全文</button>
-    </div>
-</div>
-<div class="contentBox">
-    <a class="title" href="#">如何评价SN打野SOFM在《英雄联盟》2020年lpl全明星周末获得年度mvp奖？</a>
-    <span class="coreContentBox">
-        <span class="author">小妖：</span>
-        你问我离谱吗。我会说，离谱。这是最离谱的？我回答：不是。我见过的s7才是最离谱的。说实话，仿照nba，足球完善荣誉体系是好事。但藤井这么多年造的荣誉为什么立不住？为什么观众还是只认冠军？原因就在于此了。其实没必要看的太重。记住，观众眼里，赞助商眼里，冠军才是唯一，外战漂亮=吸粉。藤井的荣誉=cjb。至于cjb是什么。问问s8之前的uzi，肉鸡粉丝，问问s10之前的k9粉丝，他们对这个词熟。至于sn。看看就得了。这企业在哪都让人呕吐。只会营销的货色。张康阳当初世界赛一顿营销，精英，年少有为人设玩的贼响，各种角度踩着wsc上位。结果国米欧联被干碎，苏宁小店赔的比wsc还多。差不多得了。张康阳那句在意大利提到苏宁，老百姓眼里满满的敬畏。都被人嘲出花了。现在又在lpl搅风搅雨的。
-    </span>
-    <div class="buttonGroup">
-        <button class="agreeButton" onclick="agree()"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 164</button>
-        <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>
-        <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> 1 条评论</button>
-        <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>
-        <button class="likeButton" onclick="like()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 关注</button>
-        <button class="collectButton" onclick="collect()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>
-        <button class="readMoreButton" onclick="readMore()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span> 阅读全文</button>
-    </div>
-</div>
-<div class="contentBox">
-    <a class="title" href="#">如何评价SN打野SOFM在《英雄联盟》2020年lpl全明星周末获得年度mvp奖？</a>
-    <span class="coreContentBox">
-        <span class="author">小妖：</span>
-        你问我离谱吗。我会说，离谱。这是最离谱的？我回答：不是。我见过的s7才是最离谱的。说实话，仿照nba，足球完善荣誉体系是好事。但藤井这么多年造的荣誉为什么立不住？为什么观众还是只认冠军？原因就在于此了。其实没必要看的太重。记住，观众眼里，赞助商眼里，冠军才是唯一，外战漂亮=吸粉。藤井的荣誉=cjb。至于cjb是什么。问问s8之前的uzi，肉鸡粉丝，问问s10之前的k9粉丝，他们对这个词熟。至于sn。看看就得了。这企业在哪都让人呕吐。只会营销的货色。张康阳当初世界赛一顿营销，精英，年少有为人设玩的贼响，各种角度踩着wsc上位。结果国米欧联被干碎，苏宁小店赔的比wsc还多。差不多得了。张康阳那句在意大利提到苏宁，老百姓眼里满满的敬畏。都被人嘲出花了。现在又在lpl搅风搅雨的。
-    </span>
-    <div class="buttonGroup">
-        <button class="agreeButton" onclick="agree()"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 164</button>
-        <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>
-        <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> 1 条评论</button>
-        <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>
-        <button class="likeButton" onclick="like()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 关注</button>
-        <button class="collectButton" onclick="collect()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>
-        <button class="readMoreButton" onclick="readMore()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span> 阅读全文</button>
-    </div>
-</div>
--->
-
 
 </html>

@@ -28,7 +28,7 @@
 }
 
 /*顶部按钮组样式设计*/
-#concernQuestion,#reply,#invite,#readMoreButton,#goodQuestion,#write,#focus{
+#concernQuestion,#reply,#invite,#readMoreButton,#goodQuestion,#write,#focus,#submitAnswer{
     display: inline-block;
 }
 
@@ -36,7 +36,7 @@
     width: 50%;
 }
 /*关注问题按钮*/
-#concernQuestion,#goodQuestion{
+#concernQuestion,#goodQuestion,#submitAnswer{
     background-color: #0084ff;
     border-radius: 3px;
     color: #ffffff;
@@ -48,7 +48,7 @@
     border: 1px solid #0084ff;
 }
 
-#concernQuestion:hover{
+#concernQuestion:hover,#goodQuestion:hover,#submitAnswer:hover{
     background-color: #0470d4;
 }
 /*写回答按钮*/
@@ -92,7 +92,6 @@
 #answerMainBox{
     margin-top: 15px;
     margin-left: 15%;
-    
 }
 
 #answerMainBox::after{
@@ -105,11 +104,17 @@
 }
 
 #leftAnswerContentBox{
-    background-color: #ffffff;
+    /*background-color: #ffffff;*/
     width: 55%;
-    padding-left: 15px;
+    /*padding-left: 15px;*/
     float: left;
 }
+
+#leftAnswerContentBox>div,#leftAnswerContentBox>nav{
+    background-color: #fff;
+    padding-left: 15px;
+}
+
 #topSortNav{
     border-bottom-color: rgb(240,242,247);
     border-bottom-style: solid;
@@ -156,6 +161,8 @@
     line-height: 24px;
     margin-right: 15px;
     margin-bottom: 22px;
+    word-wrap: break-word;
+	word-break: break-all;
 }
 .time{
     color: #8590a6;

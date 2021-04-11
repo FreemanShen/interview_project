@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../css/facetime/interview_room.css">
     <!-- Favicon -->
     <link rel="icon" href="./dist/media/img/favicon.png" type="image/png">
@@ -12,10 +14,11 @@
     <link rel="stylesheet" href="./vendor/enjoyhint/enjoyhint.css">
     <!-- App styles -->
     <link rel="stylesheet" href="./dist/css/app.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/modal.css"/>
-
+    
+    <!--<link rel="stylesheet" type="text/css" href="../css/modal.css"/>-->
     <title>面试房间</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="../js/bootstrap.js"></script>
     <script src="../js/init.js"></script>
     <script src="../js/facetime/GenerateTestUserSig.js"></script>
     <script src="../js/facetime/lib-generate-test-usersig.min.js"></script>
@@ -45,16 +48,46 @@
 <body>
     <!--显示共享内容-->
     <!--弹出罩。。。默认不可见-->
+    <!--
     <div class="modal">
         <div class="modal-header">
-            <p class="title">屏幕共享</p>
+            <p class="title">面试邀请</p>
             <p class="close">×</p>
         </div>
-        <div class="modal-content" id="share_screen">
+        <div class="modal-content" id="interview_info">
             
+        </div>
+        <div class="modal-footer">
+            <button class="btn" onclick="accept_interview()">接受邀请</button>
         </div>
     </div>
     <div class="mask"></div>
+    -->
+    <!--@新的面试模态框:-->
+    <div class="modal fade" id="interviewModal" tabindex="-1" role="dialog" aria-labelledby="interviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        面试邀请
+                    </h4>
+                </div>
+                <div class="modal-body" id="interview_info">
+                    在这里添加一些文本
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="accept_interview()">
+                        接受邀请
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->       
+    </div>
     <div class="room_left">
         <div class="opposite_viewer" id="opposite_viewer">
 

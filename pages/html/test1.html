@@ -1,28 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="../js/jquery-1.9.1.min.js"></script>
-	<title>Document</title>
-	<script>
-		function test(node){
-			console.log(node.value);
+	<meta charset="utf-8"> 
+	<title>Bootstrap 实例 - 模态框（Modal）插件</title>
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<style>
+		.ask_my_question{
+			min-height: 200px;
 		}
-		window.onload = function(){
-			console.log(document.getElementById('sortSelect').value);	
+		.my_question{
+			color:#121212;
+			font-size: 24px;
+			font-style: normal;
+			outline: none;
+			border:none;
+			box-shadow: none;
+			overflow-y: scroll;
+			overflow-x: hidden;
+			resize: none;
+			height: 50px !important;
+		}
+		.my_question:focus{
+			outline: none;
+			border:none;
+			box-shadow: none;
+		}
 
+		.my_description{
+			border: 1px solid #b1b1b1;
+   			border-radius: 3px;
+			resize: none;
+			margin-top: 12px;
+			font-size: 16px;
 		}
-	</script>
+
+
+		.my_description:focus{
+			border: 1px solid #5f5f5f;
+   			border-radius: 3px;
+			resize: none;
+			box-shadow: none;
+		}
+		.askBtn{
+			background-color: #0066ff;
+			border-radius: 3px;
+			color: #ffffff;
+			font-size: 14px !important;
+			font-weight: 400 !important;
+			line-height: 32px;
+			padding: 0 16px;
+			outline: none;
+			border: 1px solid #0066ff;
+		}
+		.askBtn:hover{
+			background-color: #0084ff;
+		}
+		
+	</style>
 </head>
 <body>
-	<select id='sortSelect' class="form-control" onchange='test(this)'>
-		<option value=1>时间排序</option>
-		<option value=2>点赞量排序</option>
-	</select>
-	<button id="agreeButton" onclick="agree('+obj[i].review_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 255</button>
 
+<h2>创建模态框（Modal）</h2>
+<!-- 按钮触发模态框 -->
+<a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+	开始演示模态框
+</a>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					发布问题
+				</h4>
+			</div>
+			<div class="modal-body ask_my_question">
+				<textarea class="form-control my_question" placeholder="写下你的问题，准确地描述更容易得到解答"></textarea>
+				<div style="width: 100%;"><span style="display: inline-block;float:right;color: #f1403c;font-size: 15px;">您好没有输入</span></div>
+				<div style="clear: both;"></div>
+				<textarea class="form-control my_description" placeholder="输入问题背景、条件等详细信息" rows="6"></textarea>
+			</div>
+			<div class="modal-footer">
+				<!--<button type="button" class="btn btn-default" data-dismiss="modal">关闭-->
+				</button>
+				<button type="button" class="askBtn">
+					发布问题
+				</button>
+			</div>
+			<textarea id='test'></textarea>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script>
+	$('#myModal').modal('show')
 
+	$('#test').bind('input propertychange','textarea',function(){
+		console.log($('#test').val());
+	});
+
+</script>
 </body>
 </html>

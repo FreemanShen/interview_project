@@ -3,23 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>知乎，分享你新编的故事</title>
+    <title>程序员面试系统-回答</title>
+    <!--
     <link rel="shortcut icon" type="image/x-icon" href="https://static.zhihu.com/static/favicon.ico">
+    -->
     <!-- 新 Bootstrap 核心 CSS 文件 -->
     <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     
     <link rel="stylesheet" type="text/css" href="../css/main.css" />
     <link rel="stylesheet" type="text/css" href="../css/index.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/modal.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="../css/modal.css"/>-->
     <link rel="stylesheet" href="../css/forum_answer.css" />
     <link rel="stylesheet" href="../css/forum_index.css" />
     <style>
         #descriptionButtonGroup button:hover{
             cursor: pointer !important;
         }
-    </style>
+        #checkOutContentNav a{
+            margin: 0;
+            line-height: 56px;
+            height: 56px;
+        }
+        .myAnswer{
+            margin-right: 15px;   
+        }
+        .myAnswer textarea{
+            resize: none;
+        }
+        #writeAnswer{
+            border-bottom-color: rgb(240,242,247);
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            display: none;
+        }
 
+    </style>
+    
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="../js/bootstrap.js"></script>
     <script src="../js/index.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/recevie_invite.js"></script>
@@ -168,6 +191,7 @@
             }
         
         }
+
 
         function likeThis(){
             let art_id = GetRequest().art_id;
@@ -319,9 +343,8 @@
                                 newBtn.classList.add("agreeButton");
                                 newBtn.classList.add("agreed");
                                 newBtn.innerHTML = '<span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#ffffff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 已赞同 '+newNum;
+                                node.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.innerHTML='<p> '+newNum+' 人赞同了该回答</p>'
                                 node.parentNode.replaceChild(newBtn,node);
-
-                                node.parentNode.previousSibling.previousSibling.previousSibling.innerHTML='<p> '+newNum+'人赞同了该回答</p>'
                             }else if(data == 'fail'){
                                 window.alert('你已经点过赞啦~')
                                 return;
@@ -334,11 +357,53 @@
                 }
             }
         }
+
+        function submitMyAns(node){
+            let text = $('#myAnswerText').val();
+            $.ajax({
+                    url: "http://localhost/interview-project/server/submit_ans.php",
+                    data: {user_id: sessionStorage.getItem('userId'),content:text,art_id:GetRequest().art_id},
+                    type: "POST",
+                    success: function(data) {
+                            if(data=='success'){
+                                $('#myAnswerText').val('');
+                                $('#writeAnswer').css('display','none');
+                                window.alert('感谢您参与这个问题的回答~');
+                                updateAnswer(document.getElementById('sortSelect'))
+
+                                
+                                //获取art_id对应的回答总数
+                                $.ajax({
+                                        url: "http://localhost/interview-project/server/get_review_num.php",
+                                        data: {art_id: GetRequest().art_id},
+                                        type: "GET",
+                                        success: function(data) {
+                                            $('#answerNum').html(data+'个回答');
+                                        }
+                                });  
+
+                            }else{
+                                window.alert('请检查回答内容是否有非法信息！');
+                            }
+                        }
+                    });
+
+        }
+
+        function writeAnswer(){
+            if(sessionStorage.getItem('login')=='true'){
+                document.getElementById('writeAnswer')
+                $('#writeAnswer').css('display','block');
+            }else{
+                window.alert('要写回答，请先登录噢~');
+            }
+        }
 </script>
 </head>
 <body>
     <!-- 导航栏部分 -->
     <!--弹出罩。。。默认不可见-->
+    <!--
     <div class="modal">
         <div class="modal-header">
             <p class="title">面试邀请</p>
@@ -352,6 +417,34 @@
         </div>
     </div>
     <div class="mask"></div>
+    -->
+    <!--@新的面试模态框:-->
+    <div class="modal fade" id="interviewModal" tabindex="-1" role="dialog" aria-labelledby="interviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        面试邀请
+                    </h4>
+                </div>
+                <div class="modal-body" id="interview_info">
+                    在这里添加一些文本
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="accept_interview()">
+                        接受邀请
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->       
+    </div>
+
+    
     <!--导航条 正文-->
     <div id="nav">
         <a href="./index.html">首页</a>
@@ -380,7 +473,7 @@
         <div id="descriptionButtonGroup">
             <!--@2021-4-10todo: 有时间改一下图标样式-->
             <button id="concernQuestion" onclick="likeThis()">点赞 1</button>
-            <button id="reply"><span style="display: inline-flex; align-items: center;">​<svg fill="#0084ff" viewBox="0 0 24 24" width="16" height="16"><path d="M4.076 16.966a4.19 4.19 0 0 1 1.05-1.76l8.568-8.569a.524.524 0 0 1 .741 0l2.928 2.927a.524.524 0 0 1 0 .74l-8.568 8.57c-.49.49-1.096.852-1.761 1.051l-3.528 1.058a.394.394 0 0 1-.49-.488l1.06-3.53zM20.558 4.83c.59.59.59 1.546 0 2.136l-1.693 1.692a.503.503 0 0 1-.712 0l-2.812-2.812a.504.504 0 0 1 0-.712l1.693-1.693a1.51 1.51 0 0 1 2.135 0l1.389 1.389z"></path></svg></span>&nbsp;写回答</button>
+            <button id="reply" onclick="writeAnswer()"><span style="display: inline-flex; align-items: center;">​<svg fill="#0084ff" viewBox="0 0 24 24" width="16" height="16"><path d="M4.076 16.966a4.19 4.19 0 0 1 1.05-1.76l8.568-8.569a.524.524 0 0 1 .741 0l2.928 2.927a.524.524 0 0 1 0 .74l-8.568 8.57c-.49.49-1.096.852-1.761 1.051l-3.528 1.058a.394.394 0 0 1-.49-.488l1.06-3.53zM20.558 4.83c.59.59.59 1.546 0 2.136l-1.693 1.692a.503.503 0 0 1-.712 0l-2.812-2.812a.504.504 0 0 1 0-.712l1.693-1.693a1.51 1.51 0 0 1 2.135 0l1.389 1.389z"></path></svg></span>&nbsp;写回答</button>
             <button id="invite"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M4 10V8a1 1 0 1 1 2 0v2h2a1 1 0 0 1 0 2H6v2a1 1 0 0 1-2 0v-2H2a1 1 0 0 1 0-2h2zm10.455 2c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-7 6c0-2.66 4.845-4 7.272-4C17.155 14 22 15.34 22 18v1.375c0 .345-.28.625-.625.625H8.08a.625.625 0 0 1-.625-.625V18z" fill-rule="evenodd"></path></svg></span>&nbsp;关注问题</button>
             <button id="readMoreButton" class="readMoreButton" onclick="readMore()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span></button>
         </div>
@@ -388,6 +481,19 @@
     <div id="answerMainBox">
         <!--@todo:做一个 根据时间和点赞数量进行排序的功能 -->
         <article id="leftAnswerContentBox">
+            <div id="writeAnswer">
+                <nav id="checkOutContentNav">
+                    <a style="color: #0084ff;">我的回答</a>
+                </nav>
+                <div class = "myAnswer" >
+                    <textarea id="myAnswerText" class="form-control" rows="15" placeholder="写下你的回答吧~"></textarea>
+                    <button id="submitAnswer" style="float: right;margin-top: 15px;" onclick="submitMyAns(this)">提交回答</button>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            
+
+
             <nav id="topSortNav">
                 <span id="answerNum">38个回答</span>
                 <select id='sortSelect' class="form-control" onchange='updateAnswer(this)'>
@@ -395,6 +501,8 @@
                     <option value='2'>点赞量排序</option>
                 </select>
             </nav>
+            <!--添加一个不可见的box-->
+            
         </article>
         <!--@时间关系，右边的内容和Index页面右边的是一样的-->
         <div id="rightAnswerContentBox">
@@ -419,8 +527,8 @@
     </div>
 
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 </body>
 </html>
