@@ -4,6 +4,8 @@
 	<meta charset="utf-8"> 
 	<title>Bootstrap 实例 - 模态框（Modal）插件</title>
 	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="../js/bootstrap.js"></script>
 	<style>
 		.ask_my_question{
 			min-height: 200px;
@@ -55,54 +57,39 @@
 		.askBtn:hover{
 			background-color: #0084ff;
 		}
-		
+		p{
+			background: #ffff00;
+		}
 	</style>
 </head>
+
 <body>
 
-<h2>创建模态框（Modal）</h2>
-<!-- 按钮触发模态框 -->
-<a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-	开始演示模态框
-</a>
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-					&times;
-				</button>
-				<h4 class="modal-title" id="myModalLabel">
-					发布问题
-				</h4>
-			</div>
-			<div class="modal-body ask_my_question">
-				<textarea class="form-control my_question" placeholder="写下你的问题，准确地描述更容易得到解答"></textarea>
-				<div style="width: 100%;"><span style="display: inline-block;float:right;color: #f1403c;font-size: 15px;">您好没有输入</span></div>
-				<div style="clear: both;"></div>
-				<textarea class="form-control my_description" placeholder="输入问题背景、条件等详细信息" rows="6"></textarea>
-			</div>
-			<div class="modal-footer">
-				<!--<button type="button" class="btn btn-default" data-dismiss="modal">关闭-->
-				</button>
-				<button type="button" class="askBtn">
-					发布问题
-				</button>
-			</div>
-			<textarea id='test'></textarea>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal -->
-</div>
-<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-<script src="../js/bootstrap.js"></script>
+
+	<br />
+	<font size='1'><table class='xdebug-error xe-notice' dir='ltr' border='1' cellspacing='0' cellpadding='1'>
+	<tr><th align='left' bgcolor='#f57900' colspan="5"><span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Notice: Undefined index: star in D:\wamp\www\interview-project\server\refreshLikeAndCollect.php on line <i>10</i></th></tr>
+	<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>
+	<tr><th align='center' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Time</th><th align='left' bgcolor='#eeeeec'>Memory</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>Location</th></tr>
+	<tr><td bgcolor='#eeeeec' align='center'>1</td><td bgcolor='#eeeeec' align='center'>0.0005</td><td bgcolor='#eeeeec' align='right'>137144</td><td bgcolor='#eeeeec'>{main}(  )</td><td title='D:\wamp\www\interview-project\server\refreshLikeAndCollect.php' bgcolor='#eeeeec'>...\refreshLikeAndCollect.php<b>:</b>0</td></tr>
+	</table></font>
+	<br />
+	<font size='1'><table class='xdebug-error xe-warning' dir='ltr' border='1' cellspacing='0' cellpadding='1'>
+	<tr><th align='left' bgcolor='#f57900' colspan="5"><span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Warning: mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in D:\wamp\www\interview-project\server\refreshLikeAndCollect.php on line <i>38</i></th></tr>
+	<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>
+	<tr><th align='center' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Time</th><th align='left' bgcolor='#eeeeec'>Memory</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>Location</th></tr>
+	<tr><td bgcolor='#eeeeec' align='center'>1</td><td bgcolor='#eeeeec' align='center'>0.0005</td><td bgcolor='#eeeeec' align='right'>137144</td><td bgcolor='#eeeeec'>{main}(  )</td><td title='D:\wamp\www\interview-project\server\refreshLikeAndCollect.php' bgcolor='#eeeeec'>...\refreshLikeAndCollect.php<b>:</b>0</td></tr>
+	<tr><td bgcolor='#eeeeec' align='center'>2</td><td bgcolor='#eeeeec' align='center'>0.0832</td><td bgcolor='#eeeeec' align='right'>146320</td><td bgcolor='#eeeeec'><a href='http://www.php.net/function.mysqli-num-rows' target='_new'>mysqli_num_rows</a>
+	(  )</td><td title='D:\wamp\www\interview-project\server\refreshLikeAndCollect.php' bgcolor='#eeeeec'>...\refreshLikeAndCollect.php<b>:</b>38</td></tr>
+	</table></font>
+	{"agreed":false,"followed":false,"collected":false}"
 <script>
-	$('#myModal').modal('show')
-
-	$('#test').bind('input propertychange','textarea',function(){
-		console.log($('#test').val());
-	});
-
+	$(function(){
+		$('.askBtn').click(function(){
+			console.log(new Date()+'detecting...');
+			$('p').css('background','')
+		})
+	})
 </script>
 </body>
 </html>

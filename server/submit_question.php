@@ -14,6 +14,8 @@ if($result){
     echo 'success';
 }else{
     echo 'fail';
+    echo 'content:'.$content;
+    echo $result;
 }
 
 ?>

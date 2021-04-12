@@ -139,7 +139,7 @@ body{
     background-color: #76839b10;
 }
 #indexMain{
-    width:80%;
+    width:68%;
     margin: 0 auto;
     color: #121212;
 }
@@ -211,10 +211,8 @@ body{
     margin-bottom: -4px;
     line-height: 25.05px;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    height: fit-content;
 }
 .buttonGroup{
     padding-top:10px;
@@ -236,7 +234,7 @@ body{
     border-style: none;
     border: none;
 }
-.commentButton,.shareButton,.likeButton,.collectButton,.readMoreButton{
+.commentButton,.shareButton,.likeButton,.collectButton,.readMoreButton,.showLessBtn{
     color: #8590a6;
     outline: none;
     background-color: #ffffff;
@@ -246,11 +244,11 @@ body{
     margin-left: 20px;
 }
 
-.commentButton:hover,.shareButton:hover,.likeButton:hover,.collectButton:hover,.readMoreButton:hover{
+.commentButton:hover,.shareButton:hover,.likeButton:hover,.collectButton:hover,.readMoreButton:hover,.showLessBtn:hover{
     color:#65676d;
 }
 
-.commentButton:focus,.shareButton:focus,.likeButton:focus,.collectButton:focus,.readMoreButton:focus{
+.commentButton:focus,.shareButton:focus,.likeButton:focus,.collectButton:focus,.readMoreButton:focus,.showLessBtn:hover{
     background-color: #ffffff;
     outline:none;
     border: none;
@@ -288,4 +286,52 @@ body{
 .agreed{
     background-color: #0066ff;
     color: #ffffff;
+}
+
+/*2021-4-12新添加部分*/
+.authorInfo{
+
+}
+.authorInfo>p{
+    line-height: normal;
+    margin-left: 52px;
+    margin-bottom: 0px;
+}
+.authorPic{
+   float: left; 
+}
+.authorName{
+    /*margin-bottom: 4px !important;*/
+    line-height: 15px;
+}
+.authorPic{
+    display: inline-block;
+    border-radius: 10%;
+    height: 40px;
+    width:40px;
+}
+.authorSign{
+    font-size: 14px;
+    line-height: 14px;
+    color:#646464;
+}
+.authorDescription-min{
+    margin-top: 10px;
+    -webkit-line-clamp: 6;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;   
+    /*color: red;*/
+    /*height:fit-content;*/
+}
+
+.authorDescription{
+    margin-top: 10px;
+    -webkit-line-clamp: none;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;   
+    height:fit-content;
 }
