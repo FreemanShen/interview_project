@@ -145,7 +145,7 @@
     padding: 12px 0;
 }
 .authorName{
-    display: inline-block;
+    /*display: inline-block;*/
     font-weight: 600 !important;
     line-height: 16.5px;
     height: 16.5px;

@@ -1,0 +1,123 @@
+body{
+    background: #f6f6f6;
+}
+#profile,#contentBox{
+    width:70%;
+    margin: 0 auto;
+    margin-top: 12px;
+    background-color: #ffffff;
+}
+#profile{
+    height: 265px;
+    background: linear-gradient(to bottom, #d1d6df 0%,#d1d6df 50%,white 51%,white 100%);
+    padding-top: 126px;
+}
+#profileImg{
+    margin-top: -73px;
+    display: inline-block;
+    width: 160px;
+    height: 160px;
+    border-radius: 10px;
+    border:4px solid #ffffff;
+    margin-left: 20px;
+}
+#userNickName{
+    display: inline-block;
+    font-weight: 600;
+    font-size: 26px;
+    margin-left: 20px;
+    margin-top:-10px;
+}
+.editButton{
+    display: block;
+    float:right;
+    margin-right: 15px;
+}
+.editBox{
+    margin-bottom: 15px;
+}
+#leftContent{
+    width:70%;
+    background-color: #ffffff;
+    float: left;
+}
+#rightContent{
+    width: 28%;
+    float: right;
+}
+
+/*左侧列表导航栏*/
+.checkOutContentNav{
+    border-bottom-color: rgb(240,242,247);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+.checkOutContentNav a{
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    margin:0 22px;
+    height: 58px;
+    line-height: 58px;
+    color: #121212;
+}
+
+.checkOutContentNav a:hover{
+    color: #329cffb9;
+    cursor: pointer;
+}
+
+.selectedNavTab{
+    color: #121212;
+    font-weight: 600 !important;
+}
+
+.headPic{
+    float: left;
+}
+.headPic img{
+    border-radius: 50%;    
+}
+.author{
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 28.8px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.corePersonBox{
+    float: left;
+    padding-left: 12px;
+    /*width: 90%;*/
+}
+.sign{
+    color: rgb(100, 100, 100);
+    font-size: 15px;
+    line-height: 24px;
+    margin-bottom: 6px;
+}
+.decorationBtn{
+    float: right;
+    padding: 0 24px;
+    color: #ffffff;
+    background-color: #8590a6;
+    line-height: 32px;
+    border:none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+.decorationBtn:hover{
+    background-color: #acb5c7;
+    color: #ffffff;
+}
+.decorationBtn:focus{
+    border:none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: #ffffff;
+}
+#topFunctionLogo,#centerFuncLogo,#advertisement1,#advertisement2,#myFunc{
+    margin-bottom: 15px;
+}
