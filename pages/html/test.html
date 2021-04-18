@@ -5,98 +5,13 @@
 	<title>Bootstrap 实例 - 基本表单</title>
 	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">  
 	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.js"></script>  
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-
-  <form role="form-horizontal">
-    <div class="form-inline">
-      <div class="form-group" style="width: 35%;margin-left:10%;margin-right: 10%;">
-        <label for="name" class="control-label" style="width: 10%;margin-right: 0;">名称</label>
-        <input type="text" class="form-control" id="name" style="width: 80%;margin-left: 0;"
-            placeholder="请输入名称">
-      </div>
-    
-      <div class="form-group" style="width: 35%;">
-        <label for="name" class="control-label" style="width: 10%;">名称</label>
-        <input type="text" class="form-control" id="name"  style="width: 80%;margin-left: 0;" placeholder="请输入名称">
-      </div>
-      
-    </div>  
-  
-    <div class="form-inline">
-      <div class="form-group" style="width: 35%;margin-left:10%;margin-right: 10%;">
-        <label for="name">名称</label>
-        <input type="text" class="form-control" id="name" style="width: 100%;"
-            placeholder="请输入名称">
-      </div>
-    
-      <div class="form-group" style="width: 35%;">
-        <label for="name">名称</label>
-        <input type="text" class="form-control" id="name" style="width: 100%;"
-            placeholder="请输入名称">
-      </div>
-      
-    </div> 
-    <div class="form-group">
-      <label class="sr-only" for="inputfile">文件输入</label>
-      <input type="file" id="inputfile">
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"> 请打勾
-      </label>
-    </div>
-    <div class="form-group has-success">
-      <label for="firstname" class="col-sm-1 control-label">名字</label>
-      <div class="col-sm-5">
-        <input type="text" class="form-control" id="firstname" placeholder="请输入名字">
-      </div>
-    </div>
-    <button type="submit" class="btn btn-default">提交</button>
-
-    <div class="form-group">
-      <label class="col-sm-1 control-label">Email</label>
-      <div class="col-sm-5">
-        <p class="form-control-static">email@example.com</p>
-      </div>
-
-      <label class="col-sm-1 control-label">Email</label>
-      <div class="col-sm-5">
-        <p class="form-control-static">email@example.com</p>
-      </div>  
-    </div>
-   
-    <div class="form-group">
-      <label for="inputPassword" class="col-sm-2 control-label">密码</label>
-      <div class="col-sm-10">
-        <input type="password" class="form-control input-lg" id="inputPassword" 
-             placeholder="请输入密码">
-      </div>
-    </div>
-
-    
-  </form>
-  
-  <div class="dropdown">
-    <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">主题
-        <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-        <li role="presentation">
-            <a role="menuitem" tabindex="-1" href="#">Java</a>
-        </li>
-        <li role="presentation">
-            <a role="menuitem" tabindex="-1" href="#">数据挖掘</a>
-        </li>
-        <li role="presentation">
-            <a role="menuitem" tabindex="-1" href="#">数据通信/网络</a>
-        </li>
-        <li role="presentation" class="divider"></li>
-        <li role="presentation">
-            <a role="menuitem" tabindex="-1" href="#">分离的链接</a>
-        </li>
-    </ul>
+  <script>
+      console.log(md5(865366186));
+  </script>
 </div>
 </body>
 </html>

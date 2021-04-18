@@ -10,13 +10,14 @@ values(2,"c++ question 3","c++ question 3 answer a","c++ question 3 answer b"
 
 $sql;
 $result;
-
-// insert into user(id,name,password) values(865366186,"Freeman","bestzjs666");
+$me = md5('bestzjs666');
+echo $me;
+// insert user(id,name,password) values(865366186,"Freeman","bestzjs666");
 /*
 "INSERT INTO Persons (FirstName, LastName, Age) 
 VALUES ('Peter', 'Griffin', '35')"
 */
-
+/*
 for($type = 1;$type<21;$type++){
     for($counter = 1;$counter<10;$counter++){
         $question = "type ".$type." question ".$counter."";
@@ -40,4 +41,5 @@ for($type = 1;$type<21;$type++){
     }
 }
 die();
+*/
 ?>

@@ -18,7 +18,14 @@ function login(){
   var password = document.getElementById('password').value;
   var userId = document.getElementById('userid').value;
   console.log(userId); console.log(password);
-
+  //合法性校验
+  if(!(validate(password)&&validate(userId))){
+    window.alert('请检查输入的账号和密码是否包含非法字符');
+    location.reload();
+    return;
+  }
+  //MD5加密
+  password = md5(password);
   //@todo:添加一下正则校验。
 
   var response;
