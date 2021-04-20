@@ -68,6 +68,7 @@ client.on('stream-subscribed', event => {
         get_receiver_info();    
     }else{
         show();
+        //$('#shareScreenModal').modal('show');
         remoteStream.play('share_screen')
     }
 
@@ -163,7 +164,7 @@ function send_message(){
 
 
 function get_msg(){
-
+    console.log(new Date()+'get msg() executing');
     //@todo:添加一个用户头像
     let response;
     let getMsgHttp = new XMLHttpRequest();
@@ -175,6 +176,7 @@ function get_msg(){
                 let msgNode = document.getElementById('messages')
                 msgNode.innerHTML = "";
                 let objArr = JSON.parse(response);
+                console.log(new Date()+'response receving');
                 if(objArr!=null && objArr.length!=0){
                     for(let i =0;i<objArr.length;i++){
                         /*
@@ -242,7 +244,7 @@ function get_msg(){
 }
  
 //@todo:添加时间戳，过了一天的内容就去除掉
-setInterval(get_msg,200);
+setInterval(get_msg,1000);
 
 function get_receiver_info(){
     //receiver_id
@@ -302,8 +304,8 @@ function show(){
     closes = document.getElementsByClassName("close");
     if(closes[0]!=null)
         closes[0].onclick = close;
-    //if(closes[1]!=null)
-      //closes[1].onclick = close;
+    if(closes[1]!=null)
+      closes[1].onclick = close;
 
     if(mask!=null && modal!=null){
         mask.style.display = "block";

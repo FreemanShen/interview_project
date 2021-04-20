@@ -15,7 +15,7 @@
     <!-- App styles -->
     <link rel="stylesheet" href="./dist/css/app.min.css">
     
-    <!--<link rel="stylesheet" type="text/css" href="../css/modal.css"/>-->
+    <link rel="stylesheet" type="text/css" href="../css/modal.css"/>
     <title>面试房间</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
     <script src="../js/bootstrap.js"></script>
@@ -24,47 +24,35 @@
     <script src="../js/facetime/lib-generate-test-usersig.min.js"></script>
     <script src="../js/facetime/trtc.js"></script>
     <script src="../js/facetime/interview_room.js"></script>
-    
     <style>
-        .message-content{
-            width:fit-content;
-        }
-        .my_content{
-            float:right;
-        }
-        .my_avatar{
-            margin-right: 0 !important;
-            margin-left: 16px;
-        }
         .modal{
-            width: 480px;
-            height: fit-content;
+            width: 800px !important;
         }
         .modal-content{
-            height:  270px !important;
+            height: 600px !important;
+            padding-left: 15px;
+            padding-top: 15px;
         }
     </style>
 </head>
 <body>
-    <!--显示共享内容-->
-    <!--弹出罩。。。默认不可见-->
-    <!--
     <div class="modal">
         <div class="modal-header">
-            <p class="title">面试邀请</p>
+            <p class="title">共享屏幕中</p>
             <p class="close">×</p>
         </div>
-        <div class="modal-content" id="interview_info">
+        <div class="modal-content" id="share_screen">
             
         </div>
         <div class="modal-footer">
-            <button class="btn" onclick="accept_interview()">接受邀请</button>
+            <button class="btn btn-default close">关闭</button>
         </div>
     </div>
     <div class="mask"></div>
-    -->
-    <!--@新的面试模态框:-->
-    <div class="modal fade" id="interviewModal" tabindex="-1" role="dialog" aria-labelledby="interviewModalLabel" aria-hidden="true">
+    
+    <!--共享屏幕罩子-->
+    <!--
+    <div class="modal fade" id="shareScreenModal" tabindex="-1" role="dialog" aria-labelledby="shareScreenModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -72,21 +60,22 @@
                         &times;
                     </button>
                     <h4 class="modal-title" id="myModalLabel">
-                        面试邀请
+                        共享屏幕
                     </h4>
                 </div>
-                <div class="modal-body" id="interview_info">
-                    在这里添加一些文本
+                <div class="modal-body" id="share_screen">
+                        共享屏幕测试
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                     </button>
-                    <button type="button" class="btn btn-primary" onclick="accept_interview()">
-                        接受邀请
-                    </button>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->       
+            </div>
+        </div>       
+    </div>
+    -->
+    <div>
+
     </div>
     <div class="room_left">
         <div class="opposite_viewer" id="opposite_viewer">
