@@ -53,3 +53,13 @@ delimiter ;
 
 test:
 call add_follower(865366186,864738697)
+
+delimiter ;
+drop procedure if exists del_resetSession;
+DELIMITER // 
+create procedure del_resetSession()
+BEGIN
+	DELETE FROM resetsession WHERE ctime < unix_timestamp(now())-60;
+END//
+DELIMITER ;
+

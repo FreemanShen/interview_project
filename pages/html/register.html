@@ -1,34 +1,37 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Required meta tags -->
     
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>面试系统_注册</title>
-    <!--
-        小Logo
-    <link rel="shortcut icon" type="image/x-icon" href="https://static.zhihu.com/static/favicon.ico">
-    -->
+    <title>面试系统-注册</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon1.ico">
     <!-- plugins:css -->
     <link rel="stylesheet" href="./register/simple-line-icons.css">
     <link rel="stylesheet" href="./register/flag-icon.min.css">
     <link rel="stylesheet" href="./register/vendor.bundle.base.css">
-
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
     <link rel="stylesheet" href="./register/style.css">
-    <script src="../js/register.js"></script>
 
-    <!--背景图片
-        <style>
-            body{
-            background: url(./images/background.png) !important;
-            }
-        </style>
-    -->
+    <script src='../cdnJs/jquery.js'></script>
+    <script src="../js/general_func.js"></script>
+    <script src="../cdnJs/md5.js"></script>
+    <script src="../js/register.js"></script>
+    <style>
+        .content-wrapper{
+          background: url('./images/background.png');
+        }
+    </style>
+
+    <script>
+      /*
+      $(function(){
+        $('#checkDec').hide();
+        $('#regBtn').hide();
+        $('#mailCode').hide();
+      })
+      */
+    </script>
   </head>
   <body>
     <div class="container-scroller">
@@ -44,7 +47,7 @@
                 <h6 class="font-weight-light">注册账号十分容易，只需以下几步</h6>
                 <div class="pt-3">
                   <div class="form-group">
-                    <input type="text" class="form-control form-control-lg" id="userid" placeholder="输入账号ID">
+                    <input type="text" class="form-control form-control-lg" id="userid" placeholder="输入账号ID(数字)">
                     </div>
                   <div class="form-group">
                     <input type="text" class="form-control form-control-lg" id="username" placeholder="输入用户名">
@@ -55,15 +58,23 @@
                   <div class="form-group">
                     <input type="password" class="form-control form-control-lg" id="surepassword" placeholder="确认密码">
                   </div>      
-            
-                  <div class="mb-4">
+                  <div class="form-group">
+                    <input type="text" class="form-control form-control-lg" id="mail" placeholder="输入密保邮箱"> 
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control form-control-lg" id="mailCode" placeholder="输入验证码">
+                  </div> 
+                  <div class="form-group">
+                    <button class="btn btn-block btn-success btn-lg font-weight-medium auth-form-btn" id="send_mail" onclick="send_mail()">发送验证码</button>
+                  </div>
+                  <div class="mb-4" id='checkDec'>
                     <div class="form-check">
                       <label class="form-check-label text-muted">
                         <input type="checkbox" class="form-check-input"> 我接受所有隐私保护条款 <i class="input-helper"></i></label>
                     </div>
                   </div>
                   <div class="mt-3">
-                    <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" onclick="register()">注册</button>
+                    <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" id='regBtn' onclick="register()">注册</button>
                   </div>
                   <div class="text-center mt-4 font-weight-light"> 已经有账号了? <a href="./login.html" class="text-primary">登录</a>
                   </div>
@@ -76,15 +87,4 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="./register/vendor.bundle.base.js.下载"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="./register/off-canvas.js.下载"></script>
-    <script src="./registers/misc.js.下载"></script>
-    <!-- endinject -->
-  
 </body></html>

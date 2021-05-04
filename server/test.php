@@ -1,45 +1,43 @@
 <?php
-include("conn.php");
-mysqli_set_charset($conn,"utf8");
-
-/*
-insert into exercise(type,question,ansa,ansb,ansc,ansd,correct,reason)
-values(2,"c++ question 3","c++ question 3 answer a","c++ question 3 answer b"
-,"c++ question 3 answer c","c++ question 3 answer d",3,"question 3 reason")
-*/
-
-$sql;
-$result;
-$me = md5('bestzjs666');
-echo $me;
-// insert user(id,name,password) values(865366186,"Freeman","bestzjs666");
-/*
-"INSERT INTO Persons (FirstName, LastName, Age) 
-VALUES ('Peter', 'Griffin', '35')"
-*/
-/*
-for($type = 1;$type<21;$type++){
-    for($counter = 1;$counter<10;$counter++){
-        $question = "type ".$type." question ".$counter."";
-        $ansa = "type ".$type." question ".$counter." ansa ";
-        $ansb = "type ".$type." question ".$counter." ansb ";
-        $ansc = "type ".$type." question ".$counter." ansc ";
-        $ansd = "type ".$type." question ".$counter." ansd ";
-        $reason = "type ".$type." question ".$counter." reason ";
-        $number = floor(mt_rand(1,4.9));
-        $sql = "insert into exercise(type,question,ansa,ansb,ansc,ansd,correct,reason) values(".$type.",'".$question."','".$ansa."','".$ansb."','".$ansc."','".$ansd."',".$number.",'".$reason."')";
-        $result = mysqli_query($conn,$sql);
-        //echo $sql;
-        if(!$result){
-            echo 'fail';
-            //echo $sql;
-            die();
-        }else{
-            echo 'success number: '.$number.'<br>';
-            //die();
-        }  
-    }
-}
-die();
-*/
+require './PHPMailer-master/PHPMailer-master/PHPMailerAutoload.php'; 
+// 实例化PHPMailer核心类
+$mail = new PHPMailer();
+// 是否启用smtp的debug进行调试 开发环境建议开启 生产环境注释掉即可 默认关闭debug调试模式
+$mail->SMTPDebug = 1;
+// 使用smtp鉴权方式发送邮件
+$mail->isSMTP();
+// smtp需要鉴权 这个必须是true
+$mail->SMTPAuth = true;
+// 链接qq域名邮箱的服务器地址
+$mail->Host = 'smtp.qq.com';
+// 设置使用ssl加密方式登录鉴权
+$mail->SMTPSecure = 'ssl';
+// 设置ssl连接smtp服务器的远程服务器端口号
+$mail->Port = 465;
+// 设置发送的邮件的编码
+$mail->CharSet = 'UTF-8';
+// 设置发件人昵称 显示在收件人邮件的发件人邮箱地址前的发件人姓名
+$mail->FromName = '郑景深-毕业设计';
+// smtp登录的账号 QQ邮箱即可
+$mail->Username = '865366186@qq.com';
+// smtp登录的密码 使用生成的授权码
+$mail->Password = 'rmiaedfdqgpdbdjb';
+// 设置发件人邮箱地址 同登录账号
+$mail->From = '865366186@qq.com';
+// 邮件正文是否为html编码 注意此处是一个方法
+$mail->isHTML(true);
+// 设置收件人邮箱地址
+//@
+$mail->addAddress('1783498341@qq.com');
+// 添加多个收件人 则多次调用方法即可
+//$mail->addAddress('565192010@qq.com');
+// 添加该邮件的主题 @验证
+$mail->Subject = '密码找回';
+// 添加邮件正文
+$mail->Body = '<p>用户您好，您的验证码是<b>12345</b></p>';
+// 为该邮件添加附件
+//$mail->addAttachment('./example.pdf');
+// 发送邮件 返回状态
+$status = $mail->send();
+//echo "send mail ok";
 ?>
