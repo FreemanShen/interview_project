@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>程序员面试系统-讨论</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon1.ico">
     <!--
     <link rel="shortcut icon" type="image/x-icon" href="https://static.zhihu.com/static/favicon.ico">
     -->
@@ -87,6 +88,7 @@
         //ajax获取contentBox内容
         //window.onload = function(){}
         $(function(){
+            /*
             //页面渲染之后，查看一下sessionStorage的登陆状态，如果是已登录，修改button里的内容，做一个跳转
             if(sessionStorage.getItem('login') == 'true'){
                 document.getElementById('userInfoBtn').innerHTML="欢迎,"+sessionStorage.getItem('username');
@@ -98,145 +100,18 @@
                 aNode.setAttribute("href","./admin.html");
                 document.getElementById('nav').appendChild(aNode);
             }
-   
-            var response;
-            var getContentHttp = new XMLHttpRequest();
-            getContentHttp.onreadystatechange = function(){
-                if(getContentHttp.readyState == 4 && getContentHttp.status == 200){
-                    response = getContentHttp.responseText;
-                    //test
-                    //console.log(getContentHttp.responseText);
-                    /*
-                    {
-                        art_id:
-                        poster:
-                        question:
-                        description:
-                        agreeNum:
-                        reviewNum:
-                        poster_id
-                    }
-                    返回JSON数组
-                    */
-                    if(response!="fail"){
-                        let obj = JSON.parse(response);
-                        let node = document.getElementById('indexLeftContent');
-                        for(let i =0;i<obj.length;i++){
-                            //@todo:如果用户已经登录，再发一个ajax，对于已经点过赞的，做一个变色处理
-                            let newNode = document.createElement('div');
-                            newNode.classList.add('contentBox');
-                            newNode.innerHTML= '<a class="title" href="./forum_answer.html?art_id='+obj[i].art_id+'">'+obj[i].question+'</a>\
-                                                <div class="coreContentBox">\
-                                                    <div class="authorInfo">\
-                                                        <img class="authorPic" src="./headpic/'+obj[i].pic_path+'">\
-                                                        <p class="authorName"><b>'+obj[i].poster+'</b></p>\
-                                                        <p class="authorSign">'+obj[i].intro+'</p>\
-                                                    </div>\
-                                                    <div style="clear:both;"></div>\
-                                                    <div class="authorDescription-min">'+obj[i].description+'</div>\
-                                                </div>\
-                                                <div class="buttonGroup">\
-                                                    <button class="agreeButton" onclick="agree('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 '+obj[i].agreeNum+'</button>\
-                                                    <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>\
-                                                    <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> '+obj[i].reviewNum+' 条评论</button>\
-                                                    <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>\
-                                                    <button class="likeButton" onclick="like('+obj[i].poster_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 关注</button>\
-                                                    <button class="collectButton" onclick="collect('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>\
-                                                    <button class="readMoreButton" onclick="readMore(this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span> 阅读全文</button>\
-                                                </div>';
-
-
-                            if(sessionStorage.getItem("login")=="true"){
-                            
-                                $.ajax({
-                                    url: "http://localhost/interview-project/server/refreshLikeAndCollect.php",
-                                    data: {star:obj[i].poster_id,art_id: obj[i].art_id,user_id:sessionStorage.getItem("userId")},
-                                    type: "POST",
-                                    //dataType: "json",
-                                    success: function(data) {
-                                        let boolObj = JSON.parse(data);
-                                        let contentHtml =  '<a class="title" href="./forum_answer.html?art_id='+obj[i].art_id+'">'+obj[i].question+'</a>\
-                                                            <div class="coreContentBox">\
-                                                                <div class="authorInfo">\
-                                                                    <img class="authorPic" src="./headpic/'+obj[i].pic_path+'">\
-                                                                    <p class="authorName"><b>'+obj[i].poster+'</b></p>\
-                                                                    <p class="authorSign">'+obj[i].intro+'</p>\
-                                                                </div>\
-                                                                <div style="clear:both;"></div>\
-                                                                <div class="authorDescription-min">'+obj[i].description+'</div>\
-                                                            </div>';
-                                        /*
-                                        $obj->agreed = false;
-                                        $obj->followed = false;
-                                        $obj->collected = false;
-                                        */               
-                                        let agreeBtnHtml,followBtnHtml,collectBtnHtml;     
-                                        if(boolObj.agreed){
-                                            agreeBtnHtml = '<button class="agreeButton agreed"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#ffffff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 已赞同 '+obj[i].agreeNum+'</button>';
-                                        }else{
-                                            agreeBtnHtml = '<button class="agreeButton" onclick="agree('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 '+obj[i].agreeNum+'</button>';
-                                        }
-                                        if(boolObj.followed){
-                                            followBtnHtml = '<button class="likeButton" onclick="like('+obj[i].poster_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span>已关注</button>'
-                                        }else{
-                                            followBtnHtml = '<button class="likeButton" onclick="like('+obj[i].poster_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 关注</button>'
-                                        }
-                                        if(boolObj.collected){
-                                            collectBtnHtml = '<button class="collectButton" onclick="collect('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span>已收藏</button>'
-                                        }else{
-                                            collectBtnHtml = '<button class="collectButton" onclick="collect('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>'
-                                        }
-
-                                        newNode.innerHTML = contentHtml+'<div class="buttonGroup">'+agreeBtnHtml+'\
-                                                                            <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>\
-                                                                            <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> '+obj[i].reviewNum+' 条评论</button>\
-                                                                            <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>'+followBtnHtml+collectBtnHtml+'<button class="readMoreButton" onclick="readMore(this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span> 阅读全文</button>\
-                                                                        </div>'
-                                        
-                                        node.appendChild(newNode);
-                                    }
-                                });
-                            
-                            }
-                            else{
-                                node.appendChild(newNode);
-                            }
-                        }
-                        
-                        /*
-                        //在返回内容后，才注册点击事件
-                        $('.readMoreButton').click(function(){
-                            //console.log(new Date()+'detecting...');
-                            let jqNode = $(this).parent().prev().children().filter('.authorDescription-min');
-                            jqNode.addClass('authorDescription').removeClass('authorDescription-min');
-                            $(this).addClass('showLessBtn').removeClass('readMoreButton');
-                            $(this).html('<span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span> 收起')
-                        })
-
-                        //与上个相似
-                        $('.showLessBtn').click(function(){
-                            //console.log(new Date()+'detecting...');
-                            let jqNode = $(this).parent().prev().children().filter('.authorDescription');
-                            jqNode.addClass('authorDescription-min').removeClass('authorDescription');
-                            $(this).addClass('readMoreButton').removeClass('showLessBtn');
-                            $(this).html('<span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span> 阅读全文')
-                        })
-                        */
-                    }
-                }
-            }
-            //@todo:post地址可以更改
-            getContentHttp.open('POST',"http://localhost/interview-project/server/getContentBox.php",true);
-            getContentHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
-            getContentHttp.send('getArticle=article');
+            */
+            getContent(1);
 
 
             $('#myQuestionTopic').bind('input propertychange','textarea',function(){
+                $('#my_answer_hint').css('display','none');
+                /*
                 if(($('#myQuestionTopic').val().indexOf('?') != $('#myQuestionTopic').val().length-1) && ($('#myQuestionTopic').val().indexOf('?') != $('#myQuestionTopic').val().length-1)){
                     $('#my_answer_hint').css('display','block');
-                }else{
-                    $('#my_answer_hint').css('display','none');
+                }else{ 
                 }
+                */
             });
             if(sessionStorage.getItem('login')=='true'){
                 $('#myPostBtn').attr({"data-toggle":"modal","data-target":"#myModal"})
@@ -262,7 +137,7 @@
                     //dataType: "json",
                     success: function(data) {
                         if(data=='success'){
-                            $(node).html('<span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span>已关注');
+                            $(node).html('<span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 已关注');
                         }else{
                             console.log('add_follower fail,response : '+data);
                         }
@@ -285,7 +160,7 @@
                     //dataType: "json",
                     success: function(data) {
                         if(data=='success'){
-                            $(node).html('<span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span>已收藏');
+                            $(node).html('<span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 已收藏');
                         }else{
                             console.log('add_collect fail,response : '+data);
                         }
@@ -361,6 +236,7 @@
                             $('#myQuestionTopic').val('');
                             $('#myQuestionContent').val('');
                             $('#myModal').modal('hide');                     
+                            window.alert('问题发布成功！');
                         }
                     }
                 });
@@ -376,6 +252,153 @@
         function refreshFollowAndCollect(){
 
         }
+        function changeContent(key,node){
+            node.classList.add('selectedContentTab');
+            
+            let arr = findSibling(node);
+            for(let i=0;i<arr.length;i++){
+                arr[i].classList.remove('selectedContentTab');
+            }   
+            getContent(key);
+        }
+
+        function getContent(key){
+            var response;
+            var getContentHttp = new XMLHttpRequest();
+            getContentHttp.onreadystatechange = function(){
+                if(getContentHttp.readyState == 4 && getContentHttp.status == 200){
+                    response = getContentHttp.responseText;
+                    //test
+                    //console.log(getContentHttp.responseText);
+                    /*
+                    {
+                        art_id:
+                        poster:
+                        question:
+                        description:
+                        agreeNum:
+                        reviewNum:
+                        poster_id:
+                        ctime:
+                    }
+                    返回JSON数组
+                    */
+                    if(response!="fail"){
+                        let obj = JSON.parse(response);
+                        let node = document.getElementById('indexLeftContent');
+                        /*
+                        while(node.firstElementChild.nextElementSibling){
+                            node.removeChild(node.firstElementChild.nextElementSibling);
+                        }
+                        */
+                        $('.contentBox').remove(); 
+            
+                        for(let i =0;i<obj.length;i++){
+                            //@todo:如果用户已经登录，再发一个ajax，对于已经点过赞的，做一个变色处理
+                            let newNode = document.createElement('div');
+                            newNode.classList.add('contentBox');
+
+                            if(sessionStorage.getItem("login")=="true"){
+                            
+                                $.ajax({
+                                    url: "http://localhost/interview-project/server/refreshLikeAndCollect.php",
+                                    data: {star:obj[i].poster_id,art_id: obj[i].art_id,user_id:sessionStorage.getItem("userId")},
+                                    type: "POST",
+                                    //dataType: "json",
+                                    success: function(data) {
+                                        let boolObj = JSON.parse(data);
+                                        let contentHtml =  '<a class="title" href="./forum_answer.html?art_id='+obj[i].art_id+'">'+obj[i].question+'</a>\
+                                                            <div class="coreContentBox">\
+                                                                <div class="authorInfo">\
+                                                                    <img class="authorPic" src="./headpic/'+obj[i].pic_path+'">\
+                                                                    <p class="authorName"><b>'+obj[i].poster+'</b></p>\
+                                                                    <p class="authorSign">'+obj[i].intro+'</p>\
+                                                                </div>\
+                                                                <div style="clear:both;"></div>\
+                                                                <div class="authorDescription-min">'+obj[i].description+'</div>\
+                                                            </div>';
+                                        /*
+                                        $obj->agreed = false;
+                                        $obj->followed = false;
+                                        $obj->collected = false;
+                                        */               
+                                        let agreeBtnHtml,followBtnHtml,collectBtnHtml;     
+                                        if(boolObj.agreed){
+                                            agreeBtnHtml = '<button class="agreeButton agreed"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#ffffff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 已赞同 '+obj[i].agreeNum+'</button>';
+                                        }else{
+                                            agreeBtnHtml = '<button class="agreeButton" onclick="agree('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 '+obj[i].agreeNum+'</button>';
+                                        }
+                                        if(boolObj.followed){
+                                            followBtnHtml = '<button class="likeButton" onclick="like('+obj[i].poster_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 已关注</button>'
+                                        }else{
+                                            followBtnHtml = '<button class="likeButton" onclick="like('+obj[i].poster_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 关注</button>'
+                                        }
+                                        if(boolObj.collected){
+                                            collectBtnHtml = '<button class="collectButton" onclick="collect('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 已收藏</button>'
+                                        }else{
+                                            collectBtnHtml = '<button class="collectButton" onclick="collect('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>'
+                                        }
+
+                                        newNode.innerHTML = contentHtml+'<div class="time">编辑于 '+obj[i].ctime+'</div>'+'<div class="buttonGroup">'+agreeBtnHtml+'\
+                                                                            <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>\
+                                                                            <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> '+obj[i].reviewNum+' 条评论</button>\
+                                                                            <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>'+followBtnHtml+collectBtnHtml+'<button class="readMoreButton" onclick="readMore(this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span> 阅读全文</button>\
+                                                                        </div>'
+                                        
+                                        node.appendChild(newNode);
+                                    }
+                                });
+                            
+                            }
+                            else{
+                                newNode.innerHTML= '<a class="title" href="./forum_answer.html?art_id='+obj[i].art_id+'">'+obj[i].question+'</a>\
+                                                <div class="coreContentBox">\
+                                                    <div class="authorInfo">\
+                                                        <img class="authorPic" src="./headpic/'+obj[i].pic_path+'">\
+                                                        <p class="authorName"><b>'+obj[i].poster+'</b></p>\
+                                                        <p class="authorSign">'+obj[i].intro+'</p>\
+                                                    </div>\
+                                                    <div style="clear:both;"></div>\
+                                                    <div class="authorDescription-min">'+obj[i].description+'</div>\
+                                                </div>\
+                                                <div class="time">\
+                                                    发布于 '+obj[i].ctime+'\
+                                                </div>\
+                                                <div class="buttonGroup">\
+                                                    <button class="agreeButton" onclick="agree('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 '+obj[i].agreeNum+'</button>\
+                                                    <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>\
+                                                    <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> '+obj[i].reviewNum+' 条评论</button>\
+                                                    <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>\
+                                                    <button class="likeButton" onclick="like('+obj[i].poster_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 关注</button>\
+                                                    <button class="collectButton" onclick="collect('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>\
+                                                    <button class="readMoreButton" onclick="readMore(this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span> 阅读全文</button>\
+                                                </div>';
+                                node.appendChild(newNode);
+                            }
+                        }
+                    }
+                }
+            }
+            //@todo:post地址可以更改
+            getContentHttp.open('POST',"http://localhost/interview-project/server/getContentBox.php",true);
+            getContentHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+            getContentHttp.send('getArticle=article&key='+key);
+        }
+
+
+        let findSibling = ( tag )=>{
+            let  parentEl = tag.parentNode ;
+            let  childs = parentEl.children ;
+            let  siblings = [];
+            for( let i = 0; i <= childs.length - 1 ; i++ ){
+                if( childs[i] === tag  ){
+                    continue ;
+                }
+                siblings[ siblings.length] = childs[i];
+            }
+            return siblings ;
+        };
+
     </script>
 </head>
 <body>
@@ -474,8 +497,8 @@
         <a href="./facetime.html">面试</a>
         <a>学习</a>
         <a href="./select_room.html">聊天室</a>
-        <a href="./discuss.html">讨论区</a>
-        <a href="./self.html">个人</a>
+        <a href="./forum_index.html">讨论区</a>
+        <a href="./me.html">个人</a>
         <a href="javascript:void(0);" onclick="logout()">注销</a>
         <button type="button" class="loginButton" id="userInfoBtn" onclick="backTologin()">登录/注册</button>        
     </div>
@@ -485,11 +508,11 @@
     <div id="indexMain">
         <div id="indexLeftContent">
             <nav id="checkOutContentNav">
-                <a class="selectedContentTab">推荐</a>
-                <a>关注</a>
-                <a>热榜</a>
-                <a>收藏</a>
+                <a class="selectedContentTab" onclick="changeContent(1,this)">推荐</a>
+                <a onclick="changeContent(2,this)">最新发布</a>
+                <a onclick="changeContent(3,this)">热榜</a>
             </nav>
+            
             <!--@可以通过dom.createElement appendChild方法往里面添加元素-->
         </div>
         <!-- @todo:右边区域可以做成position:fixed/static切换-->

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>编辑个人信息</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon1.ico">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">  
     <link rel="stylesheet" href="https://cdn.staticfile.org/ionicons/2.0.1/css/ionicons.min.css">  
     <link rel="stylesheet" href="../css/edit_self.css">  
@@ -10,7 +11,7 @@
 	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
     <script src="../js/edit_self.js"></script>
-    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
     <script src="../js/city.js"></script>
     <style>
         .form-inline{
@@ -64,6 +65,7 @@
         })　
 
         function submit(){
+            let flag = 0;
             console.log(new Date()+"function submit executing ..");
             let imgNode = document.getElementById('edit_img');
             let nameNode = document.getElementById('edit_name');
@@ -136,7 +138,10 @@
                     //test
                     console.log("updateHttp: " + updateHttp.responseText);
                     if(response!="fail"){
-
+                        flag++;
+                        if(flag == 2){
+                            window.location.href = "./me.html";
+                        }
                     }else if(response == "fail"){
                     }
                 }
@@ -160,7 +165,10 @@
                     //test
                     //console.log(updateImgHttp.responseText);
                     if(imgResponse!="fail"){
-
+                        flag++;
+                        if(flag == 2){
+                            window.location.href = "./me.html";
+                        }
                     }else if(response == "fail"){
                     }
                     console.log("updateImgHttp: " + updateImgHttp.responseText);

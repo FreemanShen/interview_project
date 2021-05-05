@@ -25,14 +25,16 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="../html/admin/css/style.css">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="../html/admin/images/favicon.png" />
+    <link rel="shortcut icon" href="../favicon1.ico" />
     <style>
         .tab_info span,.input_text {
-            display: inline-block;
+            display: -webkit-box;
             max-width: 100px;
             overflow: hidden;    
             text-overflow:ellipsis;    
             white-space: nowrap; 
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
         }
     </style>
     <script>        
@@ -55,7 +57,7 @@
             let mailName = JSON.parse(sessionStorage.getItem('user_json')).mail;
             let picNodes = document.getElementsByClassName('userpic');
             let userNodes = document.getElementsByClassName('username');
-            let mailNodes = document.getElementById('mail');
+            let mailNodes = document.getElementsByClassName('mail');
             for(let i=0;i<picNodes.length;i++){
                 //@to be continued
                 picNodes[i].src = "./headpic/"+pic_path;
@@ -237,6 +239,9 @@
     <script src="../html/admin/js/dashboard.js"></script>
     <!-- End custom js for this page -->
     <script>
+      $(function(){
+        updateStatics();
+      })
       var backToLogin = function(){
         window.location.href = "./login.html";
         sessionStorage.clear();

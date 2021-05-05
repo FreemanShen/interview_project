@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>知乎，分享你新编的故事</title>
-    <link rel="shortcut icon" type="image/x-icon" href="https://static.zhihu.com/static/favicon.ico">
+    <title>面试系统-个人中心</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon1.ico">
     <!-- 新 Bootstrap 核心 CSS 文件 -->
     <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../css/main.css" />
@@ -129,8 +129,7 @@
 
         //获取我的收藏
         function getMyCollect(){
-            $('.contentBox').remove();
-        
+            $('.contentBox').remove();  
             //向php发东西
             $.ajax({
                 url: "http://localhost/interview-project/server/get_my_collect.php",
@@ -143,9 +142,10 @@
                     star_sign:
                 */
                 success: function(data) {
+                    let node = document.getElementById('leftContent');
                     if(data!="fail"){
                         let obj = JSON.parse(data);
-                        let node = document.getElementById('leftContent');
+                       
                         for(let i =0;i<obj.length;i++){
                             //@todo:如果用户已经登录，再发一个ajax，对于已经点过赞的，做一个变色处理
                             let newNode = document.createElement('div');
@@ -210,6 +210,51 @@
             });
         }
 
+        function getMyReviewCollect(){
+            $('.contentBox').remove();  
+            //向php发东西
+            $.ajax({
+                url: "http://localhost/interview-project/server/forumMod/get_my_review_collect.php",
+                data: {user_id: sessionStorage.getItem('userId')},
+                type: "GET",
+                //dataType: "json",
+                /*
+                    pic_path:
+                    star_name:
+                    star_sign:
+                */
+                success: function(data) {
+                    let node = document.getElementById('leftContent');
+                    if(data!="fail"){
+                        let obj = JSON.parse(data);
+                        for(let i =0;i<obj.length;i++){
+                            //@todo:如果用户已经登录，再发一个ajax，对于已经点过赞的，做一个变色处理
+                            let newNode = document.createElement('div');
+                            newNode.classList.add('contentBox');
+                            let contentHtml =  '<a class="title" href="./forum_answer.html?art_id='+obj[i].art_id+'">'+obj[i].question+'</a>\
+                                                <div class="coreContentBox">\
+                                                    <div class="authorInfo">\
+                                                        <img class="authorPic" src="./headpic/'+obj[i].pic_path+'">\
+                                                        <p class="authorName"><b>'+obj[i].poster+'</b></p>\
+                                                        <p class="authorSign">'+obj[i].intro+'</p>\
+                                                    </div>\
+                                                    <div style="clear:both;"></div>\
+                                                    <div class="authorDescription-min">'+obj[i].description+'</div><div class="time" style="margin-top:16px;">编辑于 '+obj[i].ctime+'</div>\
+                                                </div>';
+                            let agreeBtnHtml = '<button class="agreeButton" onclick="agree('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 '+obj[i].agreeNum+'</button>';
+                            newNode.innerHTML = contentHtml+'<div class="buttonGroup">'+agreeBtnHtml+'&nbsp;<button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>'+'</div>';
+                            node.appendChild(newNode);
+                        }
+                    }
+                    else{
+                        let newNode = document.createElement('div');
+                        newNode.classList.add('contentBox');
+                        newNode.innerHTML='<br><p>&nbsp;&nbsp;&nbsp;您还没有收藏~</p>'
+                        node.appendChild(newNode);
+                    }
+                }
+            });
+        }
         function edit(){
             window.location.href="./edit_self.html";
         }
@@ -217,13 +262,21 @@
         function myIdol(node){
             $(node).addClass('selectedContentTab');
             $(node).next().removeClass('selectedContentTab');
+            $(node).next().removeClass('selectedContentTab');
             getMyFollow();
         }
 
         function myCollect(node){
             $(node).addClass('selectedContentTab');
             $(node).prev().removeClass('selectedContentTab');
+            $(node).next().removeClass('selectedContentTab');
             getMyCollect();
+        }
+        function myReviewCollect(node){
+            $(node).addClass('selectedContentTab');
+            $(node).prev().removeClass('selectedContentTab');
+            $(node).prev().prev().removeClass('selectedContentTab');
+            getMyReviewCollect();
         }
     </script>
 </head>
@@ -236,8 +289,8 @@
         <a href="./facetime.html">面试</a>
         <a>学习</a>
         <a href="./select_room.html">聊天室</a>
-        <a href="./discuss.html">讨论区</a>
-        <a href="./self.html">个人</a>
+        <a href="./forum_index.html">讨论区</a>
+        <a href="./me.html">个人</a>
         <a href="javascript:void(0);" onclick="logout()">注销</a>
         <button type="button" class="loginButton" id="userInfoBtn" onclick="backTologin()">登录/注册</button>        
     </div>
@@ -247,14 +300,15 @@
         <img id="profileImg" src="https://pic4.zhimg.com/3853e4cfc6ce319e9e8e3b5d87bb6311_xl.jpg" />
         <span id="userNickName">郑秋冬</span>
         <div class="editBox">
-            <button id="reply" class="editButton"><span style="display: inline-flex; align-items: center;">​<svg fill="#0084ff" viewBox="0 0 24 24" width="16" height="16"><path d="M4.076 16.966a4.19 4.19 0 0 1 1.05-1.76l8.568-8.569a.524.524 0 0 1 .741 0l2.928 2.927a.524.524 0 0 1 0 .74l-8.568 8.57c-.49.49-1.096.852-1.761 1.051l-3.528 1.058a.394.394 0 0 1-.49-.488l1.06-3.53zM20.558 4.83c.59.59.59 1.546 0 2.136l-1.693 1.692a.503.503 0 0 1-.712 0l-2.812-2.812a.504.504 0 0 1 0-.712l1.693-1.693a1.51 1.51 0 0 1 2.135 0l1.389 1.389z"></path></svg></span>&nbsp;编辑个人资料</button>
+            <button id="reply" class="editButton" onclick="edit()"><span style="display: inline-flex; align-items: center;">​<svg fill="#0084ff" viewBox="0 0 24 24" width="16" height="16"><path d="M4.076 16.966a4.19 4.19 0 0 1 1.05-1.76l8.568-8.569a.524.524 0 0 1 .741 0l2.928 2.927a.524.524 0 0 1 0 .74l-8.568 8.57c-.49.49-1.096.852-1.761 1.051l-3.528 1.058a.394.394 0 0 1-.49-.488l1.06-3.53zM20.558 4.83c.59.59.59 1.546 0 2.136l-1.693 1.692a.503.503 0 0 1-.712 0l-2.812-2.812a.504.504 0 0 1 0-.712l1.693-1.693a1.51 1.51 0 0 1 2.135 0l1.389 1.389z"></path></svg></span>&nbsp;编辑个人资料</button>
         </div>
     </div>
     <div id="contentBox">
         <div id="leftContent">
             <nav class="checkOutContentNav">
                 <a class="selectedContentTab" href="javascript:void(0);" onclick="myIdol(this)">我的关注</a>
-                <a href="javascript:void(0);" onclick="myCollect(this)">我的收藏</a>
+                <a href="javascript:void(0);" onclick="myCollect(this)">我收藏的话题</a>
+                <a href="javascript:void(0);" onclick="myReviewCollect(this)">我收藏的回答</a>
             </nav>
 
             <!--@todo:

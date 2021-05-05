@@ -8,8 +8,19 @@ if($_POST['getArticle'] !='article'){
     echo 'fail';
     die();
 }else{
+    $key = $_POST['key'];
+    $methods;
+    if($key == 1){
+        $methods = ' rand() ';
+    }else if($key == 2){
+        $methods = ' time desc ';        
+    }else if($key == 3){
+        $methods = ' agreeNum desc ';
+    }else{
+        $methods = ' agreeNum desc ';
+    }
     //根据点赞数量降序排列
-    $sql = 'select * from article order by agreeNum desc limit 20';
+    $sql = 'select * from article order by '.$methods.' limit 8';
     $result = mysqli_query($conn,$sql);
     $row = mysqli_num_rows($result);
 
@@ -47,6 +58,8 @@ if($_POST['getArticle'] !='article'){
             //question内容：
             $obj->question = $dbrow['topic'];
 
+            //时间
+            $obj->ctime = $dbrow['time']; 
             //description描述：
             $obj->description = $dbrow['content'];
 

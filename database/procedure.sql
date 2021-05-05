@@ -63,3 +63,12 @@ BEGIN
 END//
 DELIMITER ;
 
+/*删除会议*/
+delimiter ;
+drop procedure if exists del_sessionlogs;
+DELIMITER // 
+create procedure del_sessionlogs()
+BEGIN
+	DELETE FROM sessionlogs WHERE create_time < unix_timestamp(now())-150;
+END//
+DELIMITER ;

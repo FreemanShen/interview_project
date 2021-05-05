@@ -70,7 +70,7 @@ function send_mail(){
           //1分钟后恢复
           setTimeout(()=>{
             $('#send_mail').attr("disabled",false);
-          },5000)
+          },60000)
         }else if(data == '100'){
           window.alert('请检查邮箱是否有误');
         }

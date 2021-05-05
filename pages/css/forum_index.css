@@ -335,3 +335,13 @@ body{
     overflow: hidden;   
     height:fit-content;
 }
+.time{
+    color: #8590a6;
+    margin-top: -7px;
+    line-height: 24px;
+    font-size: 14px;
+    margin-top: 14px;
+}
+.time:hover{
+    cursor: pointer;
+}

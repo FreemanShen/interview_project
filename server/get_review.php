@@ -35,7 +35,7 @@ if($row!=0){
         $obj->content = $dbrow['content'];
         $obj->time = $dbrow['time'];
         $obj->review_id = $dbrow['review_id'];
-
+        $obj->viewer_id = $dbrow['id'];
         $userSql = "select pic_path,name from user where id = ".$dbrow['id'];
         $userRes = mysqli_query($conn,$userSql);
         $user = mysqli_fetch_array($userRes);
@@ -52,6 +52,7 @@ if($row!=0){
     $obj->pic_path = 'not found';
     $obj->user_name = 'not found';
     $obj->review_id = '0';
+    $obj->viewer_id = 'not found';
     array_push($objArray,$obj);
     echo json_encode($objArray);
 }
