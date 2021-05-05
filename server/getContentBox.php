@@ -8,6 +8,7 @@ if($_POST['getArticle'] !='article'){
     echo 'fail';
     die();
 }else{
+    $user_id = $_POST['user_id'];
     $key = $_POST['key'];
     $methods;
     if($key == 1){
@@ -19,8 +20,11 @@ if($_POST['getArticle'] !='article'){
     }else{
         $methods = ' agreeNum desc ';
     }
-    //根据点赞数量降序排列
+
     $sql = 'select * from article order by '.$methods.' limit 8';
+    if($user_id !=-1){
+        $sql = 'select * from article where poster_id = '.$user_id.' order by time desc limit 8';    
+    }
     $result = mysqli_query($conn,$sql);
     $row = mysqli_num_rows($result);
 

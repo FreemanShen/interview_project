@@ -18,6 +18,7 @@
     <script src="../js/main.js"></script>
     <script src="../js/recevie_invite.js"></script>
     <script src="../js/logout.js"></script>
+    <script src="../js/GetRequest.js"></script>
     <script>
         var screenHeight = $(window).height();
         var screenWidth = $(window).width();
@@ -70,8 +71,14 @@
                 getMsgHttp.open('POST',"http://localhost/interview-project/server/get_user_info.php",true);
                 getMsgHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
                 getMsgHttp.send('userId='+userId);
-                 
-                getMyFollow();
+                switch(GetRequest().type){
+                    case "1" : myIdol(document.getElementById('follow')); break;
+                    case "2" : myCollect(document.getElementById('collect')); break;
+                    case "3" : myReviewCollect(document.getElementById('review_collect'));break;
+                    case "4" : myTopic(document.getElementById('my_argument')); break;
+                    case "5" : myReview(document.getElementById('my_review'));break;
+                    default  : myIdol(document.getElementById('follow')); break;
+                } 
             }
         })
         
@@ -142,10 +149,10 @@
                     star_sign:
                 */
                 success: function(data) {
+                    $('.contentBox').remove();
                     let node = document.getElementById('leftContent');
                     if(data!="fail"){
                         let obj = JSON.parse(data);
-                       
                         for(let i =0;i<obj.length;i++){
                             //@todo:如果用户已经登录，再发一个ajax，对于已经点过赞的，做一个变色处理
                             let newNode = document.createElement('div');
@@ -203,7 +210,7 @@
                     else{
                         let newNode = document.createElement('div');
                         newNode.classList.add('contentBox');
-                        newNode.innerHTML='<br><p>&nbsp;&nbsp;&nbsp;您还没有收藏的贴子~</p>'
+                        newNode.innerHTML='您还没有收藏的贴子~';
                         node.appendChild(newNode);
                     }
                 }
@@ -262,13 +269,17 @@
         function myIdol(node){
             $(node).addClass('selectedContentTab');
             $(node).next().removeClass('selectedContentTab');
-            $(node).next().removeClass('selectedContentTab');
+            $(node).next().next().removeClass('selectedContentTab');
+            $(node).next().next().next().removeClass('selectedContentTab');
+            $(node).next().next().next().next().removeClass('selectedContentTab');
             getMyFollow();
         }
 
         function myCollect(node){
             $(node).addClass('selectedContentTab');
             $(node).prev().removeClass('selectedContentTab');
+            $(node).prev().prev().removeClass('selectedContentTab');
+            $(node).prev().prev().prev().removeClass('selectedContentTab');
             $(node).next().removeClass('selectedContentTab');
             getMyCollect();
         }
@@ -276,7 +287,184 @@
             $(node).addClass('selectedContentTab');
             $(node).prev().removeClass('selectedContentTab');
             $(node).prev().prev().removeClass('selectedContentTab');
+            $(node).prev().prev().prev().removeClass('selectedContentTab');
+            $(node).prev().prev().prev().prev().removeClass('selectedContentTab');
             getMyReviewCollect();
+        }
+
+        function myTopic(node){
+            $(node).addClass('selectedContentTab');
+            $(node).prev().removeClass('selectedContentTab');
+            $(node).next().removeClass('selectedContentTab');
+            $(node).next().next().removeClass('selectedContentTab');
+            $(node).next().next().next().removeClass('selectedContentTab');
+            getMyTopic();
+        }
+
+        function myReview(node){
+            $(node).addClass('selectedContentTab');
+            $(node).prev().removeClass('selectedContentTab');
+            $(node).prev().prev().removeClass('selectedContentTab');
+            $(node).next().removeClass('selectedContentTab');
+            $(node).next().next().removeClass('selectedContentTab');
+            getMyReview();
+        }
+
+        function getMyTopic(){
+            let key = 1;
+            var response;
+            var getContentHttp = new XMLHttpRequest();
+            getContentHttp.onreadystatechange = function(){
+                if(getContentHttp.readyState == 4 && getContentHttp.status == 200){
+                    response = getContentHttp.responseText;
+                    let node = document.getElementById('leftContent');
+                    $('.contentBox').remove(); 
+                    if(response!="fail"){
+                        let obj = JSON.parse(response);
+                        for(let i =0;i<obj.length;i++){
+                            //@todo:如果用户已经登录，再发一个ajax，对于已经点过赞的，做一个变色处理
+                            let newNode = document.createElement('div');
+                            newNode.classList.add('contentBox');
+                         
+                            $.ajax({
+                                url: "http://localhost/interview-project/server/refreshLikeAndCollect.php",
+                                data: {star:obj[i].poster_id,art_id: obj[i].art_id,user_id:sessionStorage.getItem("userId")},
+                                type: "POST",
+                                //dataType: "json",
+                                success: function(data) {
+                                    let boolObj = JSON.parse(data);
+                                    let contentHtml =  '<a class="title" href="./forum_answer.html?art_id='+obj[i].art_id+'">'+obj[i].question+'</a>\
+                                                        <div class="coreContentBox">\
+                                                            <div class="authorInfo">\
+                                                                <img class="authorPic" src="./headpic/'+obj[i].pic_path+'">\
+                                                                <p class="authorName"><b>'+obj[i].poster+'</b></p>\
+                                                                <p class="authorSign">'+obj[i].intro+'</p>\
+                                                            </div>\
+                                                            <div style="clear:both;"></div>\
+                                                            <div class="authorDescription-min">'+obj[i].description+'</div>\
+                                                        </div>';             
+                                    let agreeBtnHtml,followBtnHtml,collectBtnHtml;     
+                                    if(boolObj.agreed){
+                                        agreeBtnHtml = '<button class="agreeButton agreed"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#ffffff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 已赞同 '+obj[i].agreeNum+'</button>';
+                                    }else{
+                                        agreeBtnHtml = '<button class="agreeButton" onclick="agree('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 '+obj[i].agreeNum+'</button>';
+                                    }
+                                    if(boolObj.followed){
+                                        followBtnHtml = '<button class="likeButton" onclick="like('+obj[i].poster_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 已关注</button>'
+                                    }else{
+                                        followBtnHtml = '<button class="likeButton" onclick="like('+obj[i].poster_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 关注</button>'
+                                    }
+                                    if(boolObj.collected){
+                                        collectBtnHtml = '<button class="collectButton" onclick="collect('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 已收藏</button>'
+                                    }else{
+                                        collectBtnHtml = '<button class="collectButton" onclick="collect('+obj[i].art_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>'
+                                    }
+
+                                    newNode.innerHTML = contentHtml+'<div class="time" style="margin-top:16px;">编辑于 '+obj[i].ctime+'</div>'+'<div class="buttonGroup">'+agreeBtnHtml+'\
+                                                                        <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>\
+                                                                        <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> '+obj[i].reviewNum+' 条评论</button>\
+                                                                        <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>'+followBtnHtml+collectBtnHtml+'<button class="readMoreButton" onclick="readMore(this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg></span> 阅读全文</button>\
+                                                                    </div>'
+                                    
+                                    node.appendChild(newNode);
+                                }
+                            });
+                               
+                        }
+                    }else{
+                        let newNode = document.createElement('div');
+                        newNode.classList.add('contentBox');
+                        newNode.innerHTML = '您还没有发布过问题！';
+                        node.appendChild(newNode);
+                    }
+                }
+            }
+            //@todo:post地址可以更改
+            getContentHttp.open('POST',"http://localhost/interview-project/server/getContentBox.php",true);
+            getContentHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
+            getContentHttp.send('getArticle=article&key='+key+'&user_id='+sessionStorage.getItem("userId"));
+        }
+        
+        function getMyReview(){
+            $.ajax({
+                url: "http://localhost/interview-project/server/forumMod/get_my_review.php",
+                data: {id:sessionStorage.getItem('userId')},
+                type: "GET",
+                success: function(data) {
+                    /*
+                    返回的内容:                  
+                    pic_path:  
+                    user_name:
+                    likeNum:
+                    content:
+                    time:
+                    viewer_id:
+                    review_id:
+                    art_id:
+                    */
+                    let node = document.getElementById('leftContent');
+                    $('.contentBox').remove();
+                    if(data!=400){
+                        let obj = JSON.parse(data);
+                        
+                        for(let i=0;i<obj.length;i++){
+                            let newAns = document.createElement('div');
+                            newAns.classList.add('contentBox');
+                            //let art_id = GetRequest().art_id;
+                            //获取art_id对应的回答总数
+                            $.ajax({
+                                    url: "http://localhost/interview-project/server/forumMod/refresh_answer_box_btn.php",
+                                    data: {review_id: obj[i].review_id,user_id:sessionStorage.getItem('userId'),star:obj[i].viewer_id,art_id:obj[i].art_id},
+                                    type: "POST",
+                                    success: function(data) {
+                                        let statusArr = JSON.parse(data);
+                                        let agreeStr,followStr,review_collectStr;
+                                        if(statusArr[0] == 1){
+                                            agreeStr = '<button class="agreeButton agreed"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#ffffff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 已赞同 '+obj[i].likeNum+'</button>';
+                                        }else{
+                                            agreeStr = '<button class="agreeButton" onclick="agree('+obj[i].review_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg class="agreeSvg"  fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span> 赞同 '+obj[i].likeNum+'</button>';
+                                        }
+                                        if(statusArr[1] == 1){
+                                            followStr = '<button class="likeButton" onclick="like('+obj[i].viewer_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 已关注</button>';
+                                        }else{
+                                            followStr = '<button class="likeButton" onclick="like('+obj[i].viewer_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2 8.437C2 5.505 4.294 3.094 7.207 3 9.243 3 11.092 4.19 12 6c.823-1.758 2.649-3 4.651-3C19.545 3 22 5.507 22 8.432 22 16.24 13.842 21 12 21 10.158 21 2 16.24 2 8.437z" fill-rule="evenodd"></path></svg></span> 关注</button>';
+                                        }     
+                                        if(statusArr[2] == 1){
+                                            review_collectStr = '<button class="collectButton" onclick="review_collect('+obj[i].review_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 已收藏</button>';
+                                        }else{
+                                            review_collectStr = '<button class="collectButton" onclick="review_collect('+obj[i].review_id+',this)"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg></span> 收藏</button>';
+                                        }     
+                                                        
+                                        newAns.innerHTML = '<a class="title" href="./forum_answer.html?art_id='+obj[i].art_id+'">'+obj[i].question+'</a>\
+                                                            <div class="authorBox">\
+                                                                <img class="authorPhoto"  width="38" height="38" src="./headpic/'+obj[i].pic_path+'">\
+                                                                <span class="authorName">'+obj[i].user_name+'</span>\
+                                                            </div>\
+                                                            <div class="agreeNum">\
+                                                                <p>'+obj[i].likeNum+' 人赞同了该回答</p>\
+                                                            </div>\
+                                                            <div class="answer">\
+                                                                <p>'+obj[i].content+'</p>\
+                                                            </div>\
+                                                            <div class="time">\
+                                                                编辑于 '+obj[i].time+'\
+                                                            </div>\
+                                                            <div class="buttonGroup">'+agreeStr+'\
+                                                                <button class="disagreeButton" onclick="disagree()"><span style="display: inline-flex; align-items: center;">​<svg class="disagreeSvg" fill="#0084ff" viewBox="0 0 24 24" width="10" height="10"><path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path></svg></span></button>\
+                                                                <button class="commentButton" onclick="comment()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z" fill-rule="evenodd"></path></svg></span> 暂无评论 </button>\
+                                                                <button class="shareButton" onclick="share()"><span style="display: inline-flex; align-items: center;">​<svg fill="#8590a6" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M2.931 7.89c-1.067.24-1.275 1.669-.318 2.207l5.277 2.908 8.168-4.776c.25-.127.477.198.273.39L9.05 14.66l.927 5.953c.18 1.084 1.593 1.376 2.182.456l9.644-15.242c.584-.892-.212-2.029-1.234-1.796L2.93 7.89z" fill-rule="evenodd"></path></svg></span> 分享</button>'+followStr+review_collectStr+'</div>';
+                                        node.appendChild(newAns);
+                                    }
+                            }); 
+                        }
+                    }else{
+                        let newNode = document.createElement('div');
+                        newNode.classList.add('contentBox');
+                        newNode.innerHTML = '您还没有发布过评论！';
+                        node.appendChild(newNode);
+                    }
+                }
+            });  
         }
     </script>
 </head>
@@ -306,9 +494,11 @@
     <div id="contentBox">
         <div id="leftContent">
             <nav class="checkOutContentNav">
-                <a class="selectedContentTab" href="javascript:void(0);" onclick="myIdol(this)">我的关注</a>
-                <a href="javascript:void(0);" onclick="myCollect(this)">我收藏的话题</a>
-                <a href="javascript:void(0);" onclick="myReviewCollect(this)">我收藏的回答</a>
+                <a class="selectedContentTab" id='follow' href="javascript:void(0);" onclick="myIdol(this)">我的关注</a>
+                <a href="javascript:void(0);" id='my_argument' onclick="myTopic(this)">我的话题</a>
+                <a href="javascript:void(0);" id='my_review' onclick="myReview(this)">我的评论</a>
+                <a href="javascript:void(0);" id='collect' onclick="myCollect(this)">我收藏的话题</a>
+                <a href="javascript:void(0);" id='review_collect' onclick="myReviewCollect(this)">我收藏的回答</a>
             </nav>
 
             <!--@todo:
@@ -319,12 +509,12 @@
         <div id="rightContent">
             <!--@todo:当用户未登录，这部分功能应弹出alert导向用户登陆页面-->
             <div id="myFunc">
-                <a><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我的收藏</a>
-                <a target="_blank" href="#"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.74 4h12.52c.961 0 1.74.775 1.74 1.73V16.27c0 .955-.779 1.73-1.74 1.73h-3.825l-1.658 2.044a1 1 0 0 1-1.554 0l-1.658-2.044H5.74C4.78 18 4 17.224 4 16.27V5.73C4 4.775 4.778 4 5.74 4zM12 16a.976.976 0 0 0 .705-.287.951.951 0 0 0 .295-.712.954.954 0 0 0-.295-.714A.976.976 0 0 0 12 14a.962.962 0 0 0-.705.295A.961.961 0 0 0 11 15c0 .284.098.522.295.713A.975.975 0 0 0 12 16zm1.278-4.924a36.81 36.81 0 0 0 1.023-.975c.19-.193.354-.422.492-.688.138-.266.207-.575.207-.928 0-.448-.12-.864-.363-1.246a2.517 2.517 0 0 0-1.029-.906C13.164 6.111 12.652 6 12.072 6c-.624 0-1.17.133-1.638.399-.468.265-.824.6-1.068 1.005-.244.405-.366.804-.366 1.2 0 .19.077.368.231.531a.747.747 0 0 0 .567.246c.38 0 .638-.234.774-.703.144-.449.32-.788.528-1.019.208-.23.532-.345.972-.345.376 0 .683.114.921.342.238.229.357.51.357.841 0 .17-.039.328-.117.473a1.782 1.782 0 0 1-.288.396c-.114.118-.3.294-.555.526a9.71 9.71 0 0 0-.696.688c-.172.194-.31.418-.414.673a2.391 2.391 0 0 0-.156.906c0 .278.071.488.213.63a.716.716 0 0 0 .525.211c.4 0 .638-.216.714-.648.044-.203.077-.345.099-.426.022-.081.053-.162.093-.243.04-.081.101-.17.183-.268.082-.098.191-.21.327-.34z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我关注的问题&nbsp;</a>
-                <a target="_blank" href="#"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M4 10V8a1 1 0 1 1 2 0v2h2a1 1 0 0 1 0 2H6v2a1 1 0 0 1-2 0v-2H2a1 1 0 0 1 0-2h2zm10.455 2c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-7 6c0-2.66 4.845-4 7.272-4C17.155 14 22 15.34 22 18v1.375c0 .345-.28.625-.625.625H8.08a.625.625 0 0 1-.625-.625V18z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我的邀请 &nbsp;</a>
-                <a target="_blank" href="#"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.74 4h12.52c.961 0 1.74.775 1.74 1.73V16.27c0 .955-.779 1.73-1.74 1.73h-3.825l-1.658 2.044a1 1 0 0 1-1.554 0l-1.658-2.044H5.74C4.78 18 4 17.224 4 16.27V5.73C4 4.775 4.778 4 5.74 4zM7 8.98c0 .554.449.996 1.003.996h4.994A.992.992 0 0 0 14 8.981a.997.997 0 0 0-1.003-.995H8.003A.992.992 0 0 0 7 8.98zm0 4c0 .554.446.996.995.996h8.01a.993.993 0 0 0 .995-.995.993.993 0 0 0-.995-.995h-8.01A.993.993 0 0 0 7 12.98z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;站务中心</a>
-                <a target="_blank" href="#"><svg width="18" height="18" viewBox="0 0 18 18" fill="#8590a6"><path d="M9 1.5c2.835 0 5.152 2.195 5.247 4.949l.003.176v.253A2.25 2.25 0 0 1 15.75 9v2.25a2.25 2.25 0 0 1-1.5 2.122v.257c0 .547-.2 1.073-.557 1.482l-.102.109-1.06 1.06a.75.75 0 0 1-1.124-.99l.063-.07 1.06-1.061a.75.75 0 0 0 .213-.432l.007-.098V13.5H12a.75.75 0 0 1-.75-.75V7.5a.75.75 0 0 1 .75-.75h.75v-.125C12.75 4.628 11.076 3 9 3 6.98 3 5.34 4.541 5.254 6.464l-.004.286H6a.75.75 0 0 1 .743.648l.007.102v5.25a.75.75 0 0 1-.648.743L6 13.5H4.5a2.25 2.25 0 0 1-2.245-2.096l-.005-.154V9c0-.98.626-1.814 1.5-2.122v-.253C3.75 3.79 6.105 1.5 9 1.5z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;帮助中心</a>
-                <a target="_blank" href="#"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M16.517 15.815a5.871 5.871 0 0 1-4.481 2.078 5.865 5.865 0 0 1-5.859-5.857 5.865 5.865 0 0 1 5.859-5.859c1.63 0 3.204.7 4.319 1.919.085.093.24.432.209.797a1.086 1.086 0 0 1-.436.779c-.248.193-.516.29-.797.29-.402 0-.7-.198-.814-.314A3.473 3.473 0 0 0 12 8.575a3.464 3.464 0 0 0-3.46 3.461 3.464 3.464 0 0 0 3.46 3.46 3.63 3.63 0 0 0 2.654-1.181c.136-.152.458-.306.806-.306.274 0 .542.095.773.274.35.269.45.588.473.809.032.308-.072.585-.188.723m4.686-7.699C20.67 6.883 19.96 5.82 19.07 4.929c-.891-.89-1.954-1.601-3.188-2.133A9.728 9.728 0 0 0 12 2a9.733 9.733 0 0 0-3.883.796c-1.234.532-2.297 1.243-3.186 2.133-.891.891-1.602 1.954-2.134 3.187A9.713 9.713 0 0 0 2 12a9.752 9.752 0 0 0 .797 3.883c.531 1.233 1.242 2.296 2.134 3.186.89.891 1.953 1.602 3.186 2.134A9.725 9.725 0 0 0 12 22a9.72 9.72 0 0 0 3.883-.797c1.233-.532 2.296-1.243 3.188-2.134.89-.89 1.601-1.953 2.132-3.186A9.73 9.73 0 0 0 22 12a9.69 9.69 0 0 0-.797-3.884" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;版权服务中心</a>
+                <a href="./me.html?type=2"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.515 19.64l.918-5.355-3.89-3.792c-.926-.902-.639-1.784.64-1.97L8.56 7.74l2.404-4.871c.572-1.16 1.5-1.16 2.072 0L15.44 7.74l5.377.782c1.28.186 1.566 1.068.64 1.97l-3.89 3.793.918 5.354c.219 1.274-.532 1.82-1.676 1.218L12 18.33l-4.808 2.528c-1.145.602-1.896.056-1.677-1.218z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我的收藏</a>
+                <a href="./me.html?type=1"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.74 4h12.52c.961 0 1.74.775 1.74 1.73V16.27c0 .955-.779 1.73-1.74 1.73h-3.825l-1.658 2.044a1 1 0 0 1-1.554 0l-1.658-2.044H5.74C4.78 18 4 17.224 4 16.27V5.73C4 4.775 4.778 4 5.74 4zM12 16a.976.976 0 0 0 .705-.287.951.951 0 0 0 .295-.712.954.954 0 0 0-.295-.714A.976.976 0 0 0 12 14a.962.962 0 0 0-.705.295A.961.961 0 0 0 11 15c0 .284.098.522.295.713A.975.975 0 0 0 12 16zm1.278-4.924a36.81 36.81 0 0 0 1.023-.975c.19-.193.354-.422.492-.688.138-.266.207-.575.207-.928 0-.448-.12-.864-.363-1.246a2.517 2.517 0 0 0-1.029-.906C13.164 6.111 12.652 6 12.072 6c-.624 0-1.17.133-1.638.399-.468.265-.824.6-1.068 1.005-.244.405-.366.804-.366 1.2 0 .19.077.368.231.531a.747.747 0 0 0 .567.246c.38 0 .638-.234.774-.703.144-.449.32-.788.528-1.019.208-.23.532-.345.972-.345.376 0 .683.114.921.342.238.229.357.51.357.841 0 .17-.039.328-.117.473a1.782 1.782 0 0 1-.288.396c-.114.118-.3.294-.555.526a9.71 9.71 0 0 0-.696.688c-.172.194-.31.418-.414.673a2.391 2.391 0 0 0-.156.906c0 .278.071.488.213.63a.716.716 0 0 0 .525.211c.4 0 .638-.216.714-.648.044-.203.077-.345.099-.426.022-.081.053-.162.093-.243.04-.081.101-.17.183-.268.082-.098.191-.21.327-.34z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我的关注&nbsp;</a>
+                <a href="javascript:void(0)"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M4 10V8a1 1 0 1 1 2 0v2h2a1 1 0 0 1 0 2H6v2a1 1 0 0 1-2 0v-2H2a1 1 0 0 1 0-2h2zm10.455 2c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-7 6c0-2.66 4.845-4 7.272-4C17.155 14 22 15.34 22 18v1.375c0 .345-.28.625-.625.625H8.08a.625.625 0 0 1-.625-.625V18z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我要提问 &nbsp;</a>
+                <a href="./me.html?type=4"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M5.74 4h12.52c.961 0 1.74.775 1.74 1.73V16.27c0 .955-.779 1.73-1.74 1.73h-3.825l-1.658 2.044a1 1 0 0 1-1.554 0l-1.658-2.044H5.74C4.78 18 4 17.224 4 16.27V5.73C4 4.775 4.778 4 5.74 4zM7 8.98c0 .554.449.996 1.003.996h4.994A.992.992 0 0 0 14 8.981a.997.997 0 0 0-1.003-.995H8.003A.992.992 0 0 0 7 8.98zm0 4c0 .554.446.996.995.996h8.01a.993.993 0 0 0 .995-.995.993.993 0 0 0-.995-.995h-8.01A.993.993 0 0 0 7 12.98z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我的话题</a>
+                <a href="./me.html?type=5"><svg width="18" height="18" viewBox="0 0 18 18" fill="#8590a6"><path d="M9 1.5c2.835 0 5.152 2.195 5.247 4.949l.003.176v.253A2.25 2.25 0 0 1 15.75 9v2.25a2.25 2.25 0 0 1-1.5 2.122v.257c0 .547-.2 1.073-.557 1.482l-.102.109-1.06 1.06a.75.75 0 0 1-1.124-.99l.063-.07 1.06-1.061a.75.75 0 0 0 .213-.432l.007-.098V13.5H12a.75.75 0 0 1-.75-.75V7.5a.75.75 0 0 1 .75-.75h.75v-.125C12.75 4.628 11.076 3 9 3 6.98 3 5.34 4.541 5.254 6.464l-.004.286H6a.75.75 0 0 1 .743.648l.007.102v5.25a.75.75 0 0 1-.648.743L6 13.5H4.5a2.25 2.25 0 0 1-2.245-2.096l-.005-.154V9c0-.98.626-1.814 1.5-2.122v-.253C3.75 3.79 6.105 1.5 9 1.5z" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;我的评论</a>
+                <a href="javascript:void(0)"><svg fill="#8590a6" viewBox="0 0 24 24" width="18" height="18"><path d="M16.517 15.815a5.871 5.871 0 0 1-4.481 2.078 5.865 5.865 0 0 1-5.859-5.857 5.865 5.865 0 0 1 5.859-5.859c1.63 0 3.204.7 4.319 1.919.085.093.24.432.209.797a1.086 1.086 0 0 1-.436.779c-.248.193-.516.29-.797.29-.402 0-.7-.198-.814-.314A3.473 3.473 0 0 0 12 8.575a3.464 3.464 0 0 0-3.46 3.461 3.464 3.464 0 0 0 3.46 3.46 3.63 3.63 0 0 0 2.654-1.181c.136-.152.458-.306.806-.306.274 0 .542.095.773.274.35.269.45.588.473.809.032.308-.072.585-.188.723m4.686-7.699C20.67 6.883 19.96 5.82 19.07 4.929c-.891-.89-1.954-1.601-3.188-2.133A9.728 9.728 0 0 0 12 2a9.733 9.733 0 0 0-3.883.796c-1.234.532-2.297 1.243-3.186 2.133-.891.891-1.602 1.954-2.134 3.187A9.713 9.713 0 0 0 2 12a9.752 9.752 0 0 0 .797 3.883c.531 1.233 1.242 2.296 2.134 3.186.89.891 1.953 1.602 3.186 2.134A9.725 9.725 0 0 0 12 22a9.72 9.72 0 0 0 3.883-.797c1.233-.532 2.296-1.243 3.188-2.134.89-.89 1.601-1.953 2.132-3.186A9.73 9.73 0 0 0 22 12a9.69 9.69 0 0 0-.797-3.884" fill-rule="evenodd"></path></svg>&nbsp;&nbsp;&nbsp;版权服务中心</a>
             </div>
             <div id="topFunctionLogo">
 
