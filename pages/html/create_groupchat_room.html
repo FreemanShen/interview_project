@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../css/facetime/interview.css">
     <title>面试</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="../js/share_session.js"></script>
     <script src="../js/init.js"></script>
     <script src="../js/facetime/inteverview.js"></script>
     <script>
@@ -37,7 +38,9 @@
                 window.alert('房间简介过长')
                 return;
             }
-
+            if(password==''||password==null||password.length==0){
+                password = '-1';
+            }
 
             var createGroupChatHttp = new XMLHttpRequest();
             createGroupChatHttp.onreadystatechange = function(){
@@ -47,6 +50,7 @@
                     //console.log(createGroupChatHttp.responseText);
                     if(response=="success"){
                         window.location.href='./groupchat_room.html?room_id='+room_id;
+                        sessionStorage.setItem('group_chat_room_'+room_id.toString(),'success');
                     }else if(response == "fail"){
                         window.alert("房间创建失败，请稍后重试"); 
                            
@@ -56,7 +60,7 @@
             //@todo:post地址可以更改
             createGroupChatHttp.open('POST',"http://localhost/interview-project/server/add_group_chat_room.php",true);
             createGroupChatHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
-            createGroupChatHttp.send('room_id='+room_id+"&description="+description_id+"&user_id="+user_id);      
+            createGroupChatHttp.send('room_id='+room_id+"&description="+description_id+"&user_id="+user_id+"&password="+password);      
         }
 
   

@@ -72,3 +72,33 @@ BEGIN
 	DELETE FROM sessionlogs WHERE create_time < unix_timestamp(now())-150;
 END//
 DELIMITER ;
+
+/*删除会议*/
+delimiter ;
+drop procedure if exists del_singlechat;
+DELIMITER // 
+create procedure del_singlechat()
+BEGIN
+	DELETE FROM singlechat WHERE unix_timestamp(chattime) < unix_timestamp(now())-72000;
+END//
+DELIMITER ;
+
+/*删除会议*/
+delimiter ;
+drop procedure if exists del_groupchat;
+DELIMITER // 
+create procedure del_groupchat()
+BEGIN
+	DELETE FROM groupchat WHERE unix_timestamp(chattime) < unix_timestamp(now())-86400;
+END//
+DELIMITER ;
+
+delimiter ;
+drop procedure if exists del_groupchat_room;
+DELIMITER // 
+create procedure del_groupchat_room()
+BEGIN
+	DELETE FROM groupchat WHERE room_id in (select room_id from group_chat_room where time < unix_timestamp(now())-432000);
+    DELETE FROM group_chat_room where time < unix_timestamp(now())-432000;
+END//
+DELIMITER ;

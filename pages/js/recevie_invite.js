@@ -48,7 +48,11 @@ function receive(){
             let obj = JSON.parse(response);
             sessionStorage.setItem("interviewee",obj.interviewee);
             sessionStorage.setItem("interview_room_id",obj.room_id);
-            
+            /*
+            @2021-5-6 edit:
+            */
+            sessionStorage.setItem('room_id',obj.room_id);
+            sessionStorage.setItem('user_id',obj.interviewee);
             /*
             @2021-4-11 edit:
             mask = document.getElementsByClassName("mask")[0];
@@ -78,5 +82,7 @@ if(sessionStorage.getItem('login')=='true' &&sessionStorage.getItem('isAdmin')==
 }
 
 function accept_interview(){
-  window.location.href="../html/facetime.html";
+  /*@2021-5-6 edit:*/
+  window.location.href="http://localhost/interview-project/pages/html/interview_room.html";
+  //window.location.href="../html/facetime.html";
 }

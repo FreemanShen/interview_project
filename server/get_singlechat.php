@@ -6,8 +6,8 @@ $sender_id = $_POST['sender_id'];
 $receiver_id = $_POST['receiver_id'];
 
 
-$sql = "select *,date_format(chattime,'%Y-%m-%d %r') as cdt from singlechat where (sender_id = ".$sender_id." and receiver_id = ".$receiver_id.") or (sender_id =".$receiver_id." and receiver_id = ".$sender_id.") order by msg_id desc limit 20";
-$sql = "select * from (".$sql.") as ch order by msg_id";
+$sql = "select *,date_format(chattime,'%Y-%m-%d %r') as cdt from singlechat where (sender_id = ".$sender_id." and receiver_id = ".$receiver_id.") or (sender_id =".$receiver_id." and receiver_id = ".$sender_id.") order by chattime desc limit 20";
+$sql = "select * from (".$sql.") as ch order by chattime";
 
 $result = mysqli_query($conn,$sql);
 if(!$result){

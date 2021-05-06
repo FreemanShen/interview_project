@@ -69,7 +69,14 @@ client.on('stream-subscribed', event => {
     }else{
         show();
         //$('#shareScreenModal').modal('show');
-        remoteStream.play('share_screen')
+        remoteStream.play('share_screen');
+        /*
+        let frame = remoteStream.getVideoFrame();
+        if(!frame){
+            document.getElementById('share_screen').innerHTML="";
+            close();
+        }
+        */
     }
 
 });    
@@ -77,6 +84,10 @@ client.on('stream-subscribed', event => {
 client.on('peer-leave', event => {
     if(event.userId.indexOf('share')==-1){
         document.getElementById('opposite_viewer').innerHTML= "";
+        document.getElementById('user_status').innerHTML = "offline";      
+        document.getElementById('user_status').classList.remove('text-success');      
+        document.getElementById('user_status').classList.add('text-light'); 
+        window.alert('对方已离线/掉线');
     }else{
         document.getElementById('share_screen').innerHTML="";
         close();
@@ -138,7 +149,7 @@ console.error('退房失败 ' + error);
 function send_message(){
     send_msg = document.getElementById('msg_to_send').value;
 
-    if(send_msg!='' && send_message!=null){
+    if(send_msg!='' && send_msg!=null){
         //发ajax
         let response;
         let sendMsgHttp = new XMLHttpRequest();
@@ -148,7 +159,10 @@ function send_message(){
                 //test
                 //console.log(sendMsgHttp.responseText);
                 if(response!="fail"){
-                    }else if(response == "fail"){
+                    //window.alert('发送成功！');
+                    get_msg();
+                }else if(response == "fail"){
+                    window.alert('消息发送失败~服务器繁忙');
                 }
                 document.getElementById('msg_to_send').value = '';    
             }
@@ -164,7 +178,7 @@ function send_message(){
 
 
 function get_msg(){
-    console.log(new Date()+'get msg() executing');
+    //console.log(new Date()+'get msg() executing');
     //@todo:添加一个用户头像
     let response;
     let getMsgHttp = new XMLHttpRequest();
@@ -173,6 +187,7 @@ function get_msg(){
             //let set_head_flag = false;
             response = getMsgHttp.responseText;
             if(response!="fail"){ 
+                console.log(new Date()+'消息获取成功');
                 let msgNode = document.getElementById('messages')
                 msgNode.innerHTML = "";
                 let objArr = JSON.parse(response);
@@ -231,9 +246,8 @@ function get_msg(){
                     }
                     //clearInterval(get_msg)
                 }
-
-
             }else if(response == "fail"){
+                //window.alert('消息获取失败!服务器繁忙');
             }
         }
     }
@@ -280,19 +294,36 @@ function share_screen(){
     shareClient.join({ roomId:roomId }).then(() => {
         console.log('shareClient join success');
         // 创建屏幕分享流
-        const localStream = TRTC.createStream({ audio: false, screen: true });
+        let localStream = TRTC.createStream({ audio: false, screen: true });
+        localStream.setScreenProfile({ width: 1280, height: 720, frameRate: 30, bitrate: 3000 /* kbps */})
         localStream.initialize().then(() => {
         // screencast stream init success
             shareClient.publish(localStream).then(() => {
                 console.log('screen casting');
             });
         });
+        localStream.on('screen-sharing-stopped', () => {
+            console.log('共享屏幕流停止');
+            shareClient.leave().then(() => {
+                // 退房成功，可再次调用client.join重新进房开启新的通话。
+            })
+            .catch(error => {
+                console.error('退房失败 ' + error);
+                // 错误不可恢复，需要刷新页面。
+            });
+        });
+
     });
 }
 
-window.onload = function(){
+$(function(){
     get_msg();
-}
+    $('#msg_to_send').keyup(function(event){
+        if(event.keyCode ==13){
+            send_message();
+        }
+    });
+})
 
 var mask = document.getElementsByClassName("mask")[0];
 var modal = document.getElementsByClassName("modal")[0];

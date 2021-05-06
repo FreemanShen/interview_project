@@ -10,7 +10,7 @@
       <script src="../js/chatting.js"></script>
     -->
     <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
-
+    <script src="../js/share_session.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../css/main.css" />
     <link rel="stylesheet" type="text/css" href="../css/index.css"/>
@@ -104,7 +104,31 @@
       }
      
       function enterRoom(room_id){
-        window.location.href="./groupchat_room.html?room_id="+room_id;
+        //window.location.href="./groupchat_room.html?room_id="+room_id;
+        $('#room_number').text($('#room_number').text()+room_id);
+        $('#pwdModal').modal('show');
+        $('#checkPwdBtn').click(function(){checkPwd(room_id)});
+      }
+
+      function checkPwd(room_id){
+        let pwd = $('#inputPwd').val();
+        if(pwd ==''||pwd==null){
+          pwd = '-1';
+        }
+        $.ajax({
+          url: "http://localhost/interview-project/server/chatMod/checkPwd.php",
+          data: {room_id: room_id,pwd:pwd},
+          type: "POST",
+          success: function(data) {
+            if(data =='success'){
+              sessionStorage.setItem('group_chat_room_'+room_id.toString(),'success');
+              window.location.href="./groupchat_room.html?room_id="+room_id;
+            }else{
+              window.alert('密码错误！');
+              $('#pwdModal').modal('hide');
+            }
+          }
+        }); 
       }
   </script>
 </head>
@@ -151,6 +175,30 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->       
     </div>
+    <div class="modal fade" id="pwdModal" tabindex="-1" role="dialog" aria-labelledby="pwdModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      &times;
+                  </button>
+                  <h4 class="modal-title" id="room_number">
+                      进入聊天房间
+                  </h4>
+              </div>
+              <div class="modal-body">
+                  <input type="text" id='inputPwd' class="form-control" placeholder="输入房间密码,无密码可直接验证">
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                  </button>
+                  <button type="button" class="btn btn-primary" id='checkPwdBtn'>
+                      验证
+                  </button>
+              </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal -->       
+  </div>
     <!--导航条 正文-->
     <div id="nav">
       <a href="./index.html">首页</a>

@@ -17,6 +17,7 @@
 
     <!-- App styles -->
     <link rel="stylesheet" href="./dist/css/app.min.css">
+    <script src='../cdnJs/jquery.js'></script>
     <script src="../js/group_chatting.js"></script>
 
     <style>
@@ -29,6 +30,10 @@
         .my_avatar{
             margin-right: 0 !important;
             margin-left: 16px;
+        }
+        .chat-body{
+            overflow: scroll !important;
+            overflow-x: hidden !important;
         }
     </style>
 </head>
@@ -68,13 +73,13 @@
                 </div>
             </div>
             <div class="chat-footer">
-                <form>
+                <form onsubmit="return false;">
                     <div>
                         <button class="btn btn-light mr-3" data-toggle="tooltip" title="Emoji" type="button">
                             <i data-feather="smile"></i>
                         </button>
                     </div>
-                    <input type="text" class="form-control" id="msg_to_send" placeholder="Write a message.">
+                    <input class="form-control" id="msg_to_send" placeholder="发送消息~">
                     <div class="form-buttons">
                         <button class="btn btn-light" data-toggle="tooltip" title="Add files" type="button">
                             <i data-feather="paperclip"></i>
@@ -98,6 +103,7 @@
 
 <!-- Bundle -->
 <script src="https://www.jq22.com/jquery/jquery-3.3.1.js"></script>
+<script src="../js/share_session.js"></script>
 <script src="./vendor/bundle.js"></script>
 <script src="./vendor/feather.min.js"></script>
 <script src="./vendor/enjoyhint/enjoyhint.min.js"></script>

@@ -3,7 +3,7 @@
 */
 function logout(){
     if(sessionStorage.length != 0){
-        sessionStorage.clear()
+        sessionStorage.clear();
         window.location.href = "../html/login.html"    
     }
 }

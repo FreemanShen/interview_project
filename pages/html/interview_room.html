@@ -26,10 +26,10 @@
     <script src="../js/facetime/interview_room.js"></script>
     <style>
         .modal{
-            width: 800px !important;
+            width: 1300px !important;
         }
         .modal-content{
-            height: 600px !important;
+            height: 720px !important;
             padding-left: 15px;
             padding-top: 15px;
         }
@@ -155,13 +155,13 @@
                     </div>
                 </div>
                 <div class="chat-footer">
-                    <form>
+                    <form onsubmit="return false;">
                         <div>
                             <button class="btn btn-light mr-3" data-toggle="tooltip" title="Emoji" type="button">
                                 <i data-feather="smile"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control" id="msg_to_send" placeholder="Write a message.">
+                        <input type="text" class="form-control" id="msg_to_send" placeholder="发送消息.">
                         <div class="form-buttons">
                             <button class="btn btn-light" data-toggle="tooltip" title="共享屏幕" type="button" onclick="share_screen()">
                                 <i data-feather="paperclip"></i>
@@ -170,7 +170,7 @@
                                     title="Send a voice record" type="button">
                                 <i data-feather="mic"></i>
                             </button>
-                            <button class="btn btn-primary" type="button" onclick="send_message()">
+                            <button class="btn btn-primary" type="button" id='send_msg' onclick="send_message()">
                                 <i data-feather="send"></i>
                             </button>
                         </div>
@@ -185,6 +185,7 @@
 
 <!-- Bundle -->
 <script src="https://www.jq22.com/jquery/jquery-3.3.1.js"></script>
+<script src="../js/share_session.js"></script>
 <script src="./vendor/bundle.js"></script>
 <script src="./vendor/feather.min.js"></script>
 <script src="./vendor/enjoyhint/enjoyhint.min.js"></script>
@@ -193,6 +194,6 @@
 <script src="./dist/js/app.min.js"></script>
 
 <!-- Examples -->
-<script src="./dist/js/examples.js"></script>
+<!--<script src="./dist/js/examples.js"></script>-->
 </body>
 </html>

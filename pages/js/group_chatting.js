@@ -21,39 +21,6 @@ function GetRequest()
 }
 
 function get_msg(){
-/*
-<div class="messages">
-
-
-                    <div class="message-item outgoing-message">
-                        <div class="message-avatar">
-                            <figure class="avatar">
-                                <img src="./dist/media/img/women_avatar5.jpg" class="rounded-circle" alt="image">
-                            </figure>
-                            <div>
-                                <h5>Mirabelle Tow</h5>
-                                <div class="time">01:20 PM <i class="ti-double-check text-info"></i></div>
-                            </div>
-                        </div>
-                        <div class="message-content">
-                            Hello how are you?
-                        </div>
-                    </div>
-                    <div class="message-item">
-                        <div class="message-avatar">
-                            <figure class="avatar">
-                                <img src="./dist/media/img/man_avatar3.jpg" class="rounded-circle" alt="image">
-                            </figure>
-                            <div>
-                                <h5>Byrom Guittet</h5>
-                                <div class="time">01:35 PM</div>
-                            </div>
-                        </div>
-                        <div class="message-content">
-                            I'm fine, how are you 😃
-                        </div>
-                    </div>
-*/
     //@todo:添加一个用户头像
     let response;
     let getMsgHttp = new XMLHttpRequest();
@@ -65,6 +32,7 @@ function get_msg(){
                 msgNode.innerHTML = "";
                 let objArr = JSON.parse(response);
                 if(objArr!=null && objArr.length!=0){
+                    console.log(new Date()+'get_msg()执行成功');
                     for(let i =0;i<objArr.length;i++){
                         /*
                         {   sender_id:,
@@ -114,6 +82,7 @@ function get_msg(){
                     }
                 }
             }else if(response == "fail"){
+                console.log(new Date()+'get_msg() 获取消息失败');
             }
         }
     }
@@ -131,12 +100,21 @@ if(){
 
 }
 */
-setInterval(get_msg,200);
+
+$(function(){
+    get_msg();
+    $('#msg_to_send').keyup(function(event){
+        if(event.keyCode ==13){
+            send_message();
+        }
+    });
+})
+setInterval(get_msg,1000);
 
 function send_message(){
-    send_msg = document.getElementById('msg_to_send').value;
+    let send_msg = document.getElementById('msg_to_send').value;
 
-    if(send_msg!='' && send_message!=null){
+    if(send_msg!='' && send_msg!=null){
         //发ajax
         let response;
         let sendMsgHttp = new XMLHttpRequest();
@@ -146,7 +124,10 @@ function send_message(){
                 //test
                 //console.log(sendMsgHttp.responseText);
                 if(response!="fail"){
-                    }else if(response == "fail"){
+                    //window.alert('消息发送成功');
+                    get_msg();
+                }else if(response == "fail"){
+                    window.alert('服务器繁忙，消息发送失败！');
                 }
                 document.getElementById('msg_to_send').value = '';    
             }
@@ -169,13 +150,20 @@ window.onload = function(){
         window.alert('没有权限访问该页面！');
         window.location.href="../html/login.html";
         //@todo:不显示东西或者回退
+        return;
     }
     if(sender_id==null){
-        window.alert('请先登陆！');
+        window.alert('请先登录！');
         window.location.href="../html/login.html";
+        return;
+    }
+    if(sessionStorage.getItem('group_chat_room_'+room_id.toString())==null){
+        window.alert('没有权限访问！');
+        window.location.href="../html/login.html"
+        return;
     }
 
     //获取楼主和房间名
     document.getElementById('single_chat_head_user').innerHTML = room_id+"号房间";
-    document.getElementById('author_name').innerHTML='愉快的交谈~';
+    document.getElementById('author_name').innerHTML='愉快的交谈从每次友好的发言开始~';
 }

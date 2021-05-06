@@ -3,8 +3,8 @@ include("conn.php");
 mysqli_set_charset($conn,"utf8");
 
 $room_id = $_POST['room_id'];
-$sql = "select *,date_format(chattime,'%Y-%m-%d %r') as cdt from groupchat where room_id='".$room_id."'order by msg_id desc limit 20";
-$sql = "select * from (".$sql.") as ch order by msg_id";
+$sql = "select *,date_format(chattime,'%Y-%m-%d %r') as cdt from groupchat where room_id='".$room_id."'order by chattime desc limit 20";
+$sql = "select * from (".$sql.") as ch order by chattime";
 
 $result = mysqli_query($conn,$sql);
 $row = mysqli_num_rows($result);
