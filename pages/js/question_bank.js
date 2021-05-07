@@ -1,23 +1,21 @@
 var screenHeight = $(window).height();
 var screenWidth = $(window).width();
 
-window.onresize = function(){
+$(function(){
     let screenHeight = $(window).height();
     let screenWidth = $(window).width();
     $('body').css('height',screenHeight+'px')
     $('body').css('width',screenWidth+'px')
-}
+});
 
-window.onload = function(){
-  
+$(function(){
     console.log("onload exectuing...");
-
     //页面渲染之后，查看一下sessionStorage的登陆状态，如果是已登录，修改button里的内容，做一个跳转
     if(sessionStorage.getItem('login') == 'true'){
         document.getElementById('userInfoBtn').innerHTML="欢迎,"+sessionStorage.getItem('username');
         document.getElementById('userInfoBtn').setAttribute("disabled", true);
     }
-}
+})
 
 function backTologin(){
     window.location.href ="../html/login.html";
@@ -82,7 +80,7 @@ function showQuestion(id){
     activeQuestion = id;
     $(".question").find(".question_info").remove();
     var question = questions[id];
-    $(".question_title").html("<strong>第 "+(id+1)+" 题 、</strong>"+question.questionTitle);
+    $(".question_title").html("<strong>第 "+(id+1)+" 题&nbsp;&nbsp;</strong>"+question.questionTitle);
     var items = question.questionItems.split(";");
     var item="";
     for(var i=0;i<items.length-1;i++){
@@ -97,6 +95,7 @@ function showQuestion(id){
             $("#"+checkQues[i].item).find("input").prop("checked","checked");
             $("#"+checkQues[i].item).addClass("clickTrim");
             $("#ques"+activeQuestion).removeClass("question_id").addClass("clickQue");
+            progress();
         }
     }
     progress();
@@ -117,10 +116,10 @@ function showReason(reasonArray,index=0){
     // let obj = {id:QuestionJson[i].questionId,question:,correctAnswer:QuestionJson[i].questionAnswer,reason:QuestionJson[i].reason};
     let id = reasonArray[index].id;
     $(".question").find(".question_info").remove();
-    $(".question_title").html("<strong>答案解析：第 "+id+" 题 、</strong>"+reasonArray[index].question);
-    var item ="<li class='question_info' onload='clickTrim(this)'><input type='radio' name='item'>&nbsp;正确答案:"+reasonArray[index].correctAnswer+"."+reasonArray[index].questionContent+"</li>";
+    $(".question_title").html("<strong>答案解析：第 "+id+" 题&nbsp;&nbsp;</strong>"+reasonArray[index].question);
+    var item ="<li class='question_info' onload='clickTrim(this)'>正确答案: 选项"+reasonArray[index].correctAnswer+"&nbsp;&nbsp;"+reasonArray[index].questionContent+"</li>";
     $(".question").append(item);
-    var reasonItem = "<li class='question_info' onload='clickTrim(this)'>解析:"+reasonArray[index].reason+"</li>";
+    var reasonItem = "<li class='question_info' onload='clickTrim(this)'>解析: "+reasonArray[index].reason+"</li>";
     $(".question").append(reasonItem);
 }
 
@@ -129,7 +128,7 @@ function showReason(reasonArray,index=0){
 function answerCard(){
     $(".question_sum").text(questions.length);
     for(var i=0;i<questions.length;i++){
-        var questionId ="<li id='ques"+i+"'onclick='saveQuestionState("+i+")' class='questionId'>"+(i+1)+"</li>";
+        var questionId ="<li id='ques"+i+"'onclick='saveQuestionState("+i+")' class='questionId active_question_id'>"+(i+1)+"</li>";
         $("#answerCard ul").append(questionId);
     }
 }
@@ -141,6 +140,7 @@ function clickTrim(source){
     $("#"+id).find("input").prop("checked","checked");
     $("#"+id).addClass("clickTrim");
     $("#ques"+activeQuestion).removeClass("question_id").addClass("clickQue");
+    progress();
     var ques =0;
     for(var i=0;i<checkQues.length;i++){
        if( checkQues[i].id==activeQuestion&&checkQues[i].item!=id){
@@ -168,13 +168,13 @@ function clickTrim(source){
 
 /*设置进度条*/
 function progress(){
-    var prog = ($(".active_question_id").length+1)/questions.length;
+    var prog = ($(".clickQue").length)/questions.length;
     var pro = $(".progress").parent().width() * prog;
     $(".progres").text((prog*100).toString().substr(0,5)+"%")
     $(".progress").animate({
         width: pro,
         opacity: 0.5
-    }, 1000);
+    }, 100);
 }
 
 /*保存考题状态 已做答的状态*/
@@ -276,7 +276,6 @@ $(function(){
         $("#answerCard").slideUp();
         $(this).hide();
     })
-
     //提交试卷
     //@todo:可以判断是不是答完题，答完题了和正确答案比对一下，不对的话就跳到解析页面。。
     $("#submitQuestions").click(function(){
@@ -295,6 +294,10 @@ $(function(){
                 }
             }
             submitState = true;
+            //关掉答题卡
+            $('#decroation').hide();
+            $(this).hide();  
+            $('.lastChange').html('答对<span>'+correctCounter+'</span>题/共<span>'+checkQues.length+'</span>题');    
             /*
             跳转到新页面，把解析导出来
             @调用showReason函数

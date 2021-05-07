@@ -7,7 +7,7 @@ $type = $_POST['type'];
 
 
 /*可以加一个条件判断，保证题目是xxx么做过的 通过where实现 */
-$sql = 'select * from exercise where type ='.$type.'';
+$sql = 'select * from exercise where type ='.$type.' order by  rand() limit 7 ';
 $result = mysqli_query($conn,$sql);
 $row = mysqli_num_rows($result);
 $objArr = array();

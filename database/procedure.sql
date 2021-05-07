@@ -102,3 +102,14 @@ BEGIN
     DELETE FROM group_chat_room where time < unix_timestamp(now())-432000;
 END//
 DELIMITER ;
+
+
+delimiter ;
+drop procedure if exists add_exercises;
+delimiter //
+create procedure add_exercises(in type int,in question varchar(800),in ansa varchar(800),in ansb varchar(800),in ansc varchar(800),in ansd varchar(800),in correct int,in reason varchar(800))
+begin
+    insert into exercise(type,question,ansa,ansb,ansc,ansd,correct,reason)
+    values(type,question,ansa,ansb,ansc,ansd,correct,reason);
+end //
+delimiter ;
